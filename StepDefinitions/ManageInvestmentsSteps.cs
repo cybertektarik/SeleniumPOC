@@ -1,0 +1,436 @@
+//using AngleSharp.Dom;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using NUnit.Framework.Constraints;
+using OpenQA.Selenium;
+using OpenQA.Selenium.BiDi.Modules.Script;
+using SeleniumPOC.Common;
+using SeleniumPOC.EmployeePortal.Pages.Common;
+using SeleniumPOC.EmployeePortal.Pages.ManageInvestments;
+using System.Diagnostics.Metrics;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Security.Cryptography;
+//using TechTalk.SpecFlow;
+using static OpenQA.Selenium.BiDi.Modules.Input.Wheel;
+
+namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
+{
+    [Binding]
+    public class ManageInvestmentsSearchFundsSteps
+    {
+        private readonly ScenarioContext _scenarioContext;
+        private IWebDriver? driver;
+        protected AllPages? Pages;
+
+        public ManageInvestmentsSearchFundsSteps(ScenarioContext scenarioContext)
+        {
+            _scenarioContext = scenarioContext;
+            driver = _scenarioContext["driver"] as IWebDriver;
+            Pages = _scenarioContext["Pages"] as AllPages;
+        }
+
+        [Given(@"I am logged in as a user who has not created a Choice account")]
+        public void GivenILoginToTheEmployeePortalAsLimitedAccountUser()
+        {
+            Pages?.LoginPage.Login("Feature2HSABTester005");
+        }
+
+        [Given(@"I am logged in as a user who has an enrolled account")]
+        public void GivenILoginToTheEmployeePortalAsAnEnrolledUser()
+        {
+            Pages?.LoginPage.Login("Feature2HSABTester023");
+        }
+
+        [Given(@"I am logged in as a Pre enrolled user")]
+        public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
+        {
+            Pages?.LoginPage.Login("Feature2HSABTester026");
+        }
+
+        [When(@"I click on ""(.*)"" from the navigation menu")]
+        public void WhenINavigateToTheTab(string tabName)
+        {
+            switch (tabName)
+            {
+                case "Manage Investment":
+                    Pages.SidebarNavPage.GoToManageInvestments();
+                    break;
+                case "Settings":
+                    Pages.SidebarNavPage.GoToSettings();
+                    break;
+                default:
+                    throw new ArgumentException($"No navigation action defined for tab: {tabName}");
+            }
+        }
+
+        [When(@"I click on ""(.*)"" from the Risk Tolerance Selection")]
+        public void WhenIClickRiskToleranceSelection(string tabName)
+        {
+            switch (tabName)
+            {
+                case "Yes, I want to choose this portfolio.":
+                    Pages.WizardRtqScorePage.YesIWantToChooseThisPortfolio();
+                    break;
+                case "No, I want to review the questions again.":
+                    Pages.WizardRtqScorePage.NoWantToReviewAgain();
+                    break;
+                default:
+                    throw new ArgumentException($"No navigation action defined for tab: {tabName}");
+            }
+        }
+        [When(@"I click on the ""(.*)"" logo link")]
+        public void WhenISelectInvestmentOption(string investmentOption)
+        {
+            if (investmentOption == "HSA Investment")
+            {
+                Pages?.ManageInvestmentsPage.ChooseHsaInvest();
+                Thread.Sleep(5000);
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" info link")]
+        public void WhenIClickHSAInvestInfo(string HSAInvestInfo)
+        {
+            if (HSAInvestInfo == "HSA Invest Info")
+            {
+                Pages?.ManageInvestmentsPage.HSAInvestInfo();
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" banner link")]
+        public void WhenISelectHSAInvestOption(string bannerLink)
+        {
+            if (bannerLink == "Enroll in HSA Invest")
+            {
+                Pages?.ManageInvestmentsPage.ChooseEnrollInHsaInvest();
+            }
+        }
+
+        [Then(@"I should see the ""(.*)"" link displayed")]
+        public void ThenIShouldSeeTheLinkDisplayed(string linkName)
+        {
+            if (linkName == "Learn More")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifyLearnMoreLinkIsDisplayed();
+            }
+        }
+
+        [Then(@"I should see the ""(.*)"" Button displayed")]
+        public void IShouldSeeEnrollBtnDisplayed(string BtnName)
+        {
+            if (BtnName == "Enroll")
+            {
+                Pages?.ManageInvestmentsPage.ChooseEnroll();
+            }
+        }
+
+        [Then(@"I should see the (.*) letter displayed")]
+        public void ThenIShouldSeeHsaEsignAgreementDisplayed(string ESignLetter)
+        {
+            if (ESignLetter == "HsaBank Investment ESign Agreement")
+            {
+                Pages?.ManageInvestmentsPage.WizardDisclosureAgreementsPage.VerifyHsaEsignLetterIsDisplayed();
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" Button")]
+        public void WhenIClickEnrollBtn(string BtnName)
+        {
+            if (BtnName == "ENROLL")
+            {
+                Pages?.ManageInvestmentsPage.ChooseEnroll();
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" link")]
+        public void WhenIClickOnTheLink(string linkName)
+        {
+            if (linkName == "Learn More")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMore();
+            }
+        }
+
+        [Then(@"I should see ""(.*)"" banner link displays")]
+        public void ThenIShouldSeeEnrollHsaBannerLink(string banner)
+        {
+            if (banner == "Enroll in HSA Invest")
+            {
+                Thread.Sleep(2000);
+                Pages?.ManageInvestmentsPage.IsDisplayHsaEnrollInHsaInvest();
+            }
+        }
+
+        [Then(@"I should see that each investment account type has a hyperlink")]
+        public void ThenIShouldSeeThatEachInvestmentTypeHasHyperlink()
+        {
+            Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifyAccountTypeHyperlinksExist();
+        }
+
+        [When(@"I click on the funds available in choice account")]
+        public void WhenIClickOnTheFundsAvailableInChoiceAccount()
+        {
+            Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.SeeFundsAvailableInChoiceOption();
+        }
+
+        [When(@"I click on the ""(.*)"" Account")]
+        public void WhenIClickOnTheInvestmentType(string accountType)
+        {
+            switch (accountType)
+            {
+                case "Managed":
+                    Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Managed");
+                    break;
+                case "Select":
+                    Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Select");
+                    break;
+                case "Choice":
+                    Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Choice");
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid account type: {accountType}");
+            }
+        }
+        [When(@"I enter name ""(.*)"" in the name field")]
+        public void WhenIEnterName(string name)
+        {
+            Pages?.ManageInvestmentsPage.WizardSignaturePage.EnterName(name);
+            Thread.Sleep(2000);
+        }
+
+        [When(@"I click on the ""(.*)"" Investment account types")]
+        public void ClickOnInvestmentAccountType(string accountType)
+        {
+            if (accountType.Equals("managed", StringComparison.OrdinalIgnoreCase))
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Managed");
+            }
+            else if (accountType.Equals("select", StringComparison.OrdinalIgnoreCase))
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Select");
+            }
+            else if (accountType.Equals("choice", StringComparison.OrdinalIgnoreCase))
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.ClickOnInvestmentAccountType("Choice");
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid account type: {accountType}");
+            }
+        }
+
+        [When(@"I click ""(.*)"" employment status")]
+        public void WhenIClickEmploymentStatus(string empStatus)
+        {
+            switch (empStatus.ToLower())
+            {
+                case "retired":
+                    Pages?.ManageInvestmentsPage.WizardRequiredDisclosuresPage.EnterEmploymentStatusInfo("RETIRED");
+                    break;
+                case "employed":
+                    Pages?.ManageInvestmentsPage.WizardRequiredDisclosuresPage.EnterEmploymentStatusInfo("EMPLOYED");
+                    break;
+                case "student":
+                    Pages?.ManageInvestmentsPage.WizardRequiredDisclosuresPage.EnterEmploymentStatusInfo("STUDENT");
+                    break;
+                case "unemployed":
+                    Pages?.ManageInvestmentsPage.WizardRequiredDisclosuresPage.EnterEmploymentStatusInfo("UNEMPLOYED");
+                    break;
+                case "selfemployed":
+                    Pages?.ManageInvestmentsPage.WizardRequiredDisclosuresPage.EnterEmploymentStatusInfo("SELF_EMPLOYED");
+                    break;
+                default:
+                    throw new ArgumentException($"'{empStatus}' is not supported.");
+            }
+        }
+
+        [When(@"I answer question ""(.*)"" to ""(.*)"" from the questionnaire")]
+        public void WhenIClickOnAgree(string question, string answer)
+        {
+            var allowedAnswers = new[] { "agree", "neutral", "stronglyAgree", "disagree", "stronglyDisagree" };
+            if (!allowedAnswers.Contains(answer))
+            {
+                throw new ArgumentException($"Invalid answer: {answer}. Accepted values are: {string.Join(", ", allowedAnswers)}");
+            }
+
+            Pages?.ManageInvestmentsPage.WizardRtqQuestionsPage.SetAnswerForQuestion(question, answer);
+        }
+
+        [When(@"I click on the Sign Button")]
+        public void WhenIClickOnSignBtn()
+        {
+            Pages?.ManageInvestmentsPage.WizardSignaturePage.ScrollTextToEnableButton();
+            Pages?.ManageInvestmentsPage.WizardSignaturePage.Sign();
+        }
+
+        [When(@"I click on the SUBMIT Button")]
+        public void WhenIClickOnSubmitBtn()
+        {
+            Pages?.ManageInvestmentsPage.WizardRtqQuestionsPage.Submit();
+        }
+
+        [When(@"I click on the Skip Button")]
+        public void WhenIClickOnSkipBtn()
+        {
+            Thread.Sleep(5000);
+            Pages?.ManageInvestmentsPage.AutoFundingPage.Skip();
+            Thread.Sleep(5000);
+        }
+
+        [When(@"I click on the Next Button")]
+        public void WhenIClickOnNextBtn()
+        {
+            Thread.Sleep(2000);
+            Pages?.ManageInvestmentsPage.WizardSignaturePage.Next();
+            Thread.Sleep(1000);
+        }
+
+        [When(@"I check on ESign checkbox")]
+        public void WhenICheckESignCheckBox()
+        {
+            if (!Pages.ManageInvestmentsPage.WizardSignaturePage.IsEsignCheckBoxChecked())
+            {
+                Pages.ManageInvestmentsPage.WizardSignaturePage.CheckEsignCheckBox();
+            }
+        }
+        [Then(@"I should see a search box for funds")]
+        public void ThenIShouldSeeASearchBoxForFunds()
+        {
+            Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifySearchBoxIsDisplayed();
+        }
+
+        [When(@"I enter a random stock fund name in the search box")]
+        public void WhenIEnterAStockFundNameInTheSearchBox()
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.searchForStock("AAPL");
+        }
+
+        [When(@"I search for stock symbol ""(.*)""")]
+        public void WhenISearchForStockSymbol(string symbol)
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.searchForStock(symbol);
+        }
+
+        [Then(@"I should see all matching funds displayed")]
+        public void ThenIShouldSeeAllMatchingFundsDisplayed()
+        {
+            Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifyMatchingFundsDisplayed("AAPL");
+        }
+
+        [Then(@"I should see that the ""(.*)"" button is disabled for each fund in the search results")]
+        public void ThenIShouldSeeThatTheButtonIsDisabledForEachFundInTheSearchResults(string buttonName)
+        {
+            if (buttonName == "Buy")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifyAllBuyButtonsDisabled();
+            }
+        }
+
+        [When(@"I navigate to the ""(.*)"" section")]
+        public void WhenINavigateToTheSection(string sectionName)
+        {
+            Pages?.SidebarNavPage.GoToManageInvestments();
+        }
+
+        [When(@"I click on the close Investment Option Button")]
+        public void WhenIClickOnCloseInvOptBtn()
+        {
+            Pages?.ManageInvestmentsPage.PreferencesTab.ButtonCloseAccount();
+        }
+
+        [When(@"I confirm ""(.*)""")]
+        public void WhenIConfirm(string confirmText)
+        {
+            Pages?.ManageInvestmentsPage.PreferencesTab.IConfirm(confirmText);
+        }
+
+        [Then(@"I should see (.*) matching stock\(s\) with symbol ""(.*)""")]
+        public void ThenIShouldSeeMatchingStocksWithSymbol(int expectedCount, string symbol)
+        {
+            var instruments = Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.GetInstrumentList();
+
+            instruments.Should().NotBeNull("Expected an instrument list, but none was found.");
+            instruments!.Count.Should().Be(expectedCount, $"Expected {expectedCount} instruments, but found {instruments?.Count ?? 0}.");
+
+            if (expectedCount > 0 && instruments != null)
+            {
+                foreach (var instrument in instruments)
+                {
+                    instrument.Should().Contain(symbol, $"Expected instrument symbol to contain '{symbol}', but it did not.");
+                }
+            }
+            else if (expectedCount == 0)
+            {
+                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.VerifyNoStocksFound();
+                instruments.Should().BeEmpty("Expected no instruments, but some were found.");
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" tab")]
+        public void WhenIClickOnTheTab(string tabName)
+        {
+            Pages?.ManageInvestmentsPage.ActivityTab.ClickOnManagementTab(tabName);
+        }
+        [When(@"I click on the ""(.*)"" tab in Manage Investments")]
+        public void WhenIClickOnAndTradeTab(string tabName)
+        {
+            Pages?.ManageInvestmentsPage.SearchAndTradeTab();
+        }
+
+        [When(@"I click on the Preferences tab")]
+        public void WhenIClickOnPreferencesTab()
+        {
+            Pages?.ManageInvestmentsPage.ActivityTab.ClickOnPreferencesTab();
+        }
+
+        [Then(@"I should see the url contains ""(.*)""")]
+        public void ThenIShouldSeeTheUrlContains(string text)
+        {
+            Thread.Sleep(2000);
+            driver.Url.Contains(text);
+        }
+
+        [Then(@"I validate the investment accounts displays")]
+        public void ThenIValidatedTheInvestmentAccountDisplays()
+        {
+            Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.VerifyIsVisible(true, true, true);
+        }
+
+        [When(@"I click on the Close button for windows pop-up")]
+        public void WhenIClickOnTheCloseButtonForWindowsPopUp()
+        {
+            Pages?.ChooseYourInvestmentPage.CloseWindowsPopup();
+        }
+
+        /*[Then(@"I should see the Select's Modal Dialog Message displayed")]
+        public void ThenIShouldSeeTheSelectsModalDialogMessageIsDisplayed()
+        {
+            string actualModalText = Pages.ChooseYourInvestmentPage.VerifySelectModalMessageIsDisplayed();
+
+            string expectedText = "Effective February 26, 2025, the Select option provides streamlined asset allocation models that include four to six mutual fund recommendations (previously 17 to 19). This adjustment was made by an SEC-registered investment adviser (RIA) based on your existing HSA risk tolerance profile. The new model will not affect your current investments unless you choose to make changes.";
+
+            actualModalText.Trim().Should().Contain(expectedText.Trim(),
+                because: "Modal should display the correct message");
+
+            string normalizedActualText = System.Text.RegularExpressions.Regex.Replace(actualModalText, @"\s+", " ");
+            string normalizedExpectedText = System.Text.RegularExpressions.Regex.Replace(expectedText, @"\s+", " ");
+
+            normalizedActualText.Should().Contain(normalizedExpectedText,
+                because: "Modal should display the correct message");
+        }*/
+
+        [When(@"I click on TRADE Button")]
+        public void WhenIClickOnTradeButton()
+        {
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickTradeButton();
+        }
+
+        [When(@"I click on BUY Button")]
+        public void WhenIClickOnBuyButton()
+        {
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickBuyButton();
+        }
+    }
+}
+
