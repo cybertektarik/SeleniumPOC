@@ -47,7 +47,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public WizardDisclosureAgreements WizardDisclosureAgreementsPage;
         public WizardSignaturePage WizardSignaturePage;
         public WizardRtqQuestionsPage WizardRtqQuestionsPage;
-        public WizardRqtoScorePage WizardRqtoScorePage;
+        public WizardRqtScorePage WizardRqtScorePage;
 
         public ManageInvestmentPage(IWebDriver driver) : base(driver)
         {
@@ -63,7 +63,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WizardDisclosureAgreementsPage = new WizardDisclosureAgreements(driver);
             WizardSignaturePage = new WizardSignaturePage(driver);
             WizardRtqQuestionsPage = new WizardRtqQuestionsPage(driver);
-            WizardRqtoScorePage = new WizardRqtoScorePage(driver);
+            WizardRqtScorePage = new WizardRqtScorePage(driver);
             PreferencesTab = new PreferencesTab(driver);
         }
 

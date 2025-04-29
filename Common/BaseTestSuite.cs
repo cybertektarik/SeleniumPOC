@@ -9,7 +9,7 @@ namespace SeleniumPOC.Common
 {
     public class BaseTestSuite
     {
-        protected readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login";
+       protected readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login";
         // protected readonly string DEFAULT_URL = "http://localhost:8080/";
 
         private readonly bool RUN_REMOTE = false;
@@ -38,7 +38,7 @@ namespace SeleniumPOC.Common
             Console.WriteLine();
 
             GoToUrl(DEFAULT_URL);
-            Pages = new AllPages(driver);
+            Pages = new AllPages(driver);f
             Logger = new Logger();
         } */
 

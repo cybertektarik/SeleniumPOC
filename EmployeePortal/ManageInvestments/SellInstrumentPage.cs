@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 
@@ -7,22 +8,22 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
     public class SellInstrumentPage : BasePage
     {
         private PageControl chkSellAll = new PageControl(By.XPath("//label[contains(., 'Sell all')]"), "Sell all");
-        private PageControl txtEnterAmount = new PageControl(By.XPath("//p[text()='Enter Amount:']/../input"), "Enter Amount");
+        private PageControl txtEnterAmount = new PageControl(By.XPath("//*[@data-vv-name='amount']//input"), "Enter Amount");
         private PageControl btnCancel = new PageControl(By.XPath("//span[text()='Cancel']"), "Cancel");
         private PageControl btnConfirmSell = new PageControl(By.XPath("//span[text()='Confirm Sell']"), "Confirm Sell");
         private PageControl txtErrorText = new PageControl(By.XPath("//*[contains(@class, 'invalid-feedback')]"));
         private PageControl stcAvailableToSell = new PageControl(By.XPath("//div[@role='main']//div/div/div[contains(., 'Available to sell:')]"));
         private PageControl stcSharePrice = new PageControl(By.XPath("//table[@class='table not-too-wide']//tbody/tr/td[1]"));
-        private PageControl btnBuy = new PageControl(By.XPath("//span[text()='BUY']"), "BUY");
-        private PageControl btnSell = new PageControl(By.XPath("//*[normalize-space(text())='Sell'])[2]"), "Sell");
-        private PageControl tradeButton = new PageControl(By.XPath("//button[normalize-space(text())='Trade'])[1]"), "TRADE Button");
+        private PageControl btnSell = new PageControl(By.XPath("(//*[contains(text(),'Sell')])[last()]"), "Sell");
+        private PageControl tradeButton = new PageControl(By.XPath("(//*[normalize-space(text())='Trade'])[last()]"), "TRADE Button");
 
         public SellInstrumentPage(IWebDriver driver) : base(driver) { }
 
         public void ClickTradeButton()
         {
             WaitForSpinners();
-            tradeButton.Click();
+            Assert.IsTrue(tradeButton.IsDisplayed(), "Button Trade is not displayed");
+            tradeButton.SendKeysUsingActions(Keys.End);
         }
 
         public void VerifyOnTradeBtnBuyAndSellBtn()
@@ -54,6 +55,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void EnterAmount(string amount)
         {
+            WaitForSpinners();
             txtEnterAmount.Clear();
             txtEnterAmount.SendKeys(amount);
         }
@@ -71,6 +73,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ClickSellAll()
         {
             chkSellAll.Click();
+        }
+
+        public void ClickSellButton()
+        {
+            WaitForSpinners();
+            Assert.IsTrue(btnSell.IsDisplayed(), "Button Sell is not displayed");
+            btnSell.Click();
         }
     }
 }

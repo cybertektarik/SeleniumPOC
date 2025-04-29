@@ -22,7 +22,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         public OnboardingPage OnboardingPage;
         public WizardRequiredDisclosuresPage WizardRequiredDisclosuresPage;
         public WizardSignaturePage WizardSignaturePage;
-        public WizardRqtoScorePage WizardRtqScorePage;
+        public WizardRqtScorePage WizardRtqScorePage;
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
         public AutoFundingPage AutoFundingPage;
         public PageControl PageControl;
@@ -40,7 +40,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
             OnboardingPage = new OnboardingPage(driver);
             WizardRequiredDisclosuresPage = new WizardRequiredDisclosuresPage(driver);
             WizardSignaturePage = new WizardSignaturePage(driver);
-            WizardRtqScorePage = new WizardRqtoScorePage(driver);
+            WizardRtqScorePage = new WizardRqtScorePage(driver);
             ChooseYourInvestmentPage = new ChooseYourInvestmentPage(driver);
             AutoFundingPage = new AutoFundingPage(driver);
 

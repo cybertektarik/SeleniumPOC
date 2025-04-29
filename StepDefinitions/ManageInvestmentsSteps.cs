@@ -248,14 +248,16 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [When(@"I answer question ""(.*)"" to ""(.*)"" from the questionnaire")]
         public void WhenIClickOnAgree(string question, string answer)
         {
-            var allowedAnswers = new[] { "agree", "neutral", "stronglyAgree", "disagree", "stronglyDisagree" };
-            if (!allowedAnswers.Contains(answer))
+            // Validate the answer is one of the accepted values
+            if (!new[] { "agree", "neutral", "stronglyAgree", "disagree", "stronglyDisagree" }.Contains(answer))
             {
-                throw new ArgumentException($"Invalid answer: {answer}. Accepted values are: {string.Join(", ", allowedAnswers)}");
+                throw new ArgumentException($"Invalid answer: {answer}. Accepted values are: agree, neutral, stronglyAgree, disagree, stronglyDisagree");
             }
 
-            Pages?.ManageInvestmentsPage.WizardRtqQuestionsPage.SetAnswerForQuestion(question, answer);
+            // Set the answer for the question
+            Pages.ManageInvestmentsPage.WizardRtqQuestionsPage.SetAnswerForQuestion(question, answer);
         }
+
 
         [When(@"I click on the Sign Button")]
         public void WhenIClickOnSignBtn()
@@ -431,6 +433,47 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         {
             Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickBuyButton();
         }
+
+        [When("I click on SELL Button")]
+        public void WhenIClickOnSELLButton()
+        {
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickSellButton();
+        }
+
+        [When("I enter more than one dollar amount")]
+        public void WhenIEnterMoreThanOneDollarAmount()
+        {
+            string amountToSell = CommonFunctions.GenerateRandomDollarAmount(1, 5);
+            Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
+        }
+
+        [When("I click on confirm sell Button")]
+        public void WhenIClickOnConfirmSellButton()
+        {
+            Pages.ManageInvestmentsPage.SellInstrumentPage.ClickConfirmSell();
+        }
+
+        [When("I validate success message for sell")]
+        public void WhenIValidateSuccessMessage()
+        {
+            Pages.NotificationAlert.GetSuccessMessage().Should().Contain("Sale");
+            Pages.NotificationAlert.Dismiss();
+        }
+
+        [When("I click on confirm buy Button")]
+        public void WhenIClickOnConfirmBuyButton()
+        {
+            Pages.ManageInvestmentsPage.BuyInstrumentPage.ClickConfirmBuy();
+        }
+
+        [When("I validate success message for buy")]
+        public void WhenIValidateSuccessMessageForBuy()
+        {
+            Pages.NotificationAlert.GetSuccessMessage().Should().Contain("Purchase");
+            Pages.NotificationAlert.Dismiss();
+        }
+
+
     }
 }
 

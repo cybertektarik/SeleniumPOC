@@ -6,7 +6,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 {
     public class WizardRequiredDisclosuresPage : BasePage
     {
-        private PageControl radioEmploymentStatus(string status) => new PageControl(By.XPath($"//input[@value='{status}'])[2]/.."), status);
+        private PageControl radioEmploymentStatus(string status) => new PageControl(By.XPath($"(//input[@value='{status}'])[2]/.."), status);
         private PageControl selectSector => new PageControl(By.Id("employment-sector"), "Sector");
         private PageControl selectOccupation => new PageControl(By.Id("occupation"), "Occupation");
         private PageControl radioBroker(string value) => new PageControl(By.XPath($"//input[@name='broker-or-stock-exchange' and @value='{value}']/.."), "Broker-" + value);
@@ -33,6 +33,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void EnterEmploymentStatusInfo(string status)
         {
+            Thread.Sleep(3000);
             radioEmploymentStatus(status).Click();
         }
 

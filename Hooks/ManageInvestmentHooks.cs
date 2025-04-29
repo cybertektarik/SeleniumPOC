@@ -17,7 +17,7 @@ namespace SeleniumPOC.Hooks
         protected AllPages? Pages;
        
 
-        private readonly string DEFAULT_URL = "https://employee-feature2.live-test.domain.com/#/auth/login";
+        private readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login?returnUrl=%2F";
 
         public TestHooks(ScenarioContext scenarioContext)
         {
@@ -33,17 +33,12 @@ namespace SeleniumPOC.Hooks
             options.AddArgument("--ignore-certificate-errors");
             options.AddArgument("--disable-gpu");
             options.AddArgument("--disable-extensions");
-            options.AddArgument("--dns-prefetch-disable");
-            options.AddArgument("--disable-features=NetworkService");
-            options.AddArgument("--disable-features=VizDisplayCompositor");
-            options.AddArgument("--remote-allow-origins=*");
+            options.AddArgument("--allow-insecure-localhost");
             options.AcceptInsecureCertificates = true;
-
             driver = new ChromeDriver(options);
             driver.Manage().Window.Maximize();
             driver.Navigate().GoToUrl(DEFAULT_URL);
             Thread.Sleep(2000);
-
             Pages = new AllPages(driver);
             _scenarioContext["driver"] = driver;
             _scenarioContext["Pages"] = Pages;

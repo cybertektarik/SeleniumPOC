@@ -19,9 +19,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         //private PageControl btnSelect => new PageControl(By.XPath("//h4[contains(text(),'Select')]//ancestor::a"), "Select");
         //private PageControl btnChoice => new PageControl(By.XPath("//h4[contains(text(),'Choice')]//ancestor::a"), "Choice");
 
-        private PageControl btnManaged => new PageControl(By.XPath("//h4[text()='Managed']//ancestor::a"), "Managed");
-        private PageControl btnSelect => new PageControl(By.XPath("//h4[text()='Select']//ancestor::a"), "Select");
-        private PageControl btnChoice => new PageControl(By.XPath("//h4[text()='Choice']//ancestor::a"), "Choice");
+        private PageControl btnManaged => new PageControl(By.XPath("//h4[contains(., 'Managed')]"), "Managed");
+        private PageControl btnSelect => new PageControl(By.XPath("//h4[contains(., 'Select')]"), "Select");
+        private PageControl btnChoice => new PageControl(By.XPath("//h4[contains(., 'Choice')]"), "Choice");
 
         private PageControl stcSelectButtonBalance => new PageControl(By.XPath("//h4[text()='Select']//ancestor::a//strong"), "Select button balance");
         private PageControl stcChoiceButtonBalance => new PageControl(By.XPath("//h4[text()='Choice']//ancestor::a//strong"), "Choice button balance");

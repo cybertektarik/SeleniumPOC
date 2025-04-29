@@ -27,7 +27,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
 
         public void Login(string userName)
         {
-            Login(userName, "$BetterHas777");
+            Login(userName, "$BetterHsa777");
         }
     }
 }

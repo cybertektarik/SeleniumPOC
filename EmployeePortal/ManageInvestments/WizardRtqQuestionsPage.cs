@@ -14,34 +14,39 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         }
 
         private PageControl radioQuestion(string num, string value) =>
-            new PageControl(By.XPath($"//div[@data-vv-name='question_" + num + "_answer']//input[@value='" + value + "']"));
+            new PageControl(By.XPath($"(//div[@data-vv-name='question " + num + " answer']//input[@value='" + value + "'])[last()]"));
 
         private PageControl btnSubmit = new PageControl(By.XPath("//button[text()='Submit']"));
 
         public void SetAnswerForQuestion(string question, string value)
         {
+            Thread.Sleep(4000);
             // wait for element to be visible
-            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@data-vv-name='question_" + question + "_answer']//input[@value='" + value + "']")));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("(//div[@data-vv-name='question " + question + " answer']//input[@value='" + value + "'])[last()]")));
+            //ElementIsVisible(By.XPath("(//div[@data-vv-name='question " + question + " answer']//input[@value='" + value + "']/..)[2]")));
+
+
 
             // Get PageControl's Object
             var element = radioQuestion(question, value);
+            element.SendKeysUsingActions(Keys.Up);
 
-            try
-            {
-                // With JavaScript scroll
-                string script = "var element = document.evaluate(\"//div[@data-vv-name='question_" + question + "_answer']//input[@value='" + value + "']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; if(element) { element.scrollIntoView({block: 'center'}); }";
-                ((IJavaScriptExecutor)driver).ExecuteScript(script);
+            //try
+            //{
+            //    // With JavaScript scroll
+            //    string script = "var element = document.evaluate(\"//div[@data-vv-name='question " + question + " answer']//input[@value='" + value + "']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; if(element) { element.scrollIntoView({block: 'center'}); }";
+            //    ((IJavaScriptExecutor)driver).ExecuteScript(script);
 
-                Thread.Sleep(500); // wait for scroll to complete
+            //    Thread.Sleep(500); // wait for scroll to complete
 
-                // try regular click
-                element.Click();
-            }
-            catch (Exception)
-            {
-                // if it is not successful, try regular click again
-                element.Click();
-            }
+            //    // try regular click
+            //    element.Click();
+            //}
+            //catch (Exception)
+            //{
+            //    // if it is not successful, try regular click again
+            //    element.Click();
+            //}
         }
 
         public void Submit()

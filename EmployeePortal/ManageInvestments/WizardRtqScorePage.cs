@@ -7,9 +7,9 @@ using SeleniumPOC.EmployeePortal.Pages.Common;
 
 namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 {
-    public class WizardRqtoScorePage : BasePage
+    public class WizardRqtScorePage : BasePage
     {
-        private PageControl arcxoRisk => new PageControl(By.XPath("//*[name()='polygon']"));
+        private PageControl arrowRisk => new PageControl(By.XPath("//*[name()='polygon']"));
 
         private PageControl btnNoWantToReviewAgain => new PageControl(By.XPath("//button[contains(., 'No, I want to review the questions again.')]"), "No, I want to review the questions again.");
         private PageControl btnYesIWantToChoose => new PageControl(By.XPath("//button[contains(., 'Yes, I want to choose this portfolio.')]"), "Yes, I want to choose this portfolio.");
@@ -20,7 +20,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl btnPrevious = new PageControl(By.XPath("//span[text()='Previous ']"), "Previous");
         private PageControl stcRiskToleranceType = new PageControl(By.XPath("//h1[contains(., 'Your risk tolerance type is:')]"));
 
-        public WizardRqtoScorePage(IWebDriver driver) : base(driver)
+        public WizardRqtScorePage(IWebDriver driver) : base(driver)
         {
         }
 
@@ -54,9 +54,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             return stcRiskToleranceType.GetText().Replace("Your risk tolerance type is:", "").Trim();
         }
 
-        public string GetRiskArcxoLocation()
+        public string GetRiskArrowLocation()
         {
-            string text = arcxoRisk.GetAttribute("transform");
+            string text = arrowRisk.GetAttribute("transform");
             return text.Split("translate(")[1].Split(",")[0];
         }
 

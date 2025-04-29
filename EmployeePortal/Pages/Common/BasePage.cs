@@ -8,12 +8,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
     {
         protected IWebDriver driver;
         protected WebDriverWait wait;
-        private PageControl spinners = new PageControl(By.XPath("//*[contains(@id,'generic-loading')]"));
+        private PageControl spinners = new PageControl(By.XPath("//*[@id='generic-loading']"));
 
         public BasePage(IWebDriver driver)
         {
             this.driver = driver;
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(11));
         }
 
         protected void Sleep(int seconds)

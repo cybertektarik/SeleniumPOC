@@ -27,7 +27,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl btnReview => new PageControl(By.XPath("//span[text()='Review']"), "Review");
         private PageControl btnAccept => new PageControl(By.XPath("//span[text()='ACCEPT']"), "ACCEPT");
 
-         private PageControl btnSkip => new PageControl(By.XPath("//span[text()='Skip']"), "Skip");
+         private PageControl btnSkip => new PageControl(By.XPath("(//button[span[text()='Skip']])[2]"), "Skip");
         private PageControl txtSearchForLimitedLegacy => new PageControl(By.XPath("//h4[contains(text(),'Select Investments')]/..//input[@type='text']"), "Stock symbol");
         private PageControl switchShowAllFunds => new PageControl(By.XPath("//div[@class='custom-control' custom-switch"), "Show all funds");
         public AutoFundingPage(IWebDriver driver) : base(driver) { }
