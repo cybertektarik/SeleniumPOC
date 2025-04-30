@@ -48,6 +48,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public WizardSignaturePage WizardSignaturePage;
         public WizardRtqQuestionsPage WizardRtqQuestionsPage;
         public WizardRqtScorePage WizardRqtScorePage;
+        public SearchAndTradePage SearchAndTradePage;
 
         public ManageInvestmentPage(IWebDriver driver) : base(driver)
         {
@@ -65,6 +66,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WizardRtqQuestionsPage = new WizardRtqQuestionsPage(driver);
             WizardRqtScorePage = new WizardRqtScorePage(driver);
             PreferencesTab = new PreferencesTab(driver);
+            SearchAndTradePage = new SearchAndTradePage(driver);
         }
 
         // ======================== P A G E   M E T H O D S ========================

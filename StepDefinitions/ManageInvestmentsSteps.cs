@@ -474,6 +474,75 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
 
+        //Search & Trade
+        [Then("I validate Status {string} Funds displays and {string} button should be {string}")]
+        public void ThenIValidateStatusFundsDisplaysAndButtonEnable(string status, string tradeOption, string tradeOptionBtnStatus)
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.ValidateInvestmentSearchResult(status, tradeOption, tradeOptionBtnStatus);
+        }
+
+        [When("I check Include Unavailable To Buy checkbox")]
+        public void WhenICheckIncludeUnavailableToBuyCheckbox()
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.CheckkUnavailableToBuyButton();
+        }
+
+        [Then("I uncheck Include Unavailable To Buy checkbox")]
+        public void ThenIUncheckIncludeUnavailableToBuyCheckbox()
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.UnCheckkUnavailableToBuyButton();
+        }
+
+        [Then("I select Fund Type as {string}")]
+        public void ThenISelectFundTypeAs(string fundType)
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectFundType(fundType);
+        }
+
+        [Then("I validate one or more investment products are available")]
+        public void ThenIValidateOneOrMoreInvestmentProductsAreAvailable()
+        {
+
+        }
+
+        [Then("I deslect Fund Type as {string}")]
+        public void ThenIDeslectFundTypeAs(string fundType)
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.DeSelectFundType(fundType);
+        }
+
+        [Then("I validate zero investment products are available")]
+        public void ThenIValidateZeroInvestmentProductsAreAvailable()
+        {
+
+        }
+
+
+        [Then("I select Fund Company as {string}")]
+        public void ThenISelectFundCompanyAs(string companyType)
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectCompanyType(companyType);
+        }
+
+        [Then("I select Asset Class as {string}")]
+        public void ThenISelectAssetClassAs(string assetClassType)
+        {
+            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectAssetClassType(assetClassType);
+        }
+
+        [Then("I toggle on index fund")]
+        public void ThenIToggleOnIndexFund()
+        {
+
+        }
+
+        [Then("I togglw off index fund")]
+        public void ThenITogglwOffIndexFund()
+        {
+
+        }
+
+
     }
 }
 
