@@ -47,6 +47,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             btnBuyStock(stockSymbol).Click();
             WaitForSpinners();
         }
+
+        public void clearStock()
+        {
+            WaitForSpinners();
+            txtSearchField.Clear();
+        }
     }
 }
 

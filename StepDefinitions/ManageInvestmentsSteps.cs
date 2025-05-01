@@ -491,6 +491,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void ThenIUncheckIncludeUnavailableToBuyCheckbox()
         {
             Pages.ManageInvestmentsPage.SearchAndTradePage.UnCheckkUnavailableToBuyButton();
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clearStock();
         }
 
         [Then("I select Fund Type as {string}")]
@@ -502,7 +503,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then("I validate one or more investment products are available")]
         public void ThenIValidateOneOrMoreInvestmentProductsAreAvailable()
         {
-
+            Pages.ManageInvestmentsPage.SearchAndTradePage.ValidateOneOrMoreProductsAvailable();
         }
 
         [Then("I deslect Fund Type as {string}")]
@@ -514,7 +515,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then("I validate zero investment products are available")]
         public void ThenIValidateZeroInvestmentProductsAreAvailable()
         {
-
+            Pages.ManageInvestmentsPage.SearchAndTradePage.ValidateZeroProductsAvailable();
         }
 
 
@@ -533,13 +534,13 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then("I toggle on index fund")]
         public void ThenIToggleOnIndexFund()
         {
-
+            Pages.ManageInvestmentsPage.SearchAndTradePage.toggleOnIndexFund();
         }
 
-        [Then("I togglw off index fund")]
+        [Then("I toggle off index fund")]
         public void ThenITogglwOffIndexFund()
         {
-
+            Pages.ManageInvestmentsPage.SearchAndTradePage.toggleOffIndexFund();
         }
 
 

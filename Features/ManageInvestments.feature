@@ -204,7 +204,7 @@ Scenario: Validate Search Button on the Choice account
 
 	When I search for stock symbol "QABA"
 	And I check Include Unavailable To Buy checkbox
-	Then I validate Status "the Unavailable To Purchase" Funds displays and "Buy" button should be "disable"
+	Then I validate Status "Unavailable To Purchase" Funds displays and "Buy" button should be "disable"
 	And I uncheck Include Unavailable To Buy checkbox
 
 	And I select Fund Type as "Stocks"
@@ -234,7 +234,7 @@ Scenario: Validate Search Button on the Choice account
 
 	And I toggle on index fund
 	And I validate one or more investment products are available
-	And I togglw off index fund
+	And I toggle off index fund
 	And I validate zero investment products are available
 
 

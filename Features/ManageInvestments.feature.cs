@@ -737,8 +737,8 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.AndAsync("I check Include Unavailable To Buy checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 207
- await testRunner.ThenAsync("I validate Status \"the Unavailable To Purchase\" Funds displays and \"Buy\" button s" +
-                        "hould be \"disable\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I validate Status \"Unavailable To Purchase\" Funds displays and \"Buy\" button shoul" +
+                        "d be \"disable\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 208
  await testRunner.AndAsync("I uncheck Include Unavailable To Buy checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -810,7 +810,7 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 237
- await testRunner.AndAsync("I togglw off index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I toggle off index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 238
  await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
