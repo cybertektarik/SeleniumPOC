@@ -9,9 +9,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
     public class SearchAndTradePage : BasePage
     {
         private PageControl btnUnavailableToBuy = new PageControl(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='Include Unavailable To Buy']"), "include unavailable to buy");
-        private PageControl btnFundType = new PageControl(By.XPath("//*[text()='Fund Type']"), "Fund Type)");
-        private PageControl btnCompanyType = new PageControl(By.XPath("//*[text()='Fund Company']"), "Fund Company");
-        private PageControl btnAssetClassType = new PageControl(By.XPath("//*[text()='Asset Class']"), "Asset Class");
+        private PageControl btnFundType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()-2]"), "Fund Type)");
+        private PageControl btnCompanyType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()-1]"), "Fund Company");
+        private PageControl btnAssetClassType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()]"), "Asset Class");
         private PageControl btnIndexFund = new PageControl(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='Index Fund']"), "Index Fund");
 
         public SearchAndTradePage(IWebDriver driver) : base(driver) { }
@@ -45,14 +45,16 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ValidateOneOrMoreProductsAvailable()
         {
             // Wait until at least one investment row is visible
-            var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody"));
+            WaitForSpinners();
+            var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody//tr"));
             Assert.IsTrue(investmentRows.Count >= 1, "No investment rows found");
         }
 
         public void ValidateZeroProductsAvailable()
         {
             // Wait until at least one investment row is visible
-            var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody"));
+            WaitForSpinners();
+            var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody//tr"));
             Assert.IsTrue(investmentRows.Count == 0, "More than one investment rows found");
         }
 
@@ -86,6 +88,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             var fundTypeElement = driver.FindElement(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='" + fundType + "']"));
             fundTypeElement.Click();
+            btnFundType.Click();
         }
 
         public void SelectCompanyType(string companyType)
@@ -102,6 +105,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             var companyTypeElement = driver.FindElement(By.XPath("//*[@class='dropdown-menu dropdown-menu-fix show']//li//a[normalize-space(text())='" + companyType + "']"));
             companyTypeElement.Click();
+            btnCompanyType.Click();
         }
 
         public void SelectAssetClassType(string assetClassType)
@@ -118,15 +122,10 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             var assetClassTypeElement = driver.FindElement(By.XPath("//*[@class='dropdown-menu show']//li//a[normalize-space(text())='" + assetClassType + "']"));
             assetClassTypeElement.Click();
+            btnAssetClassType.Click();
         }
 
-        public void toggleOnIndexFund()
-        {
-            WaitForSpinners();
-            btnIndexFund.Click();
-        }
-
-        public void toggleOffIndexFund()
+        public void toggleIndexFund()
         {
             WaitForSpinners();
             btnIndexFund.Click();

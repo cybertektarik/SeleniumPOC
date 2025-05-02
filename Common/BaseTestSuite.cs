@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using SeleniumPOC.EmployeePortal.Pages.Common;
@@ -9,7 +10,7 @@ namespace SeleniumPOC.Common
 {
     public class BaseTestSuite
     {
-       protected readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login";
+        protected readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login";
         // protected readonly string DEFAULT_URL = "http://localhost:8080/";
 
         private readonly bool RUN_REMOTE = false;
@@ -17,14 +18,15 @@ namespace SeleniumPOC.Common
         private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME;
         private readonly bool RUN_HEADLESS = false;
         private readonly bool RUN_DESKTOP_SIZE = true;
+        private readonly string TEST_NAME = "";
 
         private SeleniumDriverHelper seleniumDriverHelper = new SeleniumDriverHelper();
         public static IWebDriver driver;
 
         protected AllPages Pages;
-       // protected Logger Logger;
+        // protected Logger Logger;
 
-        /*[SetUp]
+        [SetUp]
         public void Setup()
         {
             if (RUN_REMOTE)
@@ -38,21 +40,21 @@ namespace SeleniumPOC.Common
             Console.WriteLine();
 
             GoToUrl(DEFAULT_URL);
-            Pages = new AllPages(driver);f
-            Logger = new Logger();
-        } */
-
-        [SetUp]
-        public void Test()
-        {
-            // new DriverManager().SetUpDriver(new ChromeConfig());
-            driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();
-            driver.Navigate().GoToUrl("https://employee-feature2.live-test-domain.com/");
-            Thread.Sleep(1000);
             Pages = new AllPages(driver);
-            //Logger = new Logger();
+           // Logger = new Logger();
         }
+
+        //[SetUp]
+        //public void Test()
+        //{
+        //    // new DriverManager().SetUpDriver(new ChromeConfig());
+        //    driver = new ChromeDriver();
+        //    driver.Manage().Window.Maximize();
+        //    driver.Navigate().GoToUrl(DEFAULT_URL);
+        //    Thread.Sleep(1000);
+        //    Pages = new AllPages(driver);
+        //    //Logger = new Logger();
+        //}
 
         [TearDown]
         public void TearDown()

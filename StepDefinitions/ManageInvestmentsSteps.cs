@@ -490,57 +490,57 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then("I uncheck Include Unavailable To Buy checkbox")]
         public void ThenIUncheckIncludeUnavailableToBuyCheckbox()
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.UnCheckkUnavailableToBuyButton();
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.UnCheckkUnavailableToBuyButton();
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clearStock();
         }
 
         [Then("I select Fund Type as {string}")]
         public void ThenISelectFundTypeAs(string fundType)
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectFundType(fundType);
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.SelectFundType(fundType);
         }
 
         [Then("I validate one or more investment products are available")]
         public void ThenIValidateOneOrMoreInvestmentProductsAreAvailable()
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.ValidateOneOrMoreProductsAvailable();
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.ValidateOneOrMoreProductsAvailable();
         }
 
         [Then("I deslect Fund Type as {string}")]
         public void ThenIDeslectFundTypeAs(string fundType)
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.DeSelectFundType(fundType);
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.DeSelectFundType(fundType);
         }
 
         [Then("I validate zero investment products are available")]
         public void ThenIValidateZeroInvestmentProductsAreAvailable()
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.ValidateZeroProductsAvailable();
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.ValidateZeroProductsAvailable();
         }
 
 
         [Then("I select Fund Company as {string}")]
         public void ThenISelectFundCompanyAs(string companyType)
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectCompanyType(companyType);
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.SelectCompanyType(companyType);
         }
 
         [Then("I select Asset Class as {string}")]
         public void ThenISelectAssetClassAs(string assetClassType)
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.SelectAssetClassType(assetClassType);
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.SelectAssetClassType(assetClassType);
         }
 
         [Then("I toggle on index fund")]
         public void ThenIToggleOnIndexFund()
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.toggleOnIndexFund();
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.toggleIndexFund();
         }
 
         [Then("I toggle off index fund")]
         public void ThenITogglwOffIndexFund()
         {
-            Pages.ManageInvestmentsPage.SearchAndTradePage.toggleOffIndexFund();
+            Pages?.ManageInvestmentsPage.SearchAndTradePage.toggleIndexFund();
         }
 
 

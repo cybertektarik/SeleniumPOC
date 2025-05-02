@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -14,8 +15,8 @@ namespace SeleniumPOC.Common
     {
         private readonly string PATH_TO_CHROME = @"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
         private readonly string PATH_TO_CHROMEDRIVER = @"C:\\Compile\\NuGetPackages\\selenium.webdriver.chromedriver\\112.0.6478.12600\\driver\\win32\\chromedriver.exe";
-        //private readonly string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-       // private readonly string PERFECTO_TOKEN = "<Paste token here!>";
+        private readonly string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
+        private readonly string PERFECTO_TOKEN = "<Paste token here!>";
 
         // private ReportiumClient reportiumClient;
 
@@ -46,7 +47,7 @@ namespace SeleniumPOC.Common
             return driver;
         }
 
-        /*public WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
+        public WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
         {
             string scriptName = testName + "-" + platformName + "-" + browserType;
             WebDriver driver = null;
@@ -99,37 +100,37 @@ namespace SeleniumPOC.Common
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
             TestContext.WriteLine(driver.ToString());
-            StartPerfectoReporting(driver, browserType, platformName, scriptName);
+            //StartPerfectoReporting(driver, browserType, platformName, scriptName);
 
             return driver;
         }
 
-        public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
-        {
-            DateTime date = DateTime.Now;
-            int dateJob = 100000 + date.Month * 100 + date.Day;
+        //public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
+        //{
+        //    DateTime date = DateTime.Now;
+        //    int dateJob = 100000 + date.Month * 100 + date.Day;
 
-            PerfectoExecutionContext perfectoExecutionContext = new PerfectoExecutionContext.PerfectoExecutionContextBuilder()
-                .WithProject(new Project("Employee Portal", "feature27"))
-                .WithJob(new Job("Sample CI Job", dateJob))
-                .WithWebDriver(driver)
-                .Build();
+        //    PerfectoExecutionContext perfectoExecutionContext = new PerfectoExecutionContext.PerfectoExecutionContextBuilder()
+        //        .WithProject(new Project("Employee Portal", "feature27"))
+        //        .WithJob(new Job("Sample CI Job", dateJob))
+        //        .WithWebDriver(driver)
+        //        .Build();
 
-            reportiumClient = PerfectoClientFactory.CreatePerfectoReportiumClient(perfectoExecutionContext);
-            reportiumClient.TestStart(scriptName, new TestContext.TestContextTags(browserType, platformName));
-        }
+        //    reportiumClient = PerfectoClientFactory.CreatePerfectoReportiumClient(perfectoExecutionContext);
+        //    reportiumClient.TestStart(scriptName, new TestContext.TestContextTags(browserType, platformName));
+        //}
 
-        public void StopPerfectoReporting(bool pass)
-        {
-            if (pass)
-                reportiumClient.TestStop(TestResultFactory.CreateSuccess());
-            else
-                reportiumClient.TestStop(TestResultFactory.CreateFailure("Failed"));
+        //public void StopPerfectoReporting(bool pass)
+        //{
+        //    if (pass)
+        //        reportiumClient.TestStop(TestResultFactory.CreateSuccess());
+        //    else
+        //        reportiumClient.TestStop(TestResultFactory.CreateFailure("Failed"));
 
-            string reportURL = reportiumClient.GetReportUrl();
-            Console.WriteLine(reportURL);
-        }
-    }*/
+        //    string reportURL = reportiumClient.GetReportUrl();
+        //    Console.WriteLine(reportURL);
+        //}
     }
 }
+
 
