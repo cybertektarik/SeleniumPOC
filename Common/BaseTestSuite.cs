@@ -26,35 +26,44 @@ namespace SeleniumPOC.Common
         protected AllPages Pages;
         // protected Logger Logger;
 
-        [SetUp]
-        public void Setup()
-        {
-            if (RUN_REMOTE)
-                driver = seleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
-            else
-                driver = seleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, RUN_HEADLESS, RUN_DESKTOP_SIZE);
-
-            Console.WriteLine();
-            Console.WriteLine("********** STARTING TEST: " + TestContext.CurrentContext.Test.Name + " **********");
-            Console.WriteLine("********** TIME: " + DateTime.Now + " **********");
-            Console.WriteLine();
-
-            GoToUrl(DEFAULT_URL);
-            Pages = new AllPages(driver);
-           // Logger = new Logger();
-        }
-
         //[SetUp]
-        //public void Test()
+        //public void Setup()
         //{
-        //    // new DriverManager().SetUpDriver(new ChromeConfig());
-        //    driver = new ChromeDriver();
-        //    driver.Manage().Window.Maximize();
-        //    driver.Navigate().GoToUrl(DEFAULT_URL);
-        //    Thread.Sleep(1000);
+        //    if (RUN_REMOTE)
+        //        driver = seleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
+        //    else
+        //        driver = seleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, RUN_HEADLESS, RUN_DESKTOP_SIZE);
+
+        //    Console.WriteLine();
+        //    Console.WriteLine("********** STARTING TEST: " + TestContext.CurrentContext.Test.Name + " **********");
+        //    Console.WriteLine("********** TIME: " + DateTime.Now + " **********");
+        //    Console.WriteLine();
+
+        //    GoToUrl(DEFAULT_URL);
         //    Pages = new AllPages(driver);
-        //    //Logger = new Logger();
+        //   // Logger = new Logger();
         //}
+
+        [SetUp]
+        public void Test()
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--no-sandbox");
+            options.AddArgument("--disable-dev-shm-usage");
+            options.AddArgument("--ignore-certificate-errors");
+            options.AddArgument("--disable-gpu");
+            options.AddArgument("--disable-extensions");
+            options.AddArgument("--allow-insecure-localhost");
+            options.AcceptInsecureCertificates = true;
+            driver = new ChromeDriver(options);
+            driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl(DEFAULT_URL);
+            Thread.Sleep(2000);
+            Pages = new AllPages(driver);
+            //_scenarioContext["driver"] = driver;
+            //_scenarioContext["Pages"] = Pages;
+            //Logger = new Logger();
+        }
 
         [TearDown]
         public void TearDown()

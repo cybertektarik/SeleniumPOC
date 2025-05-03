@@ -1,136 +1,170 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Safari;
-//using Reportium.Client;
-//using Reportium.Model;
-//using Reportium.Test.Result;
+using Reportium.Client;
+using Reportium.Model;
+using Reportium.Test;
+using Reportium.Test.Result;
+using System.Drawing;
 
 namespace SeleniumPOC.Common
 {
     internal class SeleniumDriverHelper
     {
-        private readonly string PATH_TO_CHROME = @"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-        private readonly string PATH_TO_CHROMEDRIVER = @"C:\\Compile\\NuGetPackages\\selenium.webdriver.chromedriver\\112.0.6478.12600\\driver\\win32\\chromedriver.exe";
-        private readonly string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-        private readonly string PERFECTO_TOKEN = "<Paste token here!>";
+        private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
+        private const string PERFECTO_TOKEN = "";
+        private ReportiumClient? _reportiumClient;
 
-        // private ReportiumClient reportiumClient;
-
-        public WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
+        public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
         {
-            WebDriver driver = null;
-
-            switch (browserType)
+            try
             {
-                case Constants.BROWSER_CHROME:
-                    ChromeOptions chromeOptions = new ChromeOptions();
-                    chromeOptions.BinaryLocation = PATH_TO_CHROME;
+                WebDriver? driver = null;
+
+                if (browserType.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+                {
+                    ChromeOptions chromeOptions = new();
 
                     if (headless)
-                        chromeOptions.AddArguments("headless");
+                        chromeOptions.AddArguments("--headless");
+                    // Always launch in incognito mode
+                    chromeOptions.AddArguments("--incognito");
 
-                    driver = new ChromeDriver(PATH_TO_CHROMEDRIVER, chromeOptions);
+                    // Automatically manage the ChromeDriver version
+                    driver = new ChromeDriver(chromeOptions);
+                }
+                else if (browserType.Equals("edge", StringComparison.OrdinalIgnoreCase))
+                {
+                    EdgeOptions edgeOptions = new();
 
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+                    if (headless)
+                        edgeOptions.AddArguments("--headless");
+                    // Always launch in InPrivate mode
+                    edgeOptions.AddArguments("-inprivate");
 
-                    if (desktopSize)
-                        driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080); // Desktop
-                    else
-                        driver.Manage().Window.Size = new System.Drawing.Size(390, 844); // Mobile
-                    break;
+                    // Automatically manage the EdgeDriver version
+                    driver = new EdgeDriver(edgeOptions);
+                }
+                else
+                {
+                    throw new ArgumentException($"Unsupported browser type: {browserType}");
+                }
+
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+
+                if (desktopSize)
+                    driver.Manage().Window.Size = new Size(1920, 1080); // Desktop
+                else
+                    driver.Manage().Window.Size = new Size(390, 844); // Mobile
+
+                return driver;
             }
-
-            return driver;
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error initializing local driver: {e.Message}");
+                throw;
+            }
         }
 
-        public WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
+
+        public static WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
         {
-            string scriptName = testName + "-" + platformName + "-" + browserType;
-            WebDriver driver = null;
-            DriverOptions driverOptions = null;
-            Dictionary<string, object> perfectoOptions = new Dictionary<string, object>();
-            perfectoOptions.Add("securityToken", PERFECTO_TOKEN);
-            perfectoOptions.Add("resolution", desktopSize);
-            perfectoOptions.Add("scriptName", scriptName);
-            perfectoOptions.Add("location", "US East");
+            if (string.IsNullOrEmpty(PERFECTO_TOKEN))
+                throw new InvalidOperationException("Perfecto token is not set. Please configure 'PERFECTO_TOKEN' as an environment variable.");
 
-            switch (browserType)
+            try
             {
-                case Constants.BROWSER_CHROME:
-                    driverOptions = new ChromeOptions();
-                    ((ChromeOptions)driverOptions).BrowserVersion = "latest";
-                    break;
+                string scriptName = $"{testName}-{platformName}-{browserType}";
+                Dictionary<string, object> perfectoOptions = new Dictionary<string, object>
+                {
+                    {"securityToken", PERFECTO_TOKEN},
+                    {"resolution", desktopSize},
+                    {"scriptName", scriptName},
+                    {"location", "US East"}
+                };
 
-                case Constants.BROWSER_FIREFOX:
-                    driverOptions = new FirefoxOptions();
-                    ((FirefoxOptions)driverOptions).BrowserVersion = "latest";
-                    break;
+                DriverOptions driverOptions = browserType switch
+                {
+                    "chrome" => new ChromeOptions { BrowserVersion = "latest" },
+                    "firefox" => new FirefoxOptions { BrowserVersion = "latest" },
+                    "edge" => new EdgeOptions { BrowserVersion = "latest" },
+                    "safari" => new SafariOptions { BrowserVersion = "14" },
+                    _ => throw new ArgumentException($"Unrecognized browser type: {browserType}")
+                };
 
-                case Constants.BROWSER_EDGE:
-                    driverOptions = new EdgeOptions();
-                    ((EdgeOptions)driverOptions).BrowserVersion = "latest";
-                    break;
+                driverOptions.PlatformName = platformName;
+                driverOptions.AddAdditionalOption("perfecto:options", perfectoOptions);
 
-                case Constants.BROWSER_SAFARI:
-                    driverOptions = new SafariOptions();
-                    ((SafariOptions)driverOptions).BrowserVersion = "14";
-                    break;
+                var driver = new RemoteWebDriver(new Uri(PERFECTO_URL), driverOptions);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+                driver.Manage().Window.Size = new Size(1920, 1080);
 
-                default:
-                    throw new ArgumentException("Unrecognized browser type: " + browserType);
+                return driver;
             }
-
-            switch (platformName)
+            catch (Exception e)
             {
-                case Constants.PLATFORM_MACOS:
-                    perfectoOptions.Add("platformVersion", "macOS Big Sur");
-                    perfectoOptions.Add("location", "NA-US-BOS");
-                    break;
+                Console.Error.WriteLine($"Error initializing Perfecto remote driver: {e.Message}");
+                throw;
             }
-
-            driverOptions.PlatformName = platformName;
-            driverOptions.AddAdditionalOption("perfecto:options", perfectoOptions);
-
-            driver = new RemoteWebDriver(new Uri(string.Format(PERFECTO_URL)), driverOptions);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
-            driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
-
-            TestContext.WriteLine(driver.ToString());
-            //StartPerfectoReporting(driver, browserType, platformName, scriptName);
-
-            return driver;
         }
 
-        //public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
-        //{
-        //    DateTime date = DateTime.Now;
-        //    int dateJob = 100000 + date.Month * 100 + date.Day;
+        // Fix for CS0426: The type name 'TestContextTags' does not exist in the type 'TestContext'  
+        // The issue is that 'TestContextTags' is not a valid member of 'TestContext'.  
+        // Instead, we should use 'TestContext.Builder' to build a TestContext object with tags.
 
-        //    PerfectoExecutionContext perfectoExecutionContext = new PerfectoExecutionContext.PerfectoExecutionContextBuilder()
-        //        .WithProject(new Project("Employee Portal", "feature27"))
-        //        .WithJob(new Job("Sample CI Job", dateJob))
-        //        .WithWebDriver(driver)
-        //        .Build();
+        public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
+        {
+            try
+            {
+                DateTime date = DateTime.Now;
+                int dateJob = 100000 + date.Month * 100 + date.Day;
 
-        //    reportiumClient = PerfectoClientFactory.CreatePerfectoReportiumClient(perfectoExecutionContext);
-        //    reportiumClient.TestStart(scriptName, new TestContext.TestContextTags(browserType, platformName));
-        //}
+                var perfectoExecutionContext = new PerfectoExecutionContext.PerfectoExecutionContextBuilder()
+                    .WithProject(new Project("Employee Portal", "feature27"))
+                    .WithJob(new Job("Sample CI Job", dateJob))
+                    .WithWebDriver(driver)
+                    .Build();
 
-        //public void StopPerfectoReporting(bool pass)
-        //{
-        //    if (pass)
-        //        reportiumClient.TestStop(TestResultFactory.CreateSuccess());
-        //    else
-        //        reportiumClient.TestStop(TestResultFactory.CreateFailure("Failed"));
+                _reportiumClient = PerfectoClientFactory.CreatePerfectoReportiumClient(perfectoExecutionContext);
 
-        //    string reportURL = reportiumClient.GetReportUrl();
-        //    Console.WriteLine(reportURL);
-        //}
+                // Correctly build the TestContext with tags
+                var testContext = new TestContext.Builder()
+                    .WithTestExecutionTags(browserType, platformName)
+                    .Build();
+
+                _reportiumClient.TestStart(scriptName, testContext);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error starting Perfecto reporting: {e.Message}");
+                throw;
+            }
+        }
+
+        public void StopPerfectoReporting(bool pass)
+        {
+            try
+            {
+                if (_reportiumClient == null)
+                    throw new InvalidOperationException("Reportium client is not initialized. Make sure to call StartPerfectoReporting before StopPerfectoReporting.");
+
+                if (pass)
+                    _reportiumClient.TestStop(TestResultFactory.CreateSuccess());
+                else
+                    _reportiumClient.TestStop(TestResultFactory.CreateFailure("Test failed"));
+
+                string reportURL = _reportiumClient.GetReportUrl();
+                Console.WriteLine($"Perfecto Report URL: {reportURL}");
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error stopping Perfecto reporting: {e.Message}");
+                throw;
+            }
+        }
     }
 }
-
 

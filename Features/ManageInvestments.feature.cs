@@ -10,15 +10,13 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
+using Reqnroll;
 namespace SeleniumProject.Features
 {
-    using Reqnroll;
-    using System;
-    using System.Linq;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
-    [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Manage Investments - Search Funds")]
     [NUnit.Framework.FixtureLifeCycleAttribute(NUnit.Framework.LifeCycle.InstancePerTestCase)]
@@ -29,41 +27,63 @@ namespace SeleniumProject.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Manage Investments - Search Funds", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Manage Investments - Search Funds", null, global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
 #line 1 "ManageInvestments.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
-        public static async System.Threading.Tasks.Task FeatureSetupAsync()
+        public static async global::System.Threading.Tasks.Task FeatureSetupAsync()
         {
         }
         
         [NUnit.Framework.OneTimeTearDownAttribute()]
-        public static async System.Threading.Tasks.Task FeatureTearDownAsync()
+        public static async global::System.Threading.Tasks.Task FeatureTearDownAsync()
         {
         }
         
         [NUnit.Framework.SetUpAttribute()]
-        public async System.Threading.Tasks.Task TestInitializeAsync()
+        public async global::System.Threading.Tasks.Task TestInitializeAsync()
         {
             testRunner = global::Reqnroll.TestRunnerManager.GetTestRunnerForAssembly(featureHint: featureInfo);
-            if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Equals(featureInfo) == false)))
+            try
             {
-                await testRunner.OnFeatureEndAsync();
+                if (((testRunner.FeatureContext != null) 
+                            && (testRunner.FeatureContext.FeatureInfo.Equals(featureInfo) == false)))
+                {
+                    await testRunner.OnFeatureEndAsync();
+                }
             }
-            if ((testRunner.FeatureContext == null))
+            finally
             {
-                await testRunner.OnFeatureStartAsync(featureInfo);
+                if (((testRunner.FeatureContext != null) 
+                            && testRunner.FeatureContext.BeforeFeatureHookFailed))
+                {
+                    throw new global::Reqnroll.ReqnrollException("Scenario skipped because of previous before feature hook error");
+                }
+                if ((testRunner.FeatureContext == null))
+                {
+                    await testRunner.OnFeatureStartAsync(featureInfo);
+                }
             }
         }
         
         [NUnit.Framework.TearDownAttribute()]
-        public async System.Threading.Tasks.Task TestTearDownAsync()
+        public async global::System.Threading.Tasks.Task TestTearDownAsync()
         {
-            await testRunner.OnScenarioEndAsync();
-            global::Reqnroll.TestRunnerManager.ReleaseTestRunner(testRunner);
+            if ((testRunner == null))
+            {
+                return;
+            }
+            try
+            {
+                await testRunner.OnScenarioEndAsync();
+            }
+            finally
+            {
+                global::Reqnroll.TestRunnerManager.ReleaseTestRunner(testRunner);
+                testRunner = null;
+            }
         }
         
         public void ScenarioInitialize(global::Reqnroll.ScenarioInfo scenarioInfo)
@@ -72,12 +92,12 @@ namespace SeleniumProject.Features
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
-        public async System.Threading.Tasks.Task ScenarioStartAsync()
+        public async global::System.Threading.Tasks.Task ScenarioStartAsync()
         {
             await testRunner.OnScenarioStartAsync();
         }
         
-        public async System.Threading.Tasks.Task ScenarioCleanupAsync()
+        public async global::System.Threading.Tasks.Task ScenarioCleanupAsync()
         {
             await testRunner.CollectScenarioErrorsAsync();
         }
@@ -89,10 +109,10 @@ namespace SeleniumProject.Features
         [NUnit.Framework.TestCaseAttribute("XYZ", "0", null)]
         [NUnit.Framework.TestCaseAttribute("123", "0", null)]
         [NUnit.Framework.TestCaseAttribute("12*^h", "0", null)]
-        public async System.Threading.Tasks.Task SearchForStockSymbolsInAvailableInvestmentsTab(string symbol, string expected_Count, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task SearchForStockSymbolsInAvailableInvestmentsTab(string symbol, string expected_Count, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("symbol", symbol);
             argumentsOfScenario.Add("expected_count", expected_Count);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Search for stock symbols in Available Investments tab", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -134,10 +154,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("Activity", "activity", null)]
         [NUnit.Framework.TestCaseAttribute("Documents", "documents", null)]
         [NUnit.Framework.TestCaseAttribute("Fees", "fees", null)]
-        public async System.Threading.Tasks.Task ValidateManageInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task ValidateManageInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Tabs", tabs);
             argumentsOfScenario.Add("text", text);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Manage Investments Page Tabs", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -177,10 +197,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("Activity", "activity", null)]
         [NUnit.Framework.TestCaseAttribute("Documents", "documents", null)]
         [NUnit.Framework.TestCaseAttribute("Fees", "fees", null)]
-        public async System.Threading.Tasks.Task ValidateSelectInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task ValidateSelectInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Tabs", tabs);
             argumentsOfScenario.Add("text", text);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Select Investments Page Tabs", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -220,10 +240,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestCaseAttribute("Activity", "activity", null)]
         [NUnit.Framework.TestCaseAttribute("Documents", "documents", null)]
         [NUnit.Framework.TestCaseAttribute("Fees", "fees", null)]
-        public async System.Threading.Tasks.Task ValidateChoiceInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task ValidateChoiceInvestmentsPageTabs(string tabs, string text, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Tabs", tabs);
             argumentsOfScenario.Add("text", text);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Choice Investments Page Tabs", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -258,10 +278,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Enrolling a new Select Investment Account")]
-        public async System.Threading.Tasks.Task EnrollingANewSelectInvestmentAccount()
+        public async global::System.Threading.Tasks.Task EnrollingANewSelectInvestmentAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Enrolling a new Select Investment Account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 63
 this.ScenarioInitialize(scenarioInfo);
@@ -363,10 +383,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Enrolling a new Choice Investment Account")]
-        public async System.Threading.Tasks.Task EnrollingANewChoiceInvestmentAccount()
+        public async global::System.Threading.Tasks.Task EnrollingANewChoiceInvestmentAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Enrolling a new Choice Investment Account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 95
 this.ScenarioInitialize(scenarioInfo);
@@ -450,10 +470,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Enrolling a new Managed Investment Account")]
-        public async System.Threading.Tasks.Task EnrollingANewManagedInvestmentAccount()
+        public async global::System.Threading.Tasks.Task EnrollingANewManagedInvestmentAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Enrolling a new Managed Investment Account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 126
 this.ScenarioInitialize(scenarioInfo);
@@ -571,10 +591,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validate Learn More Link on Account Selection Page")]
-        public async System.Threading.Tasks.Task ValidateLearnMoreLinkOnAccountSelectionPage()
+        public async global::System.Threading.Tasks.Task ValidateLearnMoreLinkOnAccountSelectionPage()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Learn More Link on Account Selection Page", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 170
 this.ScenarioInitialize(scenarioInfo);
@@ -607,10 +627,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validate Sell Button on the Select account")]
-        public async System.Threading.Tasks.Task ValidateSellButtonOnTheSelectAccount()
+        public async global::System.Threading.Tasks.Task ValidateSellButtonOnTheSelectAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Sell Button on the Select account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 177
 this.ScenarioInitialize(scenarioInfo);
@@ -652,10 +672,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validate TRADE Button on the Managed account")]
-        public async System.Threading.Tasks.Task ValidateTRADEButtonOnTheManagedAccount()
+        public async global::System.Threading.Tasks.Task ValidateTRADEButtonOnTheManagedAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate TRADE Button on the Managed account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 187
 this.ScenarioInitialize(scenarioInfo);
@@ -697,10 +717,10 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validate Search Button on the Choice account")]
-        public async System.Threading.Tasks.Task ValidateSearchButtonOnTheChoiceAccount()
+        public async global::System.Threading.Tasks.Task ValidateSearchButtonOnTheChoiceAccount()
         {
             string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Search Button on the Choice account", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 197
 this.ScenarioInitialize(scenarioInfo);
