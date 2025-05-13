@@ -56,7 +56,7 @@ namespace SeleniumPOC.Common
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
 
                 if (desktopSize)
-                    driver.Manage().Window.Size = new Size(1920, 1080); // Desktop
+                    driver.Manage().Window.Size = new Size(1200, 800); // Desktop 1920, 1080
                 else
                     driver.Manage().Window.Size = new Size(390, 844); // Mobile
 

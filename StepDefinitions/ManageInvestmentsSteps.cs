@@ -42,8 +42,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.LoginPage.Login("Feature2HSABTester023");
         }
 
-        [Given(@"I am logged in as a Pre enrolled user")]
-        public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
+        /* [Given(@"I am logged in as a Pre enrolled user")]
+         public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
+         {
+             Pages?.LoginPage.Login("Feature2HSABTester026");
+         }*/
+
+        [Given(@"I am logged into the Employee Portal")]
+        public void GivenILoginToTheEmployeePortalAsUser()
         {
             Pages?.LoginPage.Login("Feature2HSABTester026");
         }

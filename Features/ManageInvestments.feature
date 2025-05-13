@@ -61,7 +61,8 @@ Examples:
 	| Fees             | fees             |
 
 Scenario: Enrolling a new Select Investment Account
-	Given I am logged in as a Pre enrolled user
+	#Given I am logged in as a Pre enrolled user
+	Given I am logged into the Employee Portal
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Enroll in HSA Invest" banner link
 	And I click on the "ENROLL" Button
@@ -74,8 +75,8 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
- # When I enter name "Test Signature" in the name field
- # And I click on the Sign Button
+    When I enter name "Test Signature" in the name field
+    And I click on the Sign Button
 	And I click on the Next Button
 	And I answer question "1" to "stronglyAgree" from the questionnaire
 	And I answer question "2" to "stronglyAgree" from the questionnaire
@@ -93,7 +94,8 @@ Scenario: Enrolling a new Select Investment Account
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 Scenario: Enrolling a new Choice Investment Account
-	Given I am logged in as a Pre enrolled user
+	#Given I am logged in as a Pre enrolled user
+	Given I am logged into the Employee Portal
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Enroll in HSA Invest" banner link
 	And I click on the "ENROLL" Button
@@ -105,8 +107,8 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
-	And I enter name "Test Signature" in the name field
-	And I click on the Sign Button
+	#And I enter name "Test Signature" in the name field
+	#And I click on the Sign Button
 	And I click on the Next Button
   #And I answer question "1" to "agree" from the questionnaire
   #And I answer question "2" to "agree" from the questionnaire
@@ -124,7 +126,8 @@ Scenario: Enrolling a new Choice Investment Account
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 Scenario: Enrolling a new Managed Investment Account
-	Given I am logged in as a Pre enrolled user
+	#Given I am logged in as a Pre enrolled user
+	Given I am logged into the Employee Portal
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Enroll in HSA Invest" banner link
 	And I click on the "ENROLL" Button
@@ -236,6 +239,40 @@ Scenario: Validate Search Button on the Choice account
 	And I validate one or more investment products are available
 	And I toggle off index fund
 	And I validate zero investment products are available
+
+	Given I am logged into the Employee Portal
+
+
+Given I am logged in as a Pre enrolled user
+When I click on "Manage Investment" from the navigation menu
+And I click on the "Enroll in HSA Invest" banner link
+When I click on the "ENROLL" Button
+Then I should see the "HsaBank Investment Esign Agreement" letter displayed
+When I check on Esign checkbox
+And I click on the Sign Button
+And I click on the Next Button
+When I click on the "Select" Investment account types
+And I click on the Next Button
+When I check on Esign checkbox
+And I click on the Next Button
+When I enter name "Test Signature" in the name field
+When I click on the Sign Button
+And I click on the Next Button
+And I answer question "1" to "agree" from the questionnaire
+And I answer question "2" to "agree" from the questionnaire
+And I answer question "3" to "agree" from the questionnaire
+And I answer question "4" to "agree" from the questionnaire
+And I answer question "5" to "agree" from the questionnaire
+And I click on the SUBMIT Button
+And I click on the Next Button
+And I click on the Skip Button
+And I click on the REVIEW Button
+And I click on the ACCEPT Button
+And I navigate Manage HSA Invest Enrollment page
+And I click Manage HSA Invest Enrollment
+Then I validate "Your investments will activate after you reach a minimum HSA cash balance of"
+And I click on "Cancel Enrollment"
+Then I validate navigated - START ENROLLMENT page
 
 
    

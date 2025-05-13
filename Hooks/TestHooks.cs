@@ -11,7 +11,7 @@ using OpenQA.Selenium.Edge;
 namespace SeleniumPOC.Hooks
 {
     [Binding]
-    public class TestHooks
+    public class TestHooks //Manages WebDriver lifecycle:
     {
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver driver = null!; // Fix: Initialize with null-forgiving operator  
@@ -25,7 +25,8 @@ namespace SeleniumPOC.Hooks
         private readonly bool RUN_DESKTOP_SIZE = true;
         private readonly string TEST_NAME;
 
-        public TestHooks(ScenarioContext scenarioContext)
+        public TestHooks(ScenarioContext scenarioContext) //constructor is a special method
+                                                          // that runs automatically when an object of the class is created.
         {
             _scenarioContext = scenarioContext;
             TEST_NAME = _scenarioContext.ScenarioInfo.Title;
@@ -47,8 +48,10 @@ namespace SeleniumPOC.Hooks
 
             GoToUrl(DEFAULT_URL);
             Thread.Sleep(2000);
-            Pages = new AllPages(driver);
-            _scenarioContext["driver"] = driver;
+            Pages = new AllPages(driver);//creates all the page objects like LoginPage,HomePage to interact during the test.
+
+
+            _scenarioContext["driver"] = driver; //It saves the browser and page objects
             _scenarioContext["Pages"] = Pages;
         }
 
