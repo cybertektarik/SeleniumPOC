@@ -42,11 +42,11 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.LoginPage.Login("Feature2HSABTester023");
         }
 
-        /* [Given(@"I am logged in as a Pre enrolled user")]
+         [Given(@"I am logged in as a Pre enrolled user")]
          public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
          {
-             Pages?.LoginPage.Login("Feature2HSABTester026");
-         }*/
+             Pages?.LoginPage.Login("Feature2HSABTester005");
+         }
 
         [Given(@"I am logged into the Employee Portal")]
         public void GivenILoginToTheEmployeePortalAsUser()
@@ -111,6 +111,10 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             {
                 Pages?.ManageInvestmentsPage.ChooseEnrollInHsaInvest();
             }
+            else if (bannerLink == "Manage HSA Invest Enrollment")
+            {
+                Pages?.ManageInvestmentsPage.ClickManageHsaInvestEnroll();
+            }
         }
 
         [Then(@"I should see the ""(.*)"" link displayed")]
@@ -146,6 +150,16 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             if (BtnName == "ENROLL")
             {
                 Pages?.ManageInvestmentsPage.ChooseEnroll();
+            }
+
+            else if (BtnName == "START ENROLLMENT")
+            {
+                Pages?.ManageInvestmentsPage.StartPreEnrollment();
+            }
+
+            else if (BtnName == "Cancel Enrollment")
+            {
+                Pages?.ManageInvestmentsPage.CancelEnrollment();
             }
         }
 
@@ -549,6 +563,25 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.ManageInvestmentsPage.SearchAndTradePage.toggleIndexFund();
         }
 
+        [Then(@"I should see the ""(.*)"" banner link")]
+        public void ThenIShouldSeeTitle(string linkName)
+        {
+            if (linkName == "Manage HSA Invest Enrollment")
+            {
+                Pages?.ManageInvestmentsPage.VerifyManageHsaInvestEnrollIsDisplayed();
+            }
+        }
+
+        [Then(@"I validate message ""(.*)""")]
+        public void ThenIValidateMessage(string linkName)
+        {
+            if (linkName == "Investment Enrollment has been cancelled")
+            {
+                Pages?.ManageInvestmentsPage.VerifyInvestEnrollCancelledIsDisplayed();
+            }
+            else
+                Pages?.ManageInvestmentsPage.VerifyYourInvestmentsWillActivateIsDisplayed();
+        }
 
     }
 }

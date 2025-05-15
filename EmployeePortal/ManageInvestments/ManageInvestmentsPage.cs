@@ -16,9 +16,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl btnHsaInvest => new PageControl(By.XPath("//h4[contains(text(), 'HSA Invest')]/.."), "HSA Invest");
 
         private PageControl btnCancelPreEnrollment = new PageControl(By.XPath("//button[text()='Cancel Pre-Enrollment']"));
-        private PageControl btnStartEnrollment = new PageControl(By.XPath("//button[text()='Start Enrollment']"));
+        private PageControl btnStartEnrollment = new PageControl(By.XPath("//*[contains(text(),'Start Enrollment')]"));
         private PageControl linkHsaInvestInfo = new PageControl(By.XPath("//span[text()='HSA Invest Info']"), "HSA Invest Info");
-        
+
         private PageControl stcHsaInvestButtonBalance = new PageControl(By.XPath("//h4[contains(text(),'HSA Invest')]/../div[3]"), "HSA Invest balance");
         private PageControl btnDevenirOrSchwab = new PageControl(By.XPath("//h4[contains(text(), 'Devenir or Schwab')]//.."), "Devenir or Schwab");
         private PageControl stcDevenirOrSchwabButtonBalance = new PageControl(By.XPath("//h4[contains(text(), 'Devenir or Schwab')]/../div[3]"), "Devenir or Schwab balance");
@@ -32,6 +32,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl tabCurrentlySelected = new PageControl(By.XPath("//li[contains(@class, 'active')]"));
         private PageControl tabToSelect(string tabName) => new PageControl(By.XPath($"//ul[contains(@class, 'tabs-container')]/li/a[contains(text(), '{tabName}')]"), tabName);
         private PageControl tabSearchAndTrade = new PageControl(By.XPath("//ul[contains(@class,'tabs-container')]/li/a[contains(text(),'Search & Trade')]"), "Search & Trade");
+        private PageControl linkManageHsaInvestEnroll = new PageControl(By.XPath("//*[contains(text(),'Manage HSA Invest Enrollment')]"), "Manage HSA Invest Enrollment");
+        private PageControl btnCancelEnrollment = new PageControl(By.XPath("//*[contains(text(),'Cancel Enrollment')]"));
+        private PageControl strYourInvestmentsWillActivateText = new PageControl(By.XPath("//*[contains(text(),'Your investments will activate after you reach a minimum HSA cash balance')]"));
+        private PageControl strInvestEnrollCancelledText = new PageControl(By.XPath("//*[contains(text(),'Investment Enrollment has been cancelled')]"));
+
 
         // ======================== C H I L D   P A G E S ========================
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
@@ -201,6 +206,38 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public string GetDevenirOrSchwabButtonBalance()
         {
             return stcDevenirOrSchwabButtonBalance.GetText().Trim();
+        }
+
+        public void ClickManageHsaInvestEnroll()
+        {
+            ClickAndWaitForSpinners(linkManageHsaInvestEnroll);
+        }
+
+        public void VerifyManageHsaInvestEnrollIsDisplayed()
+        {
+            Thread.Sleep(2000);
+            WaitForElementToBeVisible(linkManageHsaInvestEnroll);
+            linkManageHsaInvestEnroll.VerifyIsVisible();
+        }
+
+        public void CancelEnrollment()
+        {
+            btnCancelEnrollment.Click();
+            WaitForSpinners();
+        }
+
+        public void VerifyYourInvestmentsWillActivateIsDisplayed()
+        {
+            Thread.Sleep(2000);
+            WaitForElementToBeVisible(strYourInvestmentsWillActivateText);
+            strYourInvestmentsWillActivateText.VerifyIsVisible();
+        }
+
+        public void VerifyInvestEnrollCancelledIsDisplayed()
+        {
+            Thread.Sleep(2000);
+            WaitForElementToBeVisible(strInvestEnrollCancelledText);
+            strInvestEnrollCancelledText.VerifyIsVisible();
         }
     }
 }

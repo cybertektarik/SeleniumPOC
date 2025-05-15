@@ -60,6 +60,8 @@ namespace SeleniumPOC.Common
                 else
                     driver.Manage().Window.Size = new Size(390, 844); // Mobile
 
+                driver.Manage().Window.Maximize();
+
                 return driver;
             }
             catch (Exception e)

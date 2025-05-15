@@ -29,7 +29,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
             // Get PageControl's Object
             var element = radioQuestion(question, value);
-            element.SendKeysUsingActions(Keys.Up);
+            element.Click();
 
             //try
             //{
