@@ -42,11 +42,11 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.LoginPage.Login("Feature2HSABTester023");
         }
 
-         [Given(@"I am logged in as a Pre enrolled user")]
-         public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
-         {
-             Pages?.LoginPage.Login("Feature2HSABTester005");
-         }
+        [Given(@"I am logged in as a Pre enrolled user")]
+        public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
+        {
+            Pages?.LoginPage.Login("Feature2HSABTester005");
+        }
 
         [Given(@"I am logged into the Employee Portal")]
         public void GivenILoginToTheEmployeePortalAsUser()
@@ -169,6 +169,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             if (linkName == "Learn More")
             {
                 Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMore();
+            }
+            else if (linkName == "Return")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.Return();
+            }
+            else if (linkName == "Managed Learn More")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
             }
         }
 
@@ -581,6 +589,41 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
             else
                 Pages?.ManageInvestmentsPage.VerifyYourInvestmentsWillActivateIsDisplayed();
+        }
+
+        [When(@"I click on see all funds available in ""(.*)"" option")]
+        public void WhenIClickOnAllFundsAvailableAccountType(string accountType)
+        {
+            switch (accountType)
+            {
+                case "Select":
+                    Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.SeeFundsAvailableInSelectOption();
+                    break;
+                case "Choice":
+                    Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.SeeFundsAvailableInChoiceOption();
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid account type: {accountType}");
+            }
+        }
+
+        [Then(@"I verfy the title of page should contains ""(.*)"" option")]
+        public void ThenIVerifyTitlePageContainsAccountType(string accountType)
+        {
+            switch (accountType)
+            {
+                case "Managed":
+                    driver?.Title.Contains("Managed");
+                    break;
+                case "Select":
+                    driver?.Title.Contains("Select");
+                    break;
+                case "Choice":
+                    driver?.Title.Contains("Choice");
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid account type: {accountType}");
+            }
         }
 
     }

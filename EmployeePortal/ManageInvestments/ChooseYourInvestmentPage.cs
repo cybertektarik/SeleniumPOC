@@ -233,6 +233,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         {
             return stcChoiceButtonBalance.GetText().Trim();
         }
+
+        public void LearnMoreManaged()
+        {
+            WaitForElementToBeVisible(inkLearnMoreManaged);
+            inkLearnMoreManaged.Click();
+            Thread.Sleep(3000);
+        }
     }
 }
 
