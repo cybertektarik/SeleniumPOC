@@ -210,7 +210,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void ClickManageHsaInvestEnroll()
         {
-            ClickAndWaitForSpinners(linkManageHsaInvestEnroll);
+            WaitForElementToBeVisible(linkManageHsaInvestEnroll);
+            linkManageHsaInvestEnroll.Click();
+            //ClickAndWaitForSpinners(linkManageHsaInvestEnroll);
         }
 
         public void VerifyManageHsaInvestEnrollIsDisplayed()

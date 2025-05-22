@@ -272,6 +272,12 @@ Scenario: Validate Pre Enrollment for Select Account
 	When I click on the "Cancel Enrollment" Button
 	Then I validate message "Investment Enrollment has been cancelled"
 
+	Scenario: Validate HSA Advisory Agrements
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on "Settings" from the navigation menu
+	And I click on the "HSA Invest Info" info link
+
    
 
 
