@@ -607,19 +607,19 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [Then(@"I verfy the title of page should contains ""(.*)"" option")]
+        [Then(@"I verfy the title of page should contains ""(.*)""")]
         public void ThenIVerifyTitlePageContainsAccountType(string accountType)
         {
             switch (accountType)
             {
                 case "Managed":
-                    driver?.Title.Contains("Managed");
+                    driver?.Title.Contains("managed");
                     break;
                 case "Select":
-                    driver?.Title.Contains("Select");
+                    driver?.Title.Contains("select-list");
                     break;
                 case "Choice":
-                    driver?.Title.Contains("Choice");
+                    driver?.Title.Contains("choice-option");
                     break;
                 default:
                     throw new ArgumentException($"Invalid account type: {accountType}");

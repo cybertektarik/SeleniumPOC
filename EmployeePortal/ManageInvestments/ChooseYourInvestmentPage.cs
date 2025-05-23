@@ -27,7 +27,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl stcChoiceButtonBalance => new PageControl(By.XPath("//h4[text()='Choice']//ancestor::a//strong"), "Choice button balance");
 
         private PageControl inkLearnMore => new PageControl(By.LinkText("Learn More"), "Learn More");
-        private PageControl inkLearnMoreManaged => new PageControl(By.LinkText("Learn more managed"), "Learn more managed");
+        private PageControl inkLearnMoreManaged => new PageControl(By.XPath("//*[text()='Learn more.']"), "Learn more managed");
         private PageControl btnReturn => new PageControl(By.XPath("//span[text()='Return']"), "Return");
 
         private PageControl txtSearchStocksAndFunds => new PageControl(By.XPath("//input[@placeholder='Stock symbol or name of company or fund']"), "Stock Search");

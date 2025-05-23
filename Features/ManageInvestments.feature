@@ -176,14 +176,14 @@ Scenario: Validate Learn More Link on Account Selection Page
 	Then I should see the "Learn More" link displayed
 	When I click on the "Learn More" link
 	Then I should see that each investment account type has a hyperlink
-	When I click on see all funds available in "choice" option
-	And I verfy the title of page should contains "choice"
+	When I click on see all funds available in "Choice" option
+	Then I verfy the title of page should contains "Choice"
 	When I click on the "Learn More" link
-	When I click on see all funds available in "select" option
-	And I verfy the title of page should contains "select"
+	When I click on see all funds available in "Select" option
+	Then I verfy the title of page should contains "Select"
 	When I click on the "Return" link
 	When I click on the "Managed Learn More" link
-	And I verfy the title of page should contains "managed"
+	Then I verfy the title of page should contains "Managed"
 	When I click on the "Return" link
 
 Scenario: Validate Sell Button on the Select account
