@@ -285,6 +285,12 @@ Scenario: Validate Pre Enrollment for Select Account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on "Settings" from the navigation menu
+	And I click on the "HSA Invest" info link
+
+	Scenario: Validate Not Able to Close Account When User Has Holding Funds
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest Info" info link
 
    
