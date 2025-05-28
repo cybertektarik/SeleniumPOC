@@ -607,7 +607,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [Then(@"I verfy the title of page should contains ""(.*)""")]
+        [Then(@"I verify the title of page should contains ""(.*)""")]
         public void ThenIVerifyTitlePageContainsAccountType(string accountType)
         {
             switch (accountType)
