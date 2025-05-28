@@ -97,7 +97,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
             else if (str == "HSA Invest")
             {
-                Pages?.ManageInvestmentsPage.HSAInvestInfo();
+                Pages?.ManageInvestmentsPage.ChooseHsaInvest();
             }
         }
 
@@ -630,11 +630,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
 
             switch (agreementType)
             {
-                case "Managed":
-                    break;
                 case "Select":
+                    Pages.ManageInvestmentsPage.ClickHsaAdvisorySelect();
                     break;
                 case "Choice":
+                    Pages.ManageInvestmentsPage.ClickHsaAdvisoryChoice();
+                    break;
+                case "Managed":
+                    Pages.ManageInvestmentsPage.ClickHsaAdvisoryManaged();
                     break;
                 default:
                     throw new ArgumentException($"Invalid agreementType: {agreementType}");
@@ -674,40 +677,47 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I validate close investment option is disabled for select, choice and managed")]
         public void ThenIValidateCloseInvestmentOptionIsDisabled()
         {
-            var investmentTypes = new List<string> { "select", "choice", "managed" };
+            var investmentTypes = new List<string> { "Select", "Choice", "Managed" };
 
             foreach (var type in investmentTypes)
             {
-                var closeButton = driver.FindElement(By.Id($"close-{type}-button"));
-                bool isDisabled = !closeButton.Enabled || closeButton.GetAttribute("disabled") == "true";
+                bool isDisabled = type switch
+                {
+                    "Select" => Pages.ManageInvestmentsPage.closeInvestmentButtonSelect(),
+                    "Choice" => Pages.ManageInvestmentsPage.closeInvestmentButtonChoice(),
+                    "Managed" => Pages.ManageInvestmentsPage.closeInvestmentButtonManaged(),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
-                Assert.IsTrue(isDisabled, $"Close button for '{type}' should be disabled.");
+                Assert.That(isDisabled, Is.True, $"Close button for '{type}' should be disabled.");
             }
         }
 
         [Then(@"I validate the ""(.*)"" for select, choice and managed")]
         public void ThenIValidateInvestmentCloseMessage(string expectedMessage)
         {
-            var investmentTypes = new List<string> { "select", "choice", "managed" };
+            var investmentTypes = new List<string> { "Select", "Choice", "Managed" };
 
             foreach (var type in investmentTypes)
             {
-                var messageElement = driver.FindElement(By.Id($"close-message-{type}"));
-                string actualMessage = messageElement.Text.Trim();
+                string actualMessage = type switch
+                {
+                    "Select" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionSelectText().Trim(),
+                    "Choice" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionChoiceText().Trim(),
+                    "Managed" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionManagedText().Trim(),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
-                Assert.AreEqual(expectedMessage, actualMessage, $"Mismatch in close message for '{type}'.");
+                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close message for '{type}'.");
             }
         }
 
         [Then(@"I validate username as ""(.*)""")]
         public void ThenIValidateUsernameAs(string expectedUsername)
         {
-            var usernameElement = driver.FindElement(By.Id("username-label"));
-            string actualUsername = usernameElement.Text.Trim();
-
-            Assert.AreEqual(expectedUsername, actualUsername, "Username does not match.");
+            string actualUsername = Pages.ManageInvestmentsPage.getUserNameText().Trim();
+            Assert.That(actualUsername, Is.EqualTo(expectedUsername), "Username does not match.");
         }
-
     }
 }
 
