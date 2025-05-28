@@ -1,18 +1,10 @@
 //using AngleSharp.Dom;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using NUnit.Framework.Constraints;
+using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.BiDi.Modules.Script;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
-using SeleniumPOC.EmployeePortal.Pages.ManageInvestments;
-using System.Diagnostics.Metrics;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Security.Cryptography;
 //using TechTalk.SpecFlow;
-using static OpenQA.Selenium.BiDi.Modules.Input.Wheel;
 
 namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
 {
@@ -22,6 +14,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver? driver;
         protected AllPages? Pages;
+        private string mainTabHandle;
 
         public ManageInvestmentsSearchFundsSteps(ScenarioContext scenarioContext)
         {
@@ -96,9 +89,13 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
         [When(@"I click on the ""(.*)"" info link")]
-        public void WhenIClickHSAInvestInfo(string HSAInvestInfo)
+        public void WhenIClickHSAInvestInfo(string str)
         {
-            if (HSAInvestInfo == "HSA Invest Info")
+            if (str == "HSA Invest Info")
+            {
+                Pages?.ManageInvestmentsPage.HSAInvestInfo();
+            }
+            else if (str == "HSA Invest")
             {
                 Pages?.ManageInvestmentsPage.HSAInvestInfo();
             }
@@ -624,6 +621,91 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 default:
                     throw new ArgumentException($"Invalid account type: {accountType}");
             }
+        }
+
+        [Then(@"I click on HSA Advisory Agreement ""(.*)""")]
+        public void ThenIClickOnHsaAdvisoryAgreement(string agreementType)
+        {
+            mainTabHandle = driver.CurrentWindowHandle;
+
+            switch (agreementType)
+            {
+                case "Managed":
+                    break;
+                case "Select":
+                    break;
+                case "Choice":
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid agreementType: {agreementType}");
+            }
+
+            // Example: Find hyperlink by partial text or another locator strategy
+            //var link = driver.FindElement(By.XPath($"//a[contains(text(),'{agreementType}')]"));
+            //string openInNewTab = Keys.Control + Keys.Return;
+            //link.SendKeys(openInNewTab);
+
+            // Optional: Short delay to allow tab to open
+            Thread.Sleep(1000);
+        }
+
+        [Then(@"I validate the new tab opens with document key ""(.*)"" in the url")]
+        public void ThenIValidateNewTabOpensWithDocumentKey(string documentKey)
+        {
+            var allTabs = driver.WindowHandles;
+
+            // Switch to the new tab
+            string newTabHandle = allTabs.FirstOrDefault(handle => handle != mainTabHandle);
+            Assert.IsNotNull(newTabHandle, "New tab did not open.");
+            driver.SwitchTo().Window(newTabHandle);
+
+            // Validate URL contains the document key
+            string currentUrl = driver.Url;
+            Assert.IsTrue(currentUrl.Contains(documentKey), $"Expected URL to contain '{documentKey}', but got: {currentUrl}");
+        }
+
+        [Then(@"I close the current tab and switch to main tab")]
+        public void ThenICloseCurrentTabAndSwitchToMainTab()
+        {
+            driver.Close(); // Close current (new) tab
+            driver.SwitchTo().Window(mainTabHandle); // Switch back to main
+        }
+
+        [Then(@"I validate close investment option is disabled for select, choice and managed")]
+        public void ThenIValidateCloseInvestmentOptionIsDisabled()
+        {
+            var investmentTypes = new List<string> { "select", "choice", "managed" };
+
+            foreach (var type in investmentTypes)
+            {
+                var closeButton = driver.FindElement(By.Id($"close-{type}-button"));
+                bool isDisabled = !closeButton.Enabled || closeButton.GetAttribute("disabled") == "true";
+
+                Assert.IsTrue(isDisabled, $"Close button for '{type}' should be disabled.");
+            }
+        }
+
+        [Then(@"I validate the ""(.*)"" for select, choice and managed")]
+        public void ThenIValidateInvestmentCloseMessage(string expectedMessage)
+        {
+            var investmentTypes = new List<string> { "select", "choice", "managed" };
+
+            foreach (var type in investmentTypes)
+            {
+                var messageElement = driver.FindElement(By.Id($"close-message-{type}"));
+                string actualMessage = messageElement.Text.Trim();
+
+                Assert.AreEqual(expectedMessage, actualMessage, $"Mismatch in close message for '{type}'.");
+            }
+        }
+
+        [Then(@"I validate username as ""(.*)""")]
+        public void ThenIValidateUsernameAs(string expectedUsername)
+        {
+            var usernameElement = driver.FindElement(By.Id("username-label"));
+            string actualUsername = usernameElement.Text.Trim();
+
+            Assert.AreEqual(expectedUsername, actualUsername, "Username does not match.");
         }
 
     }

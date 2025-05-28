@@ -286,12 +286,24 @@ Scenario: Validate Pre Enrollment for Select Account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest" info link
+	Then I click on HSA Advisory Agreement "Select"
+	Then I validate the new tab opens with document key "HAS_Curated_Advisory_Agreeement_LH" in the url
+	Then I close the current tab and switch to main tab
+	Then I click on HSA Advisory Agreement "Choice"
+	Then I validate the new tab opens with document key "HAS_Choice_Advisory_Agreeement_LH" in the url
+	Then I close the current tab and switch to main tab
+	Then I click on HSA Advisory Agreement "Managed"
+	Then I validate the new tab opens with document key "abg_Advisory_managed" in the url
+	Then I close the current tab and switch to main tab
 
 	Scenario: Validate Not Able to Close Account When User Has Holding Funds
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest Info" info link
+	Then I validate close investment option is disabled for select, choice and managed
+	Then I validate the "to close your investment option, you must sell all your holdings to bring your balance to $0" for select, choice and managed
+	Then I validate username as "Feature2HSABTester003"
 
    
 

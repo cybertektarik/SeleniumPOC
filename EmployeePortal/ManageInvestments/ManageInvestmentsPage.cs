@@ -13,7 +13,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkCreateAccount = new PageControl(By.LinkText("CREATE ACCOUNT")); // ToDo: Remove!
         private PageControl btnEnroll = new PageControl(By.XPath("//span[text()='Enroll']//.."));
         private PageControl btnEnrollHsaInvest = new PageControl(By.XPath("//h4[contains(text(), 'Enroll in HSA Invest')]//.."), "Enroll in HSA Invest");
-        private PageControl btnHsaInvest => new PageControl(By.XPath("//h4[contains(text(), 'HSA Invest')]/.."), "HSA Invest");
+        private PageControl btnHsaInvest => new PageControl(By.XPath("//*[contains(text(), 'HSA Invest')]"), "HSA Invest");
 
         private PageControl btnCancelPreEnrollment = new PageControl(By.XPath("//button[text()='Cancel Pre-Enrollment']"));
         private PageControl btnStartEnrollment = new PageControl(By.XPath("//*[contains(text(),'Start Enrollment')]"));
