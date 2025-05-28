@@ -625,7 +625,7 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.WhenAsync("I click on see all funds available in \"Choice\" option", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 180
- await testRunner.ThenAsync("I verify the title of page should contains \"Choice\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I verfy the title of page should contains \"Choice\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 181
  await testRunner.WhenAsync("I click on the \"Learn More\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
@@ -634,7 +634,7 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.WhenAsync("I click on see all funds available in \"Select\" option", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 183
- await testRunner.ThenAsync("I verify the title of page should contains \"Select\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I verfy the title of page should contains \"Select\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 184
  await testRunner.WhenAsync("I click on the \"Return\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
@@ -643,7 +643,7 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.WhenAsync("I click on the \"Managed Learn More\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 186
- await testRunner.ThenAsync("I verify the title of page should contains \"Managed\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I verfy the title of page should contains \"Managed\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 187
  await testRunner.WhenAsync("I click on the \"Return\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
@@ -995,6 +995,35 @@ this.ScenarioInitialize(scenarioInfo);
 #line 288
  await testRunner.AndAsync("I click on the \"HSA Invest\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
+#line 289
+ await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Select\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 290
+ await testRunner.ThenAsync("I validate the new tab opens with document key \"HAS_Curated_Advisory_Agreeement_L" +
+                        "H\" in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 291
+ await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 292
+ await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Choice\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 293
+ await testRunner.ThenAsync("I validate the new tab opens with document key \"HAS_Choice_Advisory_Agreeement_LH" +
+                        "\" in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 294
+ await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 295
+ await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Managed\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 296
+ await testRunner.ThenAsync("I validate the new tab opens with document key \"abg_Advisory_managed\" in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 297
+ await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
             }
             await this.ScenarioCleanupAsync();
         }
@@ -1006,7 +1035,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Not Able to Close Account When User Has Holding Funds", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 290
+#line 299
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1016,17 +1045,27 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 291
+#line 300
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 292
+#line 301
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 293
+#line 302
  await testRunner.AndAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 294
+#line 303
  await testRunner.AndAsync("I click on the \"HSA Invest Info\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 304
+ await testRunner.ThenAsync("I validate close investment option is disabled for select, choice and managed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 305
+ await testRunner.ThenAsync("I validate the \"to close your investment option, you must sell all your holdings " +
+                        "to bring your balance to $0\" for select, choice and managed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 306
+ await testRunner.ThenAsync("I validate username as \"Feature2HSABTester003\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

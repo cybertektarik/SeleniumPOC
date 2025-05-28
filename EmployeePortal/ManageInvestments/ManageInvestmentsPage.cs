@@ -13,11 +13,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkCreateAccount = new PageControl(By.LinkText("CREATE ACCOUNT")); // ToDo: Remove!
         private PageControl btnEnroll = new PageControl(By.XPath("//span[text()='Enroll']//.."));
         private PageControl btnEnrollHsaInvest = new PageControl(By.XPath("//h4[contains(text(), 'Enroll in HSA Invest')]//.."), "Enroll in HSA Invest");
-        private PageControl btnHsaInvest => new PageControl(By.XPath("//h4[contains(text(), 'HSA Invest')]/.."), "HSA Invest");
+        private PageControl btnHsaInvest => new PageControl(By.XPath("//*[contains(text(), 'HSA Invest')]"), "HSA Invest");
 
         private PageControl btnCancelPreEnrollment = new PageControl(By.XPath("//button[text()='Cancel Pre-Enrollment']"));
         private PageControl btnStartEnrollment = new PageControl(By.XPath("//*[contains(text(),'Start Enrollment')]"));
-        private PageControl linkHsaInvestInfo = new PageControl(By.XPath("//span[text()='HSA Invest Info']"), "HSA Invest Info");
+        private PageControl linkHsaInvestInfo = new PageControl(By.XPath("//*[contains(text(),'HSA Invest Info')]"), "HSA Invest Info");
 
         private PageControl stcHsaInvestButtonBalance = new PageControl(By.XPath("//h4[contains(text(),'HSA Invest')]/../div[3]"), "HSA Invest balance");
         private PageControl btnDevenirOrSchwab = new PageControl(By.XPath("//h4[contains(text(), 'Devenir or Schwab')]//.."), "Devenir or Schwab");
@@ -37,6 +37,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl strYourInvestmentsWillActivateText = new PageControl(By.XPath("//*[contains(text(),'Your investments will activate after you reach a minimum HSA cash balance')]"));
         private PageControl strInvestEnrollCancelledText = new PageControl(By.XPath("//*[contains(text(),'Investment Enrollment has been cancelled')]"));
 
+        private PageControl stUsernameText = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl stCloseInvestmentOptionChoiceText = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl stCloseInvestmentOptionManagedText = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl btnCloseInvestmentOptionSelect = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl btnCloseInvestmentOptionChoice = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl btnCloseInvestmentOptionManaged = new PageControl(By.XPath("//*[@id='']"));
+
+        private PageControl lnkHsaAvisorySelect  = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[@id='']"));
 
         // ======================== C H I L D   P A G E S ========================
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
@@ -240,6 +251,59 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             Thread.Sleep(2000);
             WaitForElementToBeVisible(strInvestEnrollCancelledText);
             strInvestEnrollCancelledText.VerifyIsVisible();
+        }
+
+        public string getUserNameText()
+        {
+            return stUsernameText.GetText();
+        }
+
+        public string geCloseInvestmentOptionSelectText()
+        {
+            return stCloseInvestmentOptionSelectText.GetText();
+        }
+
+        public string geCloseInvestmentOptionChoiceText()
+        {
+            return stCloseInvestmentOptionChoiceText.GetText();
+        }
+
+        public string geCloseInvestmentOptionManagedText()
+        {
+            return stCloseInvestmentOptionManagedText.GetText();
+        }
+
+        public bool closeInvestmentButtonSelect()
+        {
+            return !btnCloseInvestmentOptionSelect.IsEnabled || btnCloseInvestmentOptionSelect.GetAttribute("disabled") == "true";
+        }
+
+        public bool closeInvestmentButtonChoice()
+        {
+            return !btnCloseInvestmentOptionChoice.IsEnabled || btnCloseInvestmentOptionChoice.GetAttribute("disabled") == "true";
+        }
+
+        public bool closeInvestmentButtonManaged()
+        {
+            return !btnCloseInvestmentOptionManaged.IsEnabled || btnCloseInvestmentOptionManaged.GetAttribute("disabled") == "true";
+        }
+
+        public void ClickHsaAdvisorySelect()
+        {
+            lnkHsaAvisorySelect.Click();
+            WaitForSpinners();
+        }
+
+        public void ClickHsaAdvisoryChoice()
+        {
+            lnkHsaAvisoryChoice.Click();
+            WaitForSpinners();
+        }
+
+        public void ClickHsaAdvisoryManaged()
+        {
+            lnkHsaAvisoryManaged.Click();
+            WaitForSpinners();
         }
     }
 }
