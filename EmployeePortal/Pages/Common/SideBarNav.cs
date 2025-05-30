@@ -11,6 +11,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl lnkCashAccount => new PageControl(By.LinkText("Cash Account"), "Cash Account");
         private PageControl lnkManageInvestments => new PageControl(By.LinkText("Manage Investments"), "Manage Investments");
         private PageControl lnkSettings => new PageControl(By.LinkText("Settings"), "Settings");
+        private PageControl lnkResources => new PageControl(By.LinkText("Resources"), "Resources");
 
         private PageControl SelectedTab => new PageControl(By.XPath("//div[@class='sidebar']//a[contains(@class, 'router-link-exact-active')]"));
 
@@ -66,6 +67,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
                 if (GetSelected() == tabToWaitFor)
                     break;
             }
+        }
+
+        public void GoToResources()
+        {
+            GoToLink(lnkResources);
         }
     }
 }

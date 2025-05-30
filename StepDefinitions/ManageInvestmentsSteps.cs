@@ -58,6 +58,9 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 case "Settings":
                     Pages.SidebarNavPage.GoToSettings();
                     break;
+                case "Resources":
+                    Pages.SidebarNavPage.GoToResources();
+                    break;
                 default:
                     throw new ArgumentException($"No navigation action defined for tab: {tabName}");
             }
@@ -628,6 +631,8 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         {
             mainTabHandle = driver.CurrentWindowHandle;
 
+            Thread.Sleep(2000);
+
             switch (agreementType)
             {
                 case "Select":
@@ -642,18 +647,10 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 default:
                     throw new ArgumentException($"Invalid agreementType: {agreementType}");
             }
-
-            // Example: Find hyperlink by partial text or another locator strategy
-            //var link = driver.FindElement(By.XPath($"//a[contains(text(),'{agreementType}')]"));
-            //string openInNewTab = Keys.Control + Keys.Return;
-            //link.SendKeys(openInNewTab);
-
-            // Optional: Short delay to allow tab to open
-            Thread.Sleep(1000);
         }
 
         [Then(@"I validate the new tab opens with document key ""(.*)"" in the url")]
-        public void ThenIValidateNewTabOpensWithDocumentKey(string documentKey)
+        public void ThenIValidateNewTabOpensWithDocumentKey(string expectedDocumentKey)
         {
             var allTabs = driver.WindowHandles;
 
@@ -662,14 +659,33 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Assert.IsNotNull(newTabHandle, "New tab did not open.");
             driver.SwitchTo().Window(newTabHandle);
 
-            // Validate URL contains the document key
+            // Get the current URL
             string currentUrl = driver.Url;
-            Assert.IsTrue(currentUrl.Contains(documentKey), $"Expected URL to contain '{documentKey}', but got: {currentUrl}");
+
+            // Manually parse the fragment (after the #)
+            string fragment = new Uri(currentUrl).Fragment; // returns everything after '#'
+            string actualDocumentKey = null;
+
+            if (fragment.Contains("documentKey="))
+            {
+                var parts = fragment.Split('?');
+                if (parts.Length > 1)
+                {
+                    var queryParams = System.Web.HttpUtility.ParseQueryString(parts[1]);
+                    documentKey = queryParams.Get("documentKey");
+                }
+            }
+
+            // Validate the document key matches expected
+            Assert.That(actualDocumentKey, Is.EqualTo(expectedDocumentKey),
+                $"Expected document key to be '{expectedDocumentKey}', but got: '{actualDocumentKey}' from URL: {currentUrl}");
         }
+
 
         [Then(@"I close the current tab and switch to main tab")]
         public void ThenICloseCurrentTabAndSwitchToMainTab()
         {
+            Thread.Sleep(2000);
             driver.Close(); // Close current (new) tab
             driver.SwitchTo().Window(mainTabHandle); // Switch back to main
         }
@@ -689,7 +705,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
-                Assert.That(isDisabled, Is.True, $"Close button for '{type}' should be disabled.");
+                Assert.That(isDisabled, Is.True, $"CloseInvestment option button for '{type}' should be disabled.");
             }
         }
 
@@ -700,24 +716,38 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
 
             foreach (var type in investmentTypes)
             {
+                // Click the Close Investment button first
+                switch (type)
+                {
+                    case "Select":
+                        Pages.ManageInvestmentsPage.clickCloseInvestmentButtonSelect();
+                        break;
+                    case "Choice":
+                        Pages.ManageInvestmentsPage.clickCloseInvestmentButtonChoice();
+                        break;
+                    case "Managed":
+                        Pages.ManageInvestmentsPage.clickCloseInvestmentButtonManaged();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                // Then retrieve the actual message
                 string actualMessage = type switch
                 {
-                    "Select" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionSelectText().Trim(),
-                    "Choice" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionChoiceText().Trim(),
-                    "Managed" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionManagedText().Trim(),
+                    "Select" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionSelectText(),
+                    "Choice" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionChoiceText(),
+                    "Managed" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionManagedText(),
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
-                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close message for '{type}'.");
+                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close invetsment option message for '{type}'.");
             }
         }
 
-        [Then(@"I validate username as ""(.*)""")]
-        public void ThenIValidateUsernameAs(string expectedUsername)
-        {
-            string actualUsername = Pages.ManageInvestmentsPage.getUserNameText().Trim();
-            Assert.That(actualUsername, Is.EqualTo(expectedUsername), "Username does not match.");
-        }
+
+
+
     }
 }
 

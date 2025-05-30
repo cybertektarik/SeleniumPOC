@@ -13,7 +13,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkCreateAccount = new PageControl(By.LinkText("CREATE ACCOUNT")); // ToDo: Remove!
         private PageControl btnEnroll = new PageControl(By.XPath("//span[text()='Enroll']//.."));
         private PageControl btnEnrollHsaInvest = new PageControl(By.XPath("//h4[contains(text(), 'Enroll in HSA Invest')]//.."), "Enroll in HSA Invest");
-        private PageControl btnHsaInvest => new PageControl(By.XPath("//*[contains(text(), 'HSA Invest')]"), "HSA Invest");
+        private PageControl btnHsaInvest => new PageControl(By.XPath("(//*[contains(text(), 'HSA Invest')])[last()]"), "HSA Invest");
 
         private PageControl btnCancelPreEnrollment = new PageControl(By.XPath("//button[text()='Cancel Pre-Enrollment']"));
         private PageControl btnStartEnrollment = new PageControl(By.XPath("//*[contains(text(),'Start Enrollment')]"));
@@ -37,17 +37,18 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl strYourInvestmentsWillActivateText = new PageControl(By.XPath("//*[contains(text(),'Your investments will activate after you reach a minimum HSA cash balance')]"));
         private PageControl strInvestEnrollCancelledText = new PageControl(By.XPath("//*[contains(text(),'Investment Enrollment has been cancelled')]"));
 
-        private PageControl stUsernameText = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl stCloseInvestmentOptionChoiceText = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl stCloseInvestmentOptionManagedText = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl btnCloseInvestmentOptionSelect = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl btnCloseInvestmentOptionChoice = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl btnCloseInvestmentOptionManaged = new PageControl(By.XPath("//*[@id='']"));
 
-        private PageControl lnkHsaAvisorySelect  = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[@id='']"));
-        private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[@id='']"));
+        private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
+        private PageControl stCloseInvestmentOptionChoiceText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
+        private PageControl stCloseInvestmentOptionManagedText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
+        private PageControl btnCloseInvestmentOptionSelect = new PageControl(By.XPath("(//*[contains(text(),'Close Investment Option')]//ancestor::*//button)[last()-3]"));
+        private PageControl btnCloseInvestmentOptionChoice = new PageControl(By.XPath("(//*[contains(text(),'Close Investment Option')]//ancestor::*//button)[last()-2]"))
+            ;
+        private PageControl btnCloseInvestmentOptionManaged = new PageControl(By.XPath("(//*[contains(text(),'Close Investment Option')]//ancestor::*//button)[last()-1]"));
+
+        private PageControl lnkHsaAvisorySelect = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Select']"));
+        private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']]"));
+        private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
         // ======================== C H I L D   P A G E S ========================
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
@@ -253,11 +254,6 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             strInvestEnrollCancelledText.VerifyIsVisible();
         }
 
-        public string getUserNameText()
-        {
-            return stUsernameText.GetText();
-        }
-
         public string geCloseInvestmentOptionSelectText()
         {
             return stCloseInvestmentOptionSelectText.GetText();
@@ -275,17 +271,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public bool closeInvestmentButtonSelect()
         {
-            return !btnCloseInvestmentOptionSelect.IsEnabled || btnCloseInvestmentOptionSelect.GetAttribute("disabled") == "true";
+            return !btnCloseInvestmentOptionSelect.IsEnabled;
         }
 
         public bool closeInvestmentButtonChoice()
         {
-            return !btnCloseInvestmentOptionChoice.IsEnabled || btnCloseInvestmentOptionChoice.GetAttribute("disabled") == "true";
+            return !btnCloseInvestmentOptionChoice.IsEnabled;
         }
 
         public bool closeInvestmentButtonManaged()
         {
-            return !btnCloseInvestmentOptionManaged.IsEnabled || btnCloseInvestmentOptionManaged.GetAttribute("disabled") == "true";
+            return !btnCloseInvestmentOptionManaged.IsEnabled;
         }
 
         public void ClickHsaAdvisorySelect()
@@ -303,6 +299,24 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ClickHsaAdvisoryManaged()
         {
             lnkHsaAvisoryManaged.Click();
+            WaitForSpinners();
+        }
+
+        public void clickCloseInvestmentButtonSelect()
+        {
+           btnCloseInvestmentOptionSelect.Click();
+            WaitForSpinners();
+        }
+
+        public void clickCloseInvestmentButtonChoice()
+        {
+           btnCloseInvestmentOptionChoice.Click();
+            WaitForSpinners();
+        }
+
+        public void clickCloseInvestmentButtonManaged()
+        {
+            btnCloseInvestmentOptionManaged.Click();
             WaitForSpinners();
         }
     }
