@@ -47,7 +47,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl btnCloseInvestmentOptionManaged = new PageControl(By.XPath("(//*[contains(text(),'Close Investment Option')]//ancestor::*//button)[last()-1]"));
 
         private PageControl lnkHsaAvisorySelect = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Select']"));
-        private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']]"));
+        private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']"));
         private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
         // ======================== C H I L D   P A G E S ========================

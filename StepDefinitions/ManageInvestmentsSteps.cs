@@ -628,8 +628,6 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I validate the HSA Advisory Agreements links for following investment types")]
         public void ThenIValidateHSAAdvisoryAgreementsOpenInNewTab(Table table)
         {
-            String mainTabHandle = driver.CurrentWindowHandle;
-
             foreach (var row in table.Rows)
             {
                 string investmentType = row["Investment Type"];
@@ -661,11 +659,17 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 string fragment = new Uri(currentUrl).Fragment;
                 string actualDocumentKey = null;
 
-                if (fragment.StartsWith("#?") && fragment.Contains("documentKey="))
+                // Handle fragments like "#/document-view?documentKey=..."
+                if (fragment.Contains("documentKey="))
                 {
-                    var query = fragment.TrimStart('#');
-                    var queryParams = System.Web.HttpUtility.ParseQueryString(query);
-                    actualDocumentKey = queryParams.Get("documentKey");
+                    // Extract query string part after "?"
+                    var queryStartIndex = fragment.IndexOf('?');
+                    if (queryStartIndex != -1)
+                    {
+                        string query = fragment.Substring(queryStartIndex + 1); // skip '?'
+                        var queryParams = System.Web.HttpUtility.ParseQueryString(query);
+                        actualDocumentKey = queryParams.Get("documentKey");
+                    }
                 }
 
                 Assert.IsNotNull(actualDocumentKey, $"Document key not found in the URL fragment: {fragment}");

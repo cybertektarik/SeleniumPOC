@@ -967,14 +967,14 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Validate HSA Advisory Agrements for Choice Select and Managed")]
-        public async global::System.Threading.Tasks.Task ValidateHSAAdvisoryAgrementsForChoiceSelectAndManaged()
+        [NUnit.Framework.DescriptionAttribute("Validate HSA Advisory Agreements link for all investment types")]
+        public async global::System.Threading.Tasks.Task ValidateHSAAdvisoryAgreementsLinkForAllInvestmentTypes()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate HSA Advisory Agrements for Choice Select and Managed", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate HSA Advisory Agreements link for all investment types", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 284
- this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -995,48 +995,36 @@ this.ScenarioInitialize(scenarioInfo);
 #line 288
  await testRunner.AndAsync("I click on the \"HSA Invest\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
+                            "Investment Type",
+                            "Document Key"});
+                table1.AddRow(new string[] {
+                            "Select",
+                            "HSA_Curated_Advisory_Agreement_LH"});
+                table1.AddRow(new string[] {
+                            "Choice",
+                            "HSA_Choice_Advisory_Agreement_LH"});
+                table1.AddRow(new string[] {
+                            "Managed",
+                            "abg_advisory_managed"});
 #line 289
- await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Select\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 290
- await testRunner.ThenAsync("I validate the new tab opens with document key \"HSA_Curated_Advisory_Agreement_LH" +
-                        "\" in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 291
- await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 292
- await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Choice\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 293
- await testRunner.ThenAsync("I validate the new tab opens with document key \"HSA_Choice_Advisory_Agreement_LH\"" +
-                        " in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 294
- await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 295
- await testRunner.ThenAsync("I click on HSA Advisory Agreement \"Managed\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 296
- await testRunner.ThenAsync("I validate the new tab opens with document key \"abg_advisory_managed\" in the url", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-#line 297
- await testRunner.ThenAsync("I close the current tab and switch to main tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I validate the HSA Advisory Agreements links for following investment types", ((string)(null)), table1, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Validate Not Able to Close Account When User Has Holding Funds")]
-        public async global::System.Threading.Tasks.Task ValidateNotAbleToCloseAccountWhenUserHasHoldingFunds()
+        [NUnit.Framework.DescriptionAttribute("Validate Close Investment Option Is Disabled and Message Is Displayed When Holdin" +
+            "gs Exist")]
+        public async global::System.Threading.Tasks.Task ValidateCloseInvestmentOptionIsDisabledAndMessageIsDisplayedWhenHoldingsExist()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Not Able to Close Account When User Has Holding Funds", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 299
- this.ScenarioInitialize(scenarioInfo);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Close Investment Option Is Disabled and Message Is Displayed When Holdin" +
+                    "gs Exist", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 296
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -1045,24 +1033,46 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 300
+#line 297
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 301
+#line 298
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 302
+#line 299
  await testRunner.AndAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 303
+#line 300
  await testRunner.AndAsync("I click on the \"HSA Invest Info\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 304
- await testRunner.ThenAsync("I validate close investment option is disabled for select, choice and managed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+                global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
+                            "Investment Type"});
+                table2.AddRow(new string[] {
+                            "Select"});
+                table2.AddRow(new string[] {
+                            "Choice"});
+                table2.AddRow(new string[] {
+                            "Managed"});
+#line 301
+ await testRunner.ThenAsync("I validate the following close investment options are disabled", ((string)(null)), table2, "Then ");
 #line hidden
-#line 305
- await testRunner.ThenAsync("I validate the \"To close your investment option, you must first sell all your hol" +
-                        "dings to bring your balance to $0.\" for select, choice and managed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
+                            "Investment Type",
+                            "Message"});
+                table3.AddRow(new string[] {
+                            "Select",
+                            "To close your investment option, you must first sell all your holdings to bring y" +
+                                "our balance to $0."});
+                table3.AddRow(new string[] {
+                            "Choice",
+                            "To close your investment option, you must first sell all your holdings to bring y" +
+                                "our balance to $0."});
+                table3.AddRow(new string[] {
+                            "Managed",
+                            "To close your investment option, you must first sell all your holdings to bring y" +
+                                "our balance to $0."});
+#line 306
+ await testRunner.AndAsync("I validate the following close investment messages are displayed", ((string)(null)), table3, "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
