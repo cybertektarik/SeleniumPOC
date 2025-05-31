@@ -5,6 +5,8 @@ using SeleniumPOC.EmployeePortal.Pages.Common;
 using Reqnroll;
 using NUnit.Framework;
 using OpenQA.Selenium.Edge;
+using SeleniumProject.Common;
+using AventStack.ExtentReports;
 
 
 
@@ -32,6 +34,18 @@ namespace SeleniumPOC.Hooks
             TEST_NAME = _scenarioContext.ScenarioInfo.Title;
         }
 
+        [BeforeTestRun]
+        public static void BeforeTestRun()
+        {
+            ReportManager.InitReport();
+        }
+
+        [BeforeFeature]
+        public static void BeforeFeature(FeatureContext featureContext)
+        {
+            ReportManager.CreateFeature(featureContext.FeatureInfo.Title);
+        }
+
         [BeforeScenario]
         public void BeforeScenario()
         {
@@ -46,7 +60,7 @@ namespace SeleniumPOC.Hooks
             else
                 driver = SeleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, RUN_HEADLESS, RUN_DESKTOP_SIZE);
 
-            GoToUrl(DEFAULT_URL);
+            NavigateToDefaultUrl(DEFAULT_URL);
             Thread.Sleep(2000);
             Pages = new AllPages(driver);//creates all the page objects like LoginPage,HomePage to interact during the test.
 
@@ -77,7 +91,32 @@ namespace SeleniumPOC.Hooks
             driver?.Quit();
         }
 
-        public void GoToUrl(string url)
+        [AfterStep]
+        public void AfterEachStep(ScenarioContext scenarioContext)
+        {
+            var stepInfo = scenarioContext.StepContext.StepInfo;
+            string stepText = $"{stepInfo.StepDefinitionType} {stepInfo.Text}";
+            string status = scenarioContext.TestError == null ? "Pass" : "Fail";
+
+            if (status == "Fail" && scenarioContext.TryGetValue("driver", out IWebDriver driver))
+            {
+                string base64Screenshot = ScreenshotHelper.CaptureScreenshotBase64(driver);
+                ReportManager.LogStepWithScreenshot(stepText, status, base64Screenshot);
+            }
+            else
+            {
+                ReportManager.LogStep(stepText, status);
+            }
+        }
+
+
+        [AfterTestRun]
+        public static void AfterTestRun()
+        {
+            ReportManager.FlushReport();
+        }
+
+        public void NavigateToDefaultUrl(string url)
         {
             if (driver == null)
             {

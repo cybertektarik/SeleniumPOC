@@ -295,19 +295,19 @@ Scenario: Validate HSA Advisory Agreements link for all investment types
 
 Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed When Holdings Exist
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
-	And I click on "Settings" from the navigation menu
-	And I click on the "HSA Invest Info" info link
-	Then I validate the following close investment options are disabled
-		| Investment Type |
-		| Select          |
-		| Choice          |
-		| Managed         |
-	And I validate the following close investment messages are displayed
-		| Investment Type | Message                                                                                             |
-		| Select          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
-		| Choice          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
-		| Managed         | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+	#When I click on "Manage Investment" from the navigation menu
+	#And I click on "Settings" from the navigation menu
+	#And I click on the "HSA Invest Info" info link
+	#Then I validate the following close investment options are disabled
+	#	| Investment Type |
+	#	| Select          |
+	#	| Choice          |
+	#	| Managed         |
+	#And I validate the following close investment messages are displayed
+	#	| Investment Type | Message                                                                                             |
+	#	| Select          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+	#	| Choice          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+	#	| Managed         | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
    
 
 

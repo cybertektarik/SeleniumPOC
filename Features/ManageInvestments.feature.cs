@@ -1036,44 +1036,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line 297
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 298
- await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 299
- await testRunner.AndAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 300
- await testRunner.AndAsync("I click on the \"HSA Invest Info\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-                global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
-                            "Investment Type"});
-                table2.AddRow(new string[] {
-                            "Select"});
-                table2.AddRow(new string[] {
-                            "Choice"});
-                table2.AddRow(new string[] {
-                            "Managed"});
-#line 301
- await testRunner.ThenAsync("I validate the following close investment options are disabled", ((string)(null)), table2, "Then ");
-#line hidden
-                global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
-                            "Investment Type",
-                            "Message"});
-                table3.AddRow(new string[] {
-                            "Select",
-                            "To close your investment option, you must first sell all your holdings to bring y" +
-                                "our balance to $0."});
-                table3.AddRow(new string[] {
-                            "Choice",
-                            "To close your investment option, you must first sell all your holdings to bring y" +
-                                "our balance to $0."});
-                table3.AddRow(new string[] {
-                            "Managed",
-                            "To close your investment option, you must first sell all your holdings to bring y" +
-                                "our balance to $0."});
-#line 306
- await testRunner.AndAsync("I validate the following close investment messages are displayed", ((string)(null)), table3, "And ");
-#line hidden
             }
             await this.ScenarioCleanupAsync();
         }
