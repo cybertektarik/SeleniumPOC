@@ -281,28 +281,33 @@ Scenario: Validate Pre Enrollment for Select Account
 	When I click on the "Cancel Enrollment" Button
 	Then I validate message "Investment Enrollment has been cancelled"
 
-	Scenario: Validate HSA Advisory Agrements for Choice Select and Managed
+Scenario: Validate HSA Advisory Agreements link for all investment types
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on "Resources" from the navigation menu
 	And I click on the "HSA Invest" info link
-	Then I click on HSA Advisory Agreement "Select"
-	Then I validate the new tab opens with document key "HSA_Curated_Advisory_Agreement_LH" in the url
-	Then I close the current tab and switch to main tab
-	Then I click on HSA Advisory Agreement "Choice"
-	Then I validate the new tab opens with document key "HSA_Choice_Advisory_Agreement_LH" in the url
-	Then I close the current tab and switch to main tab
-	Then I click on HSA Advisory Agreement "Managed"
-	Then I validate the new tab opens with document key "abg_advisory_managed" in the url
-	Then I close the current tab and switch to main tab
+	Then I validate the HSA Advisory Agreements links for following investment types
+		| Investment Type | Document Key                      |
+		| Select          | HSA_Curated_Advisory_Agreement_LH |
+		| Choice          | HSA_Choice_Advisory_Agreement_LH  |
+		| Managed         | abg_advisory_managed              |
 
-	Scenario: Validate Not Able to Close Account When User Has Holding Funds
+
+Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed When Holdings Exist
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest Info" info link
-	Then I validate close investment option is disabled for select, choice and managed
-	Then I validate the "To close your investment option, you must first sell all your holdings to bring your balance to $0." for select, choice and managed
+	Then I validate the following close investment options are disabled
+		| Investment Type |
+		| Select          |
+		| Choice          |
+		| Managed         |
+	And I validate the following close investment messages are displayed
+		| Investment Type | Message                                                                                             |
+		| Select          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+		| Choice          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+		| Managed         | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
    
 
 

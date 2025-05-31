@@ -14,7 +14,6 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver? driver;
         protected AllPages? Pages;
-        private string mainTabHandle;
 
         public ManageInvestmentsSearchFundsSteps(ScenarioContext scenarioContext)
         {
@@ -626,97 +625,89 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [Then(@"I click on HSA Advisory Agreement ""(.*)""")]
-        public void ThenIClickOnHsaAdvisoryAgreement(string agreementType)
+        [Then(@"I validate the HSA Advisory Agreements links for following investment types")]
+        public void ThenIValidateHSAAdvisoryAgreementsOpenInNewTab(Table table)
         {
-            mainTabHandle = driver.CurrentWindowHandle;
+            String mainTabHandle = driver.CurrentWindowHandle;
 
-            Thread.Sleep(2000);
-
-            switch (agreementType)
+            foreach (var row in table.Rows)
             {
-                case "Select":
-                    Pages.ManageInvestmentsPage.ClickHsaAdvisorySelect();
-                    break;
-                case "Choice":
-                    Pages.ManageInvestmentsPage.ClickHsaAdvisoryChoice();
-                    break;
-                case "Managed":
-                    Pages.ManageInvestmentsPage.ClickHsaAdvisoryManaged();
-                    break;
-                default:
-                    throw new ArgumentException($"Invalid agreementType: {agreementType}");
-            }
-        }
+                string investmentType = row["Investment Type"];
+                string expectedDocumentKey = row["Document Key"];
 
-        [Then(@"I validate the new tab opens with document key ""(.*)"" in the url")]
-        public void ThenIValidateNewTabOpensWithDocumentKey(string expectedDocumentKey)
-        {
-            var allTabs = driver.WindowHandles;
-
-            // Switch to the new tab
-            string newTabHandle = allTabs.FirstOrDefault(handle => handle != mainTabHandle);
-            Assert.IsNotNull(newTabHandle, "New tab did not open.");
-            driver.SwitchTo().Window(newTabHandle);
-
-            // Get the current URL
-            string currentUrl = driver.Url;
-
-            // Manually parse the fragment (after the #)
-            string fragment = new Uri(currentUrl).Fragment; // returns everything after '#'
-            string actualDocumentKey = null;
-
-            if (fragment.Contains("documentKey="))
-            {
-                var parts = fragment.Split('?');
-                if (parts.Length > 1)
+                // Click the advisory agreement link based on investment type
+                switch (investmentType)
                 {
-                    var queryParams = System.Web.HttpUtility.ParseQueryString(parts[1]);
-                    documentKey = queryParams.Get("documentKey");
+                    case "Select":
+                        Pages.ManageInvestmentsPage.ClickHsaAdvisorySelect();
+                        break;
+                    case "Choice":
+                        Pages.ManageInvestmentsPage.ClickHsaAdvisoryChoice();
+                        break;
+                    case "Managed":
+                        Pages.ManageInvestmentsPage.ClickHsaAdvisoryManaged();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(investmentType), $"Unsupported type: {investmentType}");
                 }
+
+                // Validate the document key in the new tab's URL
+                var allTabs = driver.WindowHandles;
+                var newTabHandle = allTabs.FirstOrDefault(handle => handle != driver.CurrentWindowHandle);
+                Assert.IsNotNull(newTabHandle, "Expected a new tab to open, but none was found.");
+                driver.SwitchTo().Window(newTabHandle);
+
+                string currentUrl = driver.Url;
+                string fragment = new Uri(currentUrl).Fragment;
+                string actualDocumentKey = null;
+
+                if (fragment.StartsWith("#?") && fragment.Contains("documentKey="))
+                {
+                    var query = fragment.TrimStart('#');
+                    var queryParams = System.Web.HttpUtility.ParseQueryString(query);
+                    actualDocumentKey = queryParams.Get("documentKey");
+                }
+
+                Assert.IsNotNull(actualDocumentKey, $"Document key not found in the URL fragment: {fragment}");
+                Assert.That(actualDocumentKey, Is.EqualTo(expectedDocumentKey),
+                    $"Expected document key to be '{expectedDocumentKey}' for '{investmentType}', but got '{actualDocumentKey}'.");
+
+                // Close the new tab and switch back
+                driver.Close();
+                var remainingTabHandle = driver.WindowHandles.FirstOrDefault();
+                Assert.IsNotNull(remainingTabHandle, "No remaining tab found after closing the current one.");
+                driver.SwitchTo().Window(remainingTabHandle);
             }
-
-            // Validate the document key matches expected
-            Assert.That(actualDocumentKey, Is.EqualTo(expectedDocumentKey),
-                $"Expected document key to be '{expectedDocumentKey}', but got: '{actualDocumentKey}' from URL: {currentUrl}");
         }
 
-
-        [Then(@"I close the current tab and switch to main tab")]
-        public void ThenICloseCurrentTabAndSwitchToMainTab()
+        [Then(@"I validate the following close investment options are disabled")]
+        public void ThenIValidateCloseInvestmentOptionsAreDisabled(Table table)
         {
-            Thread.Sleep(2000);
-            driver.Close(); // Close current (new) tab
-            driver.SwitchTo().Window(mainTabHandle); // Switch back to main
-        }
-
-        [Then(@"I validate close investment option is disabled for select, choice and managed")]
-        public void ThenIValidateCloseInvestmentOptionIsDisabled()
-        {
-            var investmentTypes = new List<string> { "Select", "Choice", "Managed" };
-
-            foreach (var type in investmentTypes)
+            foreach (var row in table.Rows)
             {
+                var type = row["Investment Type"];
+
                 bool isDisabled = type switch
                 {
                     "Select" => Pages.ManageInvestmentsPage.closeInvestmentButtonSelect(),
                     "Choice" => Pages.ManageInvestmentsPage.closeInvestmentButtonChoice(),
                     "Managed" => Pages.ManageInvestmentsPage.closeInvestmentButtonManaged(),
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported investment type: {type}")
                 };
 
-                Assert.That(isDisabled, Is.True, $"CloseInvestment option button for '{type}' should be disabled.");
+                Assert.That(isDisabled, Is.True, $"Close Investment option button for '{type}' should be disabled.");
             }
         }
 
-        [Then(@"I validate the ""(.*)"" for select, choice and managed")]
-        public void ThenIValidateInvestmentCloseMessage(string expectedMessage)
+        [Then(@"I validate the following close investment messages are displayed")]
+        public void ThenIValidateCloseInvestmentMessagesAreDisplayed(Table table)
         {
-            var investmentTypes = new List<string> { "Select", "Choice", "Managed" };
-
-            foreach (var type in investmentTypes)
+            foreach (var row in table.Rows)
             {
-                // Click the Close Investment button first
+                var type = row["Investment Type"];
+                var expectedMessage = row["Message"];
+
+                // Perform click on the respective Close Investment button
                 switch (type)
                 {
                     case "Select":
@@ -729,25 +720,21 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                         Pages.ManageInvestmentsPage.clickCloseInvestmentButtonManaged();
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported investment type: {type}");
                 }
 
-                // Then retrieve the actual message
+                // Retrieve the actual message shown
                 string actualMessage = type switch
                 {
                     "Select" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionSelectText(),
                     "Choice" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionChoiceText(),
                     "Managed" => Pages.ManageInvestmentsPage.geCloseInvestmentOptionManagedText(),
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported investment type: {type}")
                 };
 
-                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close invetsment option message for '{type}'.");
+                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close investment option message for '{type}'.");
             }
         }
-
-
-
-
     }
 }
 
