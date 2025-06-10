@@ -308,6 +308,57 @@ Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed 
 		| Select          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
 		| Choice          | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
 		| Managed         | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
+
+
+
+	Scenario: Enrolling a new Choice Investment Account with Threshold
+	Given I am logged into the Employee Portal
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Enroll in HSA Invest" banner link
+	And I click on the "ENROLL" Button
+	Then I should see the "HsaBank Investment ESign Agreement" letter displayed
+	When I check on ESign checkbox
+	And I click on the Sign Button
+	And I click on the Next Button
+	And I click on the "Choice" Investment account types
+	And I click on the Next Button
+	And I check on ESign checkbox
+	And I click on the Next Button
+	And I enter name "Test Signature" in the name field
+	And I click on the Sign Button
+	And I click on the Next Button
+    And I Set Investment Funding threshold "$500.00"
+	And I search for stock symbol "AMZN"
+	And I click on ADD Button
+	Then I validate Fund display
+	And I search for stock symbol "NVDA"
+	And I click on ADD Button
+	Then I validate Fund display
+	And I allacote "%50" for "AMZN"
+	And I allacote "%50" for "NVDA"
+	And I click on the "REVIEW" Button
+	Then I validate Fund display
+	And I click on the "ACCEPT" Button
+	Then I validate "Choice" account created
+	And I click on "Settings" from the navigation menu
+	And I click on the "HSA Invest Info" info link
+	And I click on the close Investment Option Button
+	And I confirm "Yes"
+	And I click on "Manage Investment" from the navigation menu
+	Then I should see "Enroll in HSA Invest" banner link displays
+
+
+	Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Managed" Account
+	And I click on the "<Tabs>" tab
+	Then I should see the url contains "<text>"
+	And I validate the following close investment messages are displayed
+		| Investment Type  | Fees                                                                                             |
+		| Fees for Managed | Quarterly min: $2.50   Quarterly max: $50.00  |
+		| Fees for Select  | Quarterly min: $2.50  Quarterly max: $37.50   |
+		| Fees for Choice  | Annual fee 0.15% of AUA Quarterly max: $24.00 |
    
 
 

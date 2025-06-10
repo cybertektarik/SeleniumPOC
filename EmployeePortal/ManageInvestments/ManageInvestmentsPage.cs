@@ -50,7 +50,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']"));
         private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
-        // ======================== C H I L D   P A G E S ========================
+        // ======================== C H I L D   P A G E S ======================== private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
         public CurrentHoldingsTab CurrentHoldingsTab;
         public AutoFundingPage AutoFundingPage;
