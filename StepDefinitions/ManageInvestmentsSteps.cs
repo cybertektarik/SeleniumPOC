@@ -4,6 +4,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
+using System.Text.RegularExpressions;
 //using TechTalk.SpecFlow;
 
 namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
@@ -739,6 +740,75 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Mismatch in close investment option message for '{type}'.");
             }
         }
+
+        [Then(@"I validate the following Fee messages are displayed for each investment type")]
+        public void ThenIValidateFeeMessagesAreDisplayed(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                var type = row["Investment Type"];
+                var expectedMessage = row["Message"];
+
+                // Normalize whitespace for both expected and actual
+                string actualMessage = type switch
+                {
+                    "Fees for Managed" => Pages.ManageInvestmentsPage.GetFeeMessageForManaged(),
+                    "Fees for Select" => Pages.ManageInvestmentsPage.GetFeeMessageForSelect(),
+                    "Fees for Choice" => Pages.ManageInvestmentsPage.GetFeeMessageForChoice(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported investment type: {type}")
+                };
+
+                actualMessage = Regex.Replace(actualMessage, @"\s+", " ").Trim();
+                expectedMessage = Regex.Replace(expectedMessage, @"\s+", " ").Trim();
+
+                Assert.That(actualMessage, Is.EqualTo(expectedMessage), $"Fee message mismatch for '{type}'.");
+            }
+        }
+
+        [Given(@"I Set Investment Funding threshold ""(.*)""")]
+        public void GivenISetInvestmentFundingThreshold(string amount)
+        {
+            string amountToSell = CommonFunctions.GenerateRandomDollarAmount(1, 5);
+            Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
+        }
+
+        [When(@"I click on the ""(.*)"" Button")]
+        public void WhenIClickOnTheButton(string buttonName)
+        {
+            if (buttonName == "ADD")
+            {
+                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickAddStock();
+            }
+            else if (buttonName == "REVIEW")
+            {
+                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickReviewStock();
+            }
+            else if (buttonName == "ACCEPT")
+            {
+                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickAcceptStock();
+            }
+        }
+
+        [Then(@"I validate Fund display")]
+        public void ThenIValidateFundDisplay()
+        {
+            var instruments = Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.GetInstrumentList();
+            Assert.IsNotNull(instruments, "Expected an instrument list, but none was found.");
+            Assert.IsTrue(instruments!.Count > 0, "Expected at least one instrument to be displayed.");
+        }
+
+        [When(@"I allacote ""(.*)"" for ""(.*)""")]
+        public void WhenIAllocatePercentageFor(string percentage, string symbol)
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.AllocateEquallyToAllStocks();
+        }
+
+        [Then(@"I validate ""(.*)"" account created")]
+        public void ThenIValidateAccountCreated(string expectedAccountName)
+        {
+            Assert.That(Pages?.ManageInvestmentsPage.IsChoiceAccountCreated(), Is.True, $"{expectedAccountName} account was not created or not displayed.");
+        }
+
     }
 }
 

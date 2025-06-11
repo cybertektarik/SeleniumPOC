@@ -50,6 +50,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']"));
         private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
+        private PageControl stFeesForManaged = new PageControl(By.XPath("//div[contains(text(),'Fees for Managed')]/following-sibling::div"));
+        private PageControl stFeesForSelect = new PageControl(By.XPath("//div[contains(text(),'Fees for Select')]/following-sibling::div"));
+        private PageControl stFeesForChoice = new PageControl(By.XPath("//div[contains(text(),'Fees for Choice')]/following-sibling::div"));
+
+        private PageControl stChoiceAccountCreated = new PageControl(By.XPath("//*[contains(text(), 'Choice') and contains(text(), 'Limited Brokerage')]"));
+
         // ======================== C H I L D   P A G E S ======================== private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
         public CurrentHoldingsTab CurrentHoldingsTab;
@@ -304,13 +310,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void clickCloseInvestmentButtonSelect()
         {
-           btnCloseInvestmentOptionSelect.Click();
+            btnCloseInvestmentOptionSelect.Click();
             WaitForSpinners();
         }
 
         public void clickCloseInvestmentButtonChoice()
         {
-           btnCloseInvestmentOptionChoice.Click();
+            btnCloseInvestmentOptionChoice.Click();
             WaitForSpinners();
         }
 
@@ -319,6 +325,27 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             btnCloseInvestmentOptionManaged.Click();
             WaitForSpinners();
         }
+
+        public string GetFeeMessageForManaged()
+        {
+            return stFeesForManaged.GetText();
+        }
+
+        public string GetFeeMessageForSelect()
+        {
+            return stFeesForSelect.GetText();
+        }
+
+        public string GetFeeMessageForChoice()
+        {
+            return stFeesForChoice.GetText();
+        }
+
+        public bool IsChoiceAccountCreated()
+        {
+            return stChoiceAccountCreated.IsDisplayed();
+        }
+
     }
 }
 
