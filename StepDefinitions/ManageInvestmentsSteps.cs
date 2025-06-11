@@ -772,7 +772,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
         }
 
-        [When(@"I click on the ""(.*)"" Button")]
+        [When(@"I click on the Stock ""(.*)"" Button")]
         public void WhenIClickOnTheButton(string buttonName)
         {
             if (buttonName == "ADD")
