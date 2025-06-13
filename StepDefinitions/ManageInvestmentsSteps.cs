@@ -768,11 +768,11 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Given(@"I Set Investment Funding threshold ""(.*)""")]
         public void GivenISetInvestmentFundingThreshold(string amount)
         {
-            string amountToSell = CommonFunctions.GenerateRandomDollarAmount(1, 5);
+            string amountToSell = CommonFunctions.FormatDollarAmount(amount);
             Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
         }
 
-        [When(@"I click on the Stock ""(.*)"" Button")]
+        [Then(@"I click on the Stock ""(.*)"" Button")]
         public void WhenIClickOnTheButton(string buttonName)
         {
             if (buttonName == "ADD")
@@ -799,8 +799,8 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [When(@"I allacote equal portion for all added stocks")]
-        public void WhenIAllocatePercentageFor(string percentage, string symbol)
+        [Then(@"I allacote equal portion for all added stocks")]
+        public void WhenIAllocatePercentageFor()
         {
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.AllocateEquallyToAllStocks();
         }

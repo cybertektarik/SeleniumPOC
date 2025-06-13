@@ -31,7 +31,7 @@ namespace SeleniumPOC.Common
                     if (headless)
                         chromeOptions.AddArguments("--headless");
                     // Always launch in incognito mode
-                    chromeOptions.AddArguments("--incognito");
+                    //chromeOptions.AddArguments("--incognito");
 
                     // Automatically manage the ChromeDriver version
                     driver = new ChromeDriver(chromeOptions);
@@ -43,7 +43,7 @@ namespace SeleniumPOC.Common
                     if (headless)
                         edgeOptions.AddArguments("--headless");
                     // Always launch in InPrivate mode
-                    edgeOptions.AddArguments("-inprivate");
+                    //edgeOptions.AddArguments("-inprivate");
 
                     // Automatically manage the EdgeDriver version
                     driver = new EdgeDriver(edgeOptions);

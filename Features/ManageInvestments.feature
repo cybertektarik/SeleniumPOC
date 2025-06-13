@@ -179,10 +179,10 @@ Scenario: Validate Learn More Link on Account Selection Page
 	When I click on see all funds available in "Choice" option
 	Then I verify the title of page should contains "Choice"
 	When I click on the "Learn More" link
-	When I click on see all funds available in "Select" option
+	And I click on see all funds available in "Select" option
 	Then I verify the title of page should contains "Select"
 	When I click on the "Return" link
-	When I click on the "Managed Learn More" link
+	And I click on the "Managed Learn More" link
 	Then I verify the title of page should contains "Managed"
 	When I click on the "Return" link
 
@@ -313,6 +313,9 @@ Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed 
 
 Scenario: Enrolling a new Choice Investment Account with Threshold
 	Given I am logged into the Employee Portal
+	#When I click on "Settings" from the navigation menu
+	#And I click on the "HSA Invest Info" info link
+	#Then I close investment option if not closed
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Enroll in HSA Invest" banner link
 	And I click on the "ENROLL" Button
@@ -327,20 +330,20 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I enter name "Test Signature" in the name field
 	And I click on the Sign Button
 	And I click on the Next Button
-	And I Set Investment Funding threshold "$500.00"
-	And I search for stock symbol "AMZN"
-	And I click on the Stock "ADD" Button
-	And I search for stock symbol "NVDA"
-	And I click on the Stock "ADD" Button
-	Then I validate stocks added in the allocated section
+	Given I Set Investment Funding threshold "500"
+	When I search for stock symbol "AMZN"
+	Then I click on the Stock "ADD" Button
+	When I search for stock symbol "NVDA"
+	Then I click on the Stock "ADD" Button
+	And I validate stocks added in the allocated section
 		| stocks |
 		| AMZN   |
 		| NVDA   |
-	And I allacote equal portion for all added stocks
+	Then I allacote equal portion for all added stocks
 	And I click on the Stock "REVIEW" Button
 	And I click on the Stock "ACCEPT" Button
-	Then I validate "Choice" account created
-	And I click on "Settings" from the navigation menu
+	And I validate "Choice" account created
+	When I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest Info" info link
 	And I click on the close Investment Option Button
 	And I confirm "Yes"
@@ -355,10 +358,10 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 	And I click on the "Fees" tab
 	Then I should see the url contains "Fees"
 	And I validate the following Fee messages are displayed for each investment type
-		| Investment Type  | Message                                                             |
-		| Fees for Managed | Annual fee: 0.80% of AUA Quarterly min: $2.50 Quarterly max: $50.00 |
-		| Fees for Select  | Annual fee: 0.30% of AUA Quarterly min: $2.50 Quarterly max: $37.50 |
-		| Fees for Choice  | Annual fee: 0.15% of AUA Quarterly max: $24.00                      |
+		| Investment Type  | Message                                                               |
+		| Fees for Managed | Annual fee:1 0.80% of AUA2 Quarterly min: $2.50 Quarterly max: $50.00 |
+		| Fees for Select  | Annual fee:1 0.30% of AUA2 Quarterly min: $2.50 Quarterly max: $37.50 |
+		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
    
 
 

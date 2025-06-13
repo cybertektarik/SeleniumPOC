@@ -50,11 +50,22 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']"));
         private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
-        private PageControl stFeesForManaged = new PageControl(By.XPath("//div[contains(text(),'Fees for Managed')]/following-sibling::div"));
-        private PageControl stFeesForSelect = new PageControl(By.XPath("//div[contains(text(),'Fees for Select')]/following-sibling::div"));
-        private PageControl stFeesForChoice = new PageControl(By.XPath("//div[contains(text(),'Fees for Choice')]/following-sibling::div"));
+        private PageControl stInvestAmount = new PageControl(By.XPath("//*[@class='v-money form-control']"));
+        private PageControl stStockInput = new PageControl(By.XPath("//*[@placeholder='Stock symbol or name of company or fund']"));
+        private PageControl stAddBtn = new PageControl(By.XPath("(//span[text()='Add'])[position()=1]"));
+        private PageControl stAssetAllocation = new PageControl(By.XPath("//*[@class='form-control form-control text-center']"));
 
-        private PageControl stChoiceAccountCreated = new PageControl(By.XPath("//*[contains(text(), 'Choice') and contains(text(), 'Limited Brokerage')]"));
+        private PageControl btnReview = new PageControl(By.XPath("//*[text()='Review']"));
+
+        private PageControl btnAccept = new PageControl(By.XPath("//*[text()='Accept']"));
+
+
+
+        private PageControl stFeesForManagedDetails = new PageControl(By.XPath("(//*[contains(@class, 'jumbotron')])[position()=1]//div//h4//following-sibling::div//div//div"));
+        private PageControl stFeesForSelectDetails = new PageControl(By.XPath("(//*[contains(@class, 'jumbotron')])[position()=2]//div//h4//following-sibling::div//div//div"));
+        private PageControl stFeesForChoiceDetails = new PageControl(By.XPath("(//*[contains(@class, 'jumbotron')])[position()=3]//div//h4//following-sibling::div//div//div"));
+
+        private PageControl stChoiceAccountCreated = new PageControl(By.XPath("(//*[contains(text(), 'Choice')])[last()-1]"));
 
         private PageControl stockToVerify(string stockName) => new PageControl(By.XPath($"//ul[contains(@class, 'tabs-container')]/li/a[contains(text(), '{stockName}')]"), stockName);
 
@@ -330,17 +341,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public string GetFeeMessageForManaged()
         {
-            return stFeesForManaged.GetText();
+            return stFeesForManagedDetails.GetText();
         }
 
         public string GetFeeMessageForSelect()
         {
-            return stFeesForSelect.GetText();
+            return stFeesForSelectDetails.GetText();
         }
 
         public string GetFeeMessageForChoice()
         {
-            return stFeesForChoice.GetText();
+            return stFeesForChoiceDetails.GetText();
         }
 
         public bool IsChoiceAccountCreated()
@@ -351,6 +362,51 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public bool verifyStockAdded(String stockName)
         {
             return stockToVerify(stockName).IsDisplayed();
+        }
+
+        public void clickAddStock()
+        {
+            btnAddStock.Click();
+            WaitForSpinners();
+        }
+
+        public void clickReviewStock()
+        {
+            btnAddStock.Click();
+            WaitForSpinners();
+        }
+
+        public void clickAcceptStock()
+        {
+            btnAddStock.Click();
+            WaitForSpinners();
+        }
+
+
+        public void AllocateEquallyToAllStocks()
+        {
+            // Narrow down to input[type=number] under the allocation section
+            var allocationInputs = driver.FindElements(By.XPath("//input[@type='number']"));
+
+            int count = allocationInputs.Count;
+            if (count == 0)
+                throw new InvalidOperationException("No allocation input fields found.");
+
+            int equalPercentage = 100 / count;
+            int remainder = 100 - (equalPercentage * count);
+
+            for (int i = 0; i < count; i++)
+            {
+                int allocation = equalPercentage;
+
+                // Adjust last one to ensure total = 100%
+                if (i == count - 1)
+                    allocation += remainder;
+
+                var input = allocationInputs[i];
+                input.Clear();
+                input.SendKeys(allocation.ToString());
+            }
         }
 
     }

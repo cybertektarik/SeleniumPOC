@@ -91,7 +91,7 @@ namespace SeleniumProject.Common
             extent.Flush();
 
             // Optional: Open the report file in the default browser
-            try
+           /* try
             {
                 if (!string.IsNullOrEmpty(reportPath) && File.Exists(reportPath))
                 {
@@ -106,7 +106,7 @@ namespace SeleniumProject.Common
             {
                 Console.WriteLine("Could not open the report file automatically.");
                 Console.WriteLine(ex.Message);
-            }
+            }*/
         }
     }
 

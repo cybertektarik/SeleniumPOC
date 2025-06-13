@@ -21,6 +21,18 @@ namespace SeleniumPOC.Common
             return dollarAmount;
         }
 
+        public static string FormatDollarAmount(string amountInput)
+        {
+            if (decimal.TryParse(amountInput, out decimal amount))
+            {
+                return $"${amount:0.00}";
+            }
+            else
+            {
+                throw new ArgumentException("Invalid amount input. Please provide a valid number.");
+            }
+        }
+
         public static string GenerateRandomWholeDollarAmount(int min, int max)
         {
             var random = new Random();
