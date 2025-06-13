@@ -330,14 +330,14 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I Set Investment Funding threshold "$500.00"
 	And I search for stock symbol "AMZN"
 	And I click on the Stock "ADD" Button
-	Then I validate Fund display
 	And I search for stock symbol "NVDA"
 	And I click on the Stock "ADD" Button
-	Then I validate Fund display
-	And I allacote "%50" for "AMZN"
-	And I allacote "%50" for "NVDA"
+	Then I validate stocks added in the allocated section
+		| stocks |
+		| AMZN   |
+		| NVDA   |
+	And I allacote equal portion for all added stocks
 	And I click on the Stock "REVIEW" Button
-	Then I validate Fund display
 	And I click on the Stock "ACCEPT" Button
 	Then I validate "Choice" account created
 	And I click on "Settings" from the navigation menu

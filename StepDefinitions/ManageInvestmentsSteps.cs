@@ -789,15 +789,17 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [Then(@"I validate Fund display")]
-        public void ThenIValidateFundDisplay()
+        [Then(@"I validate stocks added in the allocated section")]
+        public void ThenIValidateStocksDisplay(Table table)
         {
-            var instruments = Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.GetInstrumentList();
-            Assert.IsNotNull(instruments, "Expected an instrument list, but none was found.");
-            Assert.IsTrue(instruments!.Count > 0, "Expected at least one instrument to be displayed.");
+            foreach (var row in table.Rows)
+            {
+                var stock = row["stocks"];
+                Pages?.ManageInvestmentsPage.verifyStockAdded(stock);
+            }
         }
 
-        [When(@"I allacote ""(.*)"" for ""(.*)""")]
+        [When(@"I allacote equal portion for all added stocks")]
         public void WhenIAllocatePercentageFor(string percentage, string symbol)
         {
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.AllocateEquallyToAllStocks();

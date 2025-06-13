@@ -56,6 +56,8 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl stChoiceAccountCreated = new PageControl(By.XPath("//*[contains(text(), 'Choice') and contains(text(), 'Limited Brokerage')]"));
 
+        private PageControl stockToVerify(string stockName) => new PageControl(By.XPath($"//ul[contains(@class, 'tabs-container')]/li/a[contains(text(), '{stockName}')]"), stockName);
+
         // ======================== C H I L D   P A G E S ======================== private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
         public CurrentHoldingsTab CurrentHoldingsTab;
@@ -344,6 +346,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public bool IsChoiceAccountCreated()
         {
             return stChoiceAccountCreated.IsDisplayed();
+        }
+
+        public bool verifyStockAdded(String stockName)
+        {
+            return stockToVerify(stockName).IsDisplayed();
         }
 
     }
