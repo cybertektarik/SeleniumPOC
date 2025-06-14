@@ -769,7 +769,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void GivenISetInvestmentFundingThreshold(string amount)
         {
             string amountToSell = CommonFunctions.FormatDollarAmount(amount);
-            Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
+            Pages?.ManageInvestmentsPage.EnterAmount(amountToSell);
         }
 
         [Then(@"I click on the Stock ""(.*)"" Button")]
@@ -777,15 +777,15 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         {
             if (buttonName == "ADD")
             {
-                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickAddStock();
+                Pages?.ManageInvestmentsPage.clickAddStock();
             }
             else if (buttonName == "REVIEW")
             {
-                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickReviewStock();
+                Pages?.ManageInvestmentsPage.clickReviewStock();
             }
             else if (buttonName == "ACCEPT")
             {
-                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.clickAcceptStock();
+                Pages?.ManageInvestmentsPage.clickAcceptStock();
             }
         }
 
@@ -802,13 +802,20 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I allacote equal portion for all added stocks")]
         public void WhenIAllocatePercentageFor()
         {
-            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.AllocateEquallyToAllStocks();
+            Pages?.ManageInvestmentsPage.AllocateEquallyToAllStocks();
         }
 
         [Then(@"I validate ""(.*)"" account created")]
         public void ThenIValidateAccountCreated(string expectedAccountName)
         {
             Assert.That(Pages?.ManageInvestmentsPage.IsChoiceAccountCreated(), Is.True, $"{expectedAccountName} account was not created or not displayed.");
+        }
+
+        [Then(@"I close investment option if investment is active")]
+        public void ThenICloseInvestmentOption()
+        {
+            Pages?.ManageInvestmentsPage.PreferencesTab.ButtonCloseAccount();
+            Pages?.ManageInvestmentsPage.PreferencesTab.IConfirm("Yes");
         }
 
     }

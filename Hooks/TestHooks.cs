@@ -26,6 +26,8 @@ namespace SeleniumPOC.Hooks
         private readonly bool RUN_HEADLESS = false;
         private readonly bool RUN_DESKTOP_SIZE = true;
         private readonly string TEST_NAME;
+        public static readonly bool RUN_MULTI_BROWSER = true;
+
 
         public TestHooks(ScenarioContext scenarioContext) //constructor is a special method
                                                           // that runs automatically when an object of the class is created.

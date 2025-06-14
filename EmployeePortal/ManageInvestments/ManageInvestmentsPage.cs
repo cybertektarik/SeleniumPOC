@@ -50,16 +50,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHsaAvisoryChoice = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Choice']"));
         private PageControl lnkHsaAvisoryManaged = new PageControl(By.XPath("//*[normalize-space(text())='HSA Advisory Agreement Managed']"));
 
-        private PageControl stInvestAmount = new PageControl(By.XPath("//*[@class='v-money form-control']"));
-        private PageControl stStockInput = new PageControl(By.XPath("//*[@placeholder='Stock symbol or name of company or fund']"));
-        private PageControl stAddBtn = new PageControl(By.XPath("(//span[text()='Add'])[position()=1]"));
+        private PageControl txtInvestAmount = new PageControl(By.XPath("//*[@class='v-money form-control']"));
+        private PageControl btnAdd = new PageControl(By.XPath("(//span[text()='Add'])[position()=1]"));
         private PageControl stAssetAllocation = new PageControl(By.XPath("//*[@class='form-control form-control text-center']"));
-
         private PageControl btnReview = new PageControl(By.XPath("//*[text()='Review']"));
-
         private PageControl btnAccept = new PageControl(By.XPath("//*[text()='Accept']"));
-
-
 
         private PageControl stFeesForManagedDetails = new PageControl(By.XPath("(//*[contains(@class, 'jumbotron')])[position()=1]//div//h4//following-sibling::div//div//div"));
         private PageControl stFeesForSelectDetails = new PageControl(By.XPath("(//*[contains(@class, 'jumbotron')])[position()=2]//div//h4//following-sibling::div//div//div"));
@@ -69,7 +64,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl stockToVerify(string stockName) => new PageControl(By.XPath($"//ul[contains(@class, 'tabs-container')]/li/a[contains(text(), '{stockName}')]"), stockName);
 
-        // ======================== C H I L D   P A G E S ======================== private PageControl stCloseInvestmentOptionSelectText = new PageControl(By.XPath("//*[contains(text(),'To close your investment option, you must first sell all your holdings to bring your balance to $0.')]"));
+
+
+        // ======================== C H I L D   P A G E S ======================== 
         public ChooseYourInvestmentPage ChooseYourInvestmentPage;
         public CurrentHoldingsTab CurrentHoldingsTab;
         public AutoFundingPage AutoFundingPage;
@@ -366,27 +363,26 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void clickAddStock()
         {
-            btnAddStock.Click();
+            btnAdd.Click();
             WaitForSpinners();
         }
 
         public void clickReviewStock()
         {
-            btnAddStock.Click();
+            btnReview.Click();
             WaitForSpinners();
         }
 
         public void clickAcceptStock()
         {
-            btnAddStock.Click();
+            btnAccept.Click();
             WaitForSpinners();
         }
 
 
         public void AllocateEquallyToAllStocks()
         {
-            // Narrow down to input[type=number] under the allocation section
-            var allocationInputs = driver.FindElements(By.XPath("//input[@type='number']"));
+            var allocationInputs = driver.FindElements(By.XPath("//*[@class='form-control form-control text-center']"));
 
             int count = allocationInputs.Count;
             if (count == 0)
@@ -407,6 +403,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                 input.Clear();
                 input.SendKeys(allocation.ToString());
             }
+        }
+
+        public void EnterAmount(string amount)
+        {
+            WaitForSpinners();
+            txtInvestAmount.Clear();
+            txtInvestAmount.SendKeys(amount);
         }
 
     }
