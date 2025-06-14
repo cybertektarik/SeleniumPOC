@@ -90,10 +90,10 @@ namespace SeleniumPOC.Common
 
                 DriverOptions driverOptions = browserType switch
                 {
-                    "chrome" => new ChromeOptions { BrowserVersion = "latest" },
-                    "firefox" => new FirefoxOptions { BrowserVersion = "latest" },
-                    "edge" => new EdgeOptions { BrowserVersion = "latest" },
-                    "safari" => new SafariOptions { BrowserVersion = "14" },
+                    "Chrome" => new ChromeOptions { BrowserVersion = "latest" },
+                    "Firefox" => new FirefoxOptions { BrowserVersion = "latest" },
+                    "Edge" => new EdgeOptions { BrowserVersion = "latest" },
+                    "Safari" => new SafariOptions { BrowserVersion = "14" },
                     _ => throw new ArgumentException($"Unrecognized browser type: {browserType}")
                 };
 

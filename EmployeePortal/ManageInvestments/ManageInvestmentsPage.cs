@@ -52,7 +52,6 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl txtInvestAmount = new PageControl(By.XPath("//*[@class='v-money form-control']"));
         private PageControl btnAdd = new PageControl(By.XPath("(//span[text()='Add'])[position()=1]"));
-        private PageControl stAssetAllocation = new PageControl(By.XPath("//*[@class='form-control form-control text-center']"));
         private PageControl btnReview = new PageControl(By.XPath("//*[text()='Review']"));
         private PageControl btnAccept = new PageControl(By.XPath("//*[text()='Accept']"));
 
@@ -133,6 +132,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void HSAInvestInfo()
         {
             ClickAndWaitForSpinners(linkHsaInvestInfo);
+        }
+
+        public bool IsDisplayedHSAInvestInfo()
+        {
+            return linkHsaInvestInfo.IsDisplayed();
         }
 
         public void ChooseDevenirOrSchwab()

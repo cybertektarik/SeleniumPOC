@@ -314,7 +314,6 @@ Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed 
 Scenario: Enrolling a new Choice Investment Account with Threshold
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
-	And I click on the "HSA Invest Info" info link
 	Then I close investment option if investment is active
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Enroll in HSA Invest" banner link
