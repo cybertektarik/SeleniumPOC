@@ -14,8 +14,8 @@ namespace SeleniumPOC.Common
 {
     internal class SeleniumDriverHelper
     {
-        private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-        private const string PERFECTO_TOKEN = "";
+        private const string PERFECTO_URL = "https://trial.perfectomobile.com/nexperience/perfectomobile/wd/hub";
+        private const string PERFECTO_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2ZDM2NmJiNS01NDAyLTQ4MmMtYTVhOC1kODZhODk4MDYyZjIifQ.eyJpYXQiOjE3NDk4OTcxNzYsImp0aSI6ImJjYzgwZmEzLWVlOTgtNDBjZS04N2ZmLTlhMjE4YmEwOTM0NSIsImlzcyI6Imh0dHBzOi8vYXV0aDMucGVyZmVjdG9tb2JpbGUuY29tL2F1dGgvcmVhbG1zL3RyaWFsLXBlcmZlY3RvbW9iaWxlLWNvbSIsImF1ZCI6Imh0dHBzOi8vYXV0aDMucGVyZmVjdG9tb2JpbGUuY29tL2F1dGgvcmVhbG1zL3RyaWFsLXBlcmZlY3RvbW9iaWxlLWNvbSIsInN1YiI6ImZhOGVlYjgyLWJjY2UtNDE0MC1iZDI2LTEwMDZhOGQyMTRlNiIsInR5cCI6Ik9mZmxpbmUiLCJhenAiOiJvZmZsaW5lLXRva2VuLWdlbmVyYXRvciIsIm5vbmNlIjoiNDRkMTE1N2ItZTAzNC00NWViLWFhZGItMWI4ODE1MDFmZGNmIiwic2Vzc2lvbl9zdGF0ZSI6ImI2NzU0MmZhLWYzZDYtNGY3My1hMGNmLWViMDViNWE1ZDRjNCIsInNjb3BlIjoib3BlbmlkIG9mZmxpbmVfYWNjZXNzIHByb2ZpbGUgZW1haWwiLCJzaWQiOiJiNjc1NDJmYS1mM2Q2LTRmNzMtYTBjZi1lYjA1YjVhNWQ0YzQifQ.q-Kty9gbe55G678RihwS_EbS0CQZ6RPK1nR6DAVwHlc"; // Set your token or fetch from env
         private ReportiumClient? _reportiumClient;
 
         public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
@@ -27,25 +27,15 @@ namespace SeleniumPOC.Common
                 if (browserType.Equals("chrome", StringComparison.OrdinalIgnoreCase))
                 {
                     ChromeOptions chromeOptions = new();
-
                     if (headless)
                         chromeOptions.AddArguments("--headless");
-                    // Always launch in incognito mode
-                    //chromeOptions.AddArguments("--incognito");
-
-                    // Automatically manage the ChromeDriver version
                     driver = new ChromeDriver(chromeOptions);
                 }
                 else if (browserType.Equals("edge", StringComparison.OrdinalIgnoreCase))
                 {
                     EdgeOptions edgeOptions = new();
-
                     if (headless)
                         edgeOptions.AddArguments("--headless");
-                    // Always launch in InPrivate mode
-                    //edgeOptions.AddArguments("-inprivate");
-
-                    // Automatically manage the EdgeDriver version
                     driver = new EdgeDriver(edgeOptions);
                 }
                 else
@@ -56,12 +46,11 @@ namespace SeleniumPOC.Common
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
 
                 if (desktopSize)
-                    driver.Manage().Window.Size = new Size(1200, 800); // Desktop 1920, 1080
+                    driver.Manage().Window.Size = new Size(1200, 800);
                 else
-                    driver.Manage().Window.Size = new Size(390, 844); // Mobile
+                    driver.Manage().Window.Size = new Size(390, 844);
 
                 driver.Manage().Window.Maximize();
-
                 return driver;
             }
             catch (Exception e)
@@ -70,7 +59,6 @@ namespace SeleniumPOC.Common
                 throw;
             }
         }
-
 
         public static WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
         {
@@ -81,19 +69,19 @@ namespace SeleniumPOC.Common
             {
                 string scriptName = $"{testName}-{platformName}-{browserType}";
                 Dictionary<string, object> perfectoOptions = new Dictionary<string, object>
-                {
-                    {"securityToken", PERFECTO_TOKEN},
-                    {"resolution", desktopSize},
-                    {"scriptName", scriptName},
-                    {"location", "US East"}
-                };
+            {
+                {"securityToken", PERFECTO_TOKEN},
+                {"resolution", desktopSize},
+                {"scriptName", scriptName},
+                {"location", "US East"}
+            };
 
-                DriverOptions driverOptions = browserType switch
+                DriverOptions driverOptions = browserType.ToLowerInvariant() switch
                 {
-                    "Chrome" => new ChromeOptions { BrowserVersion = "latest" },
-                    "Firefox" => new FirefoxOptions { BrowserVersion = "latest" },
-                    "Edge" => new EdgeOptions { BrowserVersion = "latest" },
-                    "Safari" => new SafariOptions { BrowserVersion = "14" },
+                    "chrome" => new ChromeOptions { BrowserVersion = "latest" },
+                    "firefox" => new FirefoxOptions { BrowserVersion = "latest" },
+                    "edge" => new EdgeOptions { BrowserVersion = "latest" },
+                    "safari" => new SafariOptions { BrowserVersion = "14" },
                     _ => throw new ArgumentException($"Unrecognized browser type: {browserType}")
                 };
 
@@ -113,10 +101,6 @@ namespace SeleniumPOC.Common
             }
         }
 
-        // Fix for CS0426: The type name 'TestContextTags' does not exist in the type 'TestContext'  
-        // The issue is that 'TestContextTags' is not a valid member of 'TestContext'.  
-        // Instead, we should use 'TestContext.Builder' to build a TestContext object with tags.
-
         public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
         {
             try
@@ -132,7 +116,6 @@ namespace SeleniumPOC.Common
 
                 _reportiumClient = PerfectoClientFactory.CreatePerfectoReportiumClient(perfectoExecutionContext);
 
-                // Correctly build the TestContext with tags
                 var testContext = new TestContext.Builder()
                     .WithTestExecutionTags(browserType, platformName)
                     .Build();

@@ -22,24 +22,24 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             // Wait until at least one investment row is visible
             var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody"));
-            Assert.IsTrue(investmentRows.Count >= 1, "No investment rows found");
+            Assert.That(investmentRows.Count, Is.GreaterThanOrEqualTo(1), "No investment rows found");
 
             // Check the status is Active or Unable to purchase
             var statusElement = driver.FindElement(By.XPath("//*[@role='table']//tbody//td[text()='" + status + "']"));
-            Assert.AreEqual(status, statusElement.Text.Trim(), "Status is not Active");
+            Assert.That(statusElement.Text.Trim(), Is.EqualTo(status), "Status is not Active");
 
             // Check the BUY or SELL button is enabled
             var tradeOptionBtn = driver.FindElement(By.XPath("//*[@role='table']//tbody//td//span[text()='" + tradeOption + "']"));
             var btnStatus = null as IWebElement;
             if (tradeOptionBtnStatus.Equals("enable"))
             {
-                Assert.IsTrue(tradeOptionBtn.Enabled, "" + tradeOption + " button is not enabled");
+                Assert.That(tradeOptionBtn.Enabled, Is.True, $"{tradeOption} button is not enabled");
             }
 
             else if (tradeOptionBtnStatus.Equals("disable"))
             {
                 btnStatus = tradeOptionBtn.FindElement(By.XPath("//ancestor::div//a[@aria-disabled='true']"));
-                Assert.IsTrue(btnStatus.GetAttribute("aria-disabled").Contains("true"), "" + tradeOption + " button is not disabled");
+                Assert.That(btnStatus.GetAttribute("aria-disabled"), Does.Contain("true"), $"{tradeOption} button is not disabled");
             }
         }
         public void ValidateOneOrMoreProductsAvailable()
@@ -47,7 +47,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             // Wait until at least one investment row is visible
             WaitForSpinners();
             var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody//tr"));
-            Assert.IsTrue(investmentRows.Count >= 1, "No investment rows found");
+            Assert.That(investmentRows.Count, Is.GreaterThanOrEqualTo(1), "No investment rows found");
         }
 
         public void ValidateZeroProductsAvailable()
@@ -55,21 +55,21 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             // Wait until at least one investment row is visible
             WaitForSpinners();
             var investmentRows = driver.FindElements(By.XPath("//*[@role='table']//tbody//tr"));
-            Assert.IsTrue(investmentRows.Count == 0, "More than one investment rows found");
+            Assert.That(investmentRows.Count, Is.EqualTo(0), "More than one investment rows found");
         }
 
 
         public void CheckkUnavailableToBuyButton()
         {
             WaitForSpinners();
-            Assert.IsTrue(btnUnavailableToBuy.IsDisplayed(), "Include Unavailable To Buy is not displayed");
+            Assert.That(btnUnavailableToBuy.IsDisplayed(), Is.True, "Include Unavailable To Buy is not displayed");
             btnUnavailableToBuy.Click();
         }
 
         public void UnCheckkUnavailableToBuyButton()
         {
             WaitForSpinners();
-            Assert.IsTrue(btnUnavailableToBuy.IsDisplayed(), "Include Unavailable To Buy is not displayed");
+            Assert.That(btnUnavailableToBuy.IsDisplayed(), Is.True, "Include Unavailable To Buy is not displayed");
             if (btnUnavailableToBuy.IsEnabled)
                 btnUnavailableToBuy.Click();
         }
@@ -77,7 +77,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void SelectFundType(string fundType)
         {
             WaitForSpinners();
-            Assert.IsTrue(btnFundType.IsDisplayed(), "Fund Type is not displayed");
+            Assert.That(btnFundType.IsDisplayed(), Is.True, "Fund Type is not displayed");
             btnFundType.Click();
             var fundTypeElement = driver.FindElement(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='" + fundType + "']"));
             fundTypeElement.Click();
@@ -94,7 +94,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void SelectCompanyType(string companyType)
         {
             WaitForSpinners();
-            Assert.IsTrue(btnCompanyType.IsDisplayed(), "Company Type is not displayed");
+            Assert.That(btnCompanyType.IsDisplayed(), Is.True, "Company Type is not displayed");
             btnCompanyType.Click();
             var companyTypeElement = driver.FindElement(By.XPath("//*[@class='dropdown-menu dropdown-menu-fix show']//li//a[normalize-space(text())='" + companyType + "']"));
             companyTypeElement.Click();
@@ -111,7 +111,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void SelectAssetClassType(string assetClassType)
         {
             WaitForSpinners();
-            Assert.IsTrue(btnAssetClassType.IsDisplayed(), "Asset Class Type is not displayed");
+            Assert.That(btnAssetClassType.IsDisplayed(), Is.True, "Asset Class Type is not displayed");
             btnAssetClassType.Click();
             var assetClassTypeElement = driver.FindElement(By.XPath("//*[@class='dropdown-menu show']//li//a[normalize-space(text())='" + assetClassType + "']"));
             assetClassTypeElement.Click();

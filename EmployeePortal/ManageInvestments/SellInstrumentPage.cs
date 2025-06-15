@@ -22,7 +22,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ClickTradeButton()
         {
             WaitForSpinners();
-            Assert.IsTrue(tradeButton.IsDisplayed(), "Button Trade is not displayed");
+            Assert.That(tradeButton.IsDisplayed(), Is.True, "Button Trade is not displayed");
             tradeButton.SendKeysUsingActions(Keys.End);
         }
 
@@ -78,7 +78,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ClickSellButton()
         {
             WaitForSpinners();
-            Assert.IsTrue(btnSell.IsDisplayed(), "Button Sell is not displayed");
+            Assert.That(btnSell.IsDisplayed(), Is.True, "Button Sell is not displayed");
             btnSell.Click();
         }
     }

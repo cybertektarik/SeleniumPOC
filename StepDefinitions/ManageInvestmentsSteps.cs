@@ -653,7 +653,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 // Validate the document key in the new tab's URL
                 var allTabs = driver.WindowHandles;
                 var newTabHandle = allTabs.FirstOrDefault(handle => handle != driver.CurrentWindowHandle);
-                Assert.IsNotNull(newTabHandle, "Expected a new tab to open, but none was found.");
+                Assert.That(newTabHandle, Is.Not.Null, "Expected a new tab to open, but none was found.");
                 driver.SwitchTo().Window(newTabHandle);
 
                 string currentUrl = driver.Url;
@@ -673,14 +673,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                     }
                 }
 
-                Assert.IsNotNull(actualDocumentKey, $"Document key not found in the URL fragment: {fragment}");
+                Assert.That(actualDocumentKey, Is.Not.Null, $"Document key not found in the URL fragment: {fragment}");
                 Assert.That(actualDocumentKey, Is.EqualTo(expectedDocumentKey),
                     $"Expected document key to be '{expectedDocumentKey}' for '{investmentType}', but got '{actualDocumentKey}'.");
 
                 // Close the new tab and switch back
                 driver.Close();
                 var remainingTabHandle = driver.WindowHandles.FirstOrDefault();
-                Assert.IsNotNull(remainingTabHandle, "No remaining tab found after closing the current one.");
+                Assert.That(remainingTabHandle, Is.Not.Null, "No remaining tab found after closing the current one.");
                 driver.SwitchTo().Window(remainingTabHandle);
             }
         }

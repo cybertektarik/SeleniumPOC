@@ -26,7 +26,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ClickBuyButton()
         {
             WaitForSpinners();
-            Assert.IsTrue(btnBuy.IsDisplayed(), "Button Buy is not displayed");
+            Assert.That(btnBuy.IsDisplayed(), Is.True, "Button Buy is not displayed");
             btnBuy.Click();
         }
     

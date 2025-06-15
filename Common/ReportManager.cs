@@ -47,12 +47,12 @@ namespace SeleniumProject.Common
 
         public static void CreateFeature(string featureName)
         {
-            feature = extent.CreateTest(featureName);
+            feature = extent?.CreateTest(featureName);
         }
 
         public static void CreateScenario(string scenarioName)
         {
-            scenario = feature.CreateNode(scenarioName);
+            scenario = feature?.CreateNode(scenarioName);
         }
 
         public static void LogStep(string stepDescription, string status)

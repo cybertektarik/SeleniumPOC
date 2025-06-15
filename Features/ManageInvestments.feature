@@ -350,7 +350,7 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 
-Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type
+Scenario Outline: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Managed" Account
@@ -361,6 +361,12 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 		| Fees for Managed | Annual fee:1 0.80% of AUA2 Quarterly min: $2.50 Quarterly max: $50.00 |
 		| Fees for Select  | Annual fee:1 0.30% of AUA2 Quarterly min: $2.50 Quarterly max: $37.50 |
 		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
+
+Examples:
+	| browser |
+	| chrome  |
+	| edge    |
+	| safari  |
    
 
 

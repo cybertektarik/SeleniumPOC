@@ -1206,10 +1206,14 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type")]
-        public async global::System.Threading.Tasks.Task ValidateFeesTabDisplaysCorrectAnnualFeesForEachInvestmentAccountType()
+        [NUnit.Framework.TestCaseAttribute("chrome", null)]
+        [NUnit.Framework.TestCaseAttribute("edge", null)]
+        [NUnit.Framework.TestCaseAttribute("safari", null)]
+        public async global::System.Threading.Tasks.Task ValidateFeesTabDisplaysCorrectAnnualFeesForEachInvestmentAccountType(string browser, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("browser", browser);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 353
 this.ScenarioInitialize(scenarioInfo);
