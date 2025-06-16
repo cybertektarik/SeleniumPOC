@@ -14,8 +14,8 @@ namespace SeleniumPOC.Common
 {
     internal class SeleniumDriverHelper
     {
-        private const string PERFECTO_URL = "https://trial.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-        private const string PERFECTO_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2ZDM2NmJiNS01NDAyLTQ4MmMtYTVhOC1kODZhODk4MDYyZjIifQ.eyJpYXQiOjE3NDk4OTcxNzYsImp0aSI6ImJjYzgwZmEzLWVlOTgtNDBjZS04N2ZmLTlhMjE4YmEwOTM0NSIsImlzcyI6Imh0dHBzOi8vYXV0aDMucGVyZmVjdG9tb2JpbGUuY29tL2F1dGgvcmVhbG1zL3RyaWFsLXBlcmZlY3RvbW9iaWxlLWNvbSIsImF1ZCI6Imh0dHBzOi8vYXV0aDMucGVyZmVjdG9tb2JpbGUuY29tL2F1dGgvcmVhbG1zL3RyaWFsLXBlcmZlY3RvbW9iaWxlLWNvbSIsInN1YiI6ImZhOGVlYjgyLWJjY2UtNDE0MC1iZDI2LTEwMDZhOGQyMTRlNiIsInR5cCI6Ik9mZmxpbmUiLCJhenAiOiJvZmZsaW5lLXRva2VuLWdlbmVyYXRvciIsIm5vbmNlIjoiNDRkMTE1N2ItZTAzNC00NWViLWFhZGItMWI4ODE1MDFmZGNmIiwic2Vzc2lvbl9zdGF0ZSI6ImI2NzU0MmZhLWYzZDYtNGY3My1hMGNmLWViMDViNWE1ZDRjNCIsInNjb3BlIjoib3BlbmlkIG9mZmxpbmVfYWNjZXNzIHByb2ZpbGUgZW1haWwiLCJzaWQiOiJiNjc1NDJmYS1mM2Q2LTRmNzMtYTBjZi1lYjA1YjVhNWQ0YzQifQ.q-Kty9gbe55G678RihwS_EbS0CQZ6RPK1nR6DAVwHlc"; // Set your token or fetch from env
+        private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
+        private const string PERFECTO_TOKEN = ""; // Set your token or fetch from env
         private ReportiumClient? _reportiumClient;
 
         public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
