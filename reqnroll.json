@@ -1,0 +1,13 @@
+﻿{
+  "bindingCulture": {
+    "language": "en-us"
+  },
+  "runtime": {
+    "stopAtFirstError": false,
+    "missingOrPendingStepsOutcome": "Inconclusive"
+  },
+  "execution": {
+    //"order": "declare" // Or remove "order" to allow default parallel behavior
+     "stopAtFirstError": false
+  }
+}
