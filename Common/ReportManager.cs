@@ -1,113 +1,113 @@
 ﻿using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
+using AventStack.ExtentReports.Reporter.Config;
 
 
 namespace SeleniumProject.Common
 {
     public static class ReportManager
     {
-        private static ExtentReports? extent;
-        private static ExtentTest? feature;
-        private static ExtentTest? scenario;
-        private static string? reportPath;
+        private static ExtentReports _extent;
+        private static string _reportPath;
 
-        public static void InitReport()
+        private static ThreadLocal<ExtentTest> _feature = new ThreadLocal<ExtentTest>();
+        private static ThreadLocal<ExtentTest> _scenario = new ThreadLocal<ExtentTest>();
+
+        public static void InitReport(bool isParallel)
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string reportsDir = Path.Combine(baseDir, "Reports");
             string screenshotsDir = Path.Combine(reportsDir, "Screenshots");
 
-            // 🔥 Delete entire Reports directory (including screenshots and previous reports)
             if (Directory.Exists(reportsDir))
-                Directory.Delete(reportsDir, recursive: true);
+                Directory.Delete(reportsDir, true);
 
-            // ✅ Recreate Reports and Screenshots directories
             Directory.CreateDirectory(reportsDir);
             Directory.CreateDirectory(screenshotsDir);
 
-            // 🕒 Generate dynamic report filename
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             string reportFileName = $"TestReport_{timestamp}.html";
-            reportPath = Path.Combine(reportsDir, reportFileName);
+            _reportPath = Path.Combine(reportsDir, reportFileName);
 
-            // 📝 Setup ExtentReports
-            var sparkReporter = new ExtentSparkReporter(reportPath)
-            {
-                Config =
-                 {
-            DocumentTitle = "Reqnroll Test Report",
-            ReportName = "Automation Test Results"
-                 }
-            };
+            var sparkReporter = new ExtentSparkReporter(_reportPath);
+            sparkReporter.Config.Theme = Theme.Standard;
+            sparkReporter.Config.DocumentTitle = "Reqnroll Test Report";
+            sparkReporter.Config.ReportName = isParallel
+                ? "Automation Test Results (Parallel)"
+                : "Automation Test Results (Sequential)";
 
-            extent = new ExtentReports();
-            extent.AttachReporter(sparkReporter);
+            _extent = new ExtentReports();
+            _extent.AttachReporter(sparkReporter);
         }
 
 
         public static void CreateFeature(string featureName)
         {
-            feature = extent.CreateTest(featureName);
+            _feature.Value = _extent.CreateTest(featureName);
         }
 
         public static void CreateScenario(string scenarioName)
         {
-            scenario = feature.CreateNode(scenarioName);
+            if (_feature.Value == null)
+            {
+                // Optional fallback for safety
+                _feature.Value = _extent.CreateTest("Unnamed Feature");
+            }
+
+            _scenario.Value = _feature.Value.CreateNode(scenarioName);
         }
 
         public static void LogStep(string stepDescription, string status)
         {
-            if (scenario == null) return;
+            if (_scenario.Value == null) return;
 
-            if (status == "Pass")
-                scenario.CreateNode(stepDescription).Pass("Passed");
+            if (status.Equals("Pass", StringComparison.OrdinalIgnoreCase))
+            {
+                _scenario.Value.Pass(stepDescription);
+            }
             else
-                scenario.CreateNode(stepDescription).Fail("Failed");
+            {
+                _scenario.Value.Fail(stepDescription);
+            }
         }
-
 
         public static void LogStepWithScreenshot(string stepDescription, string status, string base64Image)
         {
-            if (scenario == null) return;
+            if (_scenario.Value == null) return;
 
             var mediaEntity = MediaEntityBuilder.CreateScreenCaptureFromBase64String(base64Image).Build();
 
             switch (status.ToLower())
             {
                 case "pass":
-                    scenario.Pass(stepDescription);
+                    _scenario.Value.Pass(stepDescription, mediaEntity);
                     break;
                 case "fail":
-                    scenario.Fail(stepDescription, mediaEntity);
+                    _scenario.Value.Fail(stepDescription, mediaEntity);
                     break;
                 default:
-                    scenario.Info(stepDescription);
+                    _scenario.Value.Info(stepDescription);
                     break;
             }
         }
 
         public static void FlushReport()
         {
-            extent.Flush();
+            _extent.Flush();
 
-            // Optional: Open the report file in the default browser
-           /* try
+            // Optional: auto-open the report
+
+            if (!string.IsNullOrEmpty(_reportPath) && File.Exists(_reportPath))
             {
-                if (!string.IsNullOrEmpty(reportPath) && File.Exists(reportPath))
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = reportPath,
-                        UseShellExecute = true // Required for .NET Core and above
-                    });
-                }
+                    FileName = _reportPath,
+                    UseShellExecute = true
+                });
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Could not open the report file automatically.");
-                Console.WriteLine(ex.Message);
-            }*/
+
         }
     }
+
 
 }
