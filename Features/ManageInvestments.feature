@@ -75,8 +75,8 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
-	And I enter name "Test Signature" in the name field
-	And I click on the Sign Button
+	#And I enter name "Test Signature" in the name field
+	#And I click on the Sign Button
 	And I click on the Next Button
 	And I answer question "1" to "stronglyAgree" from the questionnaire
 	And I answer question "2" to "stronglyAgree" from the questionnaire
@@ -326,8 +326,8 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
-	And I enter name "Test Signature" in the name field
-	And I click on the Sign Button
+	#And I enter name "Test Signature" in the name field
+	#And I click on the Sign Button
 	And I click on the Next Button
 	Given I Set Investment Funding threshold "500"
 	When I search for stock symbol "AMZN"
