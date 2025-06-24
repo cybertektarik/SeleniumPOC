@@ -95,14 +95,9 @@ namespace SeleniumProject.Common
         {
             _extent.Flush();
 
-<<<<<<< HEAD
-            // Optional: Open the report file in the default browser
-            try
-=======
             // Optional: auto-open the report
 
             if (!string.IsNullOrEmpty(_reportPath) && File.Exists(_reportPath))
->>>>>>> 46263d8bfdf4774b51368178060ff5da1b34bbde
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
@@ -110,15 +105,7 @@ namespace SeleniumProject.Common
                     UseShellExecute = true
                 });
             }
-<<<<<<< HEAD
-            catch (Exception ex)
-            {
-                Console.WriteLine("Could not open the report file automatically.");
-                Console.WriteLine(ex.Message);
-            }
-=======
 
->>>>>>> 46263d8bfdf4774b51368178060ff5da1b34bbde
         }
     }
 

@@ -1,36 +1,34 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
-using Reqnroll;
 using NUnit.Framework;
-using OpenQA.Selenium.Edge;
 using SeleniumProject.Common;
-using AventStack.ExtentReports;
 
 
 
 namespace SeleniumPOC.Hooks
 {
     [Binding]
-    public class TestHooks //Manages WebDriver lifecycle:
+    public class TestHooks
     {
         private readonly ScenarioContext _scenarioContext;
-        private IWebDriver driver = null!; // Fix: Initialize with null-forgiving operator  
+        private IWebDriver driver = null!;
         protected AllPages? Pages;
 
         private readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login?returnUrl=%2F";
         private readonly bool RUN_REMOTE = false;
         private readonly string PLATFORM = Constants.PLATFORM_WINDOWS;
-        private readonly string BROWSER_TYPE = Constants.BROWSER_EDGE;
+        private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME;
         private readonly bool RUN_HEADLESS = false;
         private readonly bool RUN_DESKTOP_SIZE = true;
         private readonly string TEST_NAME;
+
         public static readonly bool RUN_MULTI_BROWSER = true;
 
+        // Toggle this to enable/disable parallel execution behavior (report + driver safety)
+        private static readonly bool RUN_PARALLEL = false;
 
-        public TestHooks(ScenarioContext scenarioContext) //constructor is a special method
-                                                          // that runs automatically when an object of the class is created.
+        public TestHooks(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
             TEST_NAME = _scenarioContext.ScenarioInfo.Title;
@@ -39,7 +37,7 @@ namespace SeleniumPOC.Hooks
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            ReportManager.InitReport();
+            ReportManager.InitReport(RUN_PARALLEL); // 👈 updated
         }
 
         [BeforeFeature]
@@ -56,7 +54,8 @@ namespace SeleniumPOC.Hooks
             Console.WriteLine("Tags: " + string.Join(", ", _scenarioContext.ScenarioInfo.Tags));
             Console.WriteLine("Time: " + DateTime.Now);
 
-            // Use the class name to call the static method instead of an instance reference  
+            ReportManager.CreateScenario(TEST_NAME); // Thread-safe
+
             if (RUN_REMOTE)
                 driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
             else
@@ -64,10 +63,9 @@ namespace SeleniumPOC.Hooks
 
             NavigateToDefaultUrl(DEFAULT_URL);
             Thread.Sleep(2000);
-            Pages = new AllPages(driver);//creates all the page objects like LoginPage,HomePage to interact during the test.
 
-
-            _scenarioContext["driver"] = driver; //It saves the browser and page objects
+            Pages = new AllPages(driver);
+            _scenarioContext["driver"] = driver;
             _scenarioContext["Pages"] = Pages;
         }
 
@@ -82,14 +80,12 @@ namespace SeleniumPOC.Hooks
             Console.WriteLine("       Scenario Status: " + (isScenarioPassed ? "PASSED" : "FAILED"));
             Console.WriteLine("***************************************************************");
 
-            // Create an instance of SeleniumDriverHelper to call the non-static method  
             var seleniumDriverHelper = new SeleniumDriverHelper();
             if (RUN_REMOTE)
             {
                 seleniumDriverHelper.StopPerfectoReporting(isScenarioPassed);
             }
 
-            // Quit the driver  
             driver?.Quit();
         }
 
@@ -111,7 +107,6 @@ namespace SeleniumPOC.Hooks
             }
         }
 
-
         [AfterTestRun]
         public static void AfterTestRun()
         {
@@ -124,6 +119,7 @@ namespace SeleniumPOC.Hooks
             {
                 throw new InvalidOperationException("Driver is not initialized.");
             }
+
             Console.WriteLine("Go to URL: " + url);
             driver.Navigate().GoToUrl(url);
         }
@@ -132,6 +128,7 @@ namespace SeleniumPOC.Hooks
         {
             var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
             var screenshotDirectoryPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Screenshots\\");
+
             if (!Directory.Exists(screenshotDirectoryPath))
             {
                 Directory.CreateDirectory(screenshotDirectoryPath);
@@ -148,5 +145,5 @@ namespace SeleniumPOC.Hooks
             Thread.Sleep(seconds * 1000);
         }
     }
-}
 
+}
