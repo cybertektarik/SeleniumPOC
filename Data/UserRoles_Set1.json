@@ -1,0 +1,17 @@
+{
+  "DefaultUrl": "https://employee-feature2.live-test-domain.com/#/auth/login?returnUrl=%2F",
+  "Users": {
+    "LimitedAccountUser": {
+      "Username": "Feature2HSABTester005"
+    },
+    "EnrolledUser": {
+      "Username": "Feature2HSABTester023"
+    },
+    "PreEnrolledUser": {
+      "Username": "Feature2HSABTester019"
+    },
+    "DefaultUser": {
+      "Username": "Feature2HSABTester026"
+    }
+  }
+}

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
+using SeleniumProject.Common;
 using System.Text.RegularExpressions;
 //using TechTalk.SpecFlow;
 
@@ -26,26 +27,31 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Given(@"I am logged in as a user who has not created a Choice account")]
         public void GivenILoginToTheEmployeePortalAsLimitedAccountUser()
         {
-            Pages?.LoginPage.Login("Feature2HSABTester005");
+            var username = TestUserManager.GetUsername("LimitedAccountUser");
+            Pages?.LoginPage.Login(username);
         }
 
         [Given(@"I am logged in as a user who has an enrolled account")]
         public void GivenILoginToTheEmployeePortalAsAnEnrolledUser()
         {
-            Pages?.LoginPage.Login("Feature2HSABTester023");
+            var username = TestUserManager.GetUsername("EnrolledUser");
+            Pages?.LoginPage.Login(username);
         }
 
         [Given(@"I am logged in as a Pre enrolled user")]
         public void GivenILoginToTheEmployeePortalAsAPreEnrolledUser()
         {
-            Pages?.LoginPage.Login("Feature2HSABTester005");
+            var username = TestUserManager.GetUsername("PreEnrolledUser");
+            Pages?.LoginPage.Login(username);
         }
 
         [Given(@"I am logged into the Employee Portal")]
         public void GivenILoginToTheEmployeePortalAsUser()
         {
-            Pages?.LoginPage.Login("Feature2HSABTester026");
+            var username = TestUserManager.GetUsername("DefaultUser");
+            Pages?.LoginPage.Login(username);
         }
+
 
         [When(@"I click on ""(.*)"" from the navigation menu")]
         public void WhenINavigateToTheTab(string tabName)

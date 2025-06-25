@@ -15,7 +15,7 @@ namespace SeleniumPOC.Hooks
         private IWebDriver driver = null!;
         protected AllPages? Pages;
 
-        private readonly string DEFAULT_URL = "https://employee-feature2.live-test-domain.com/#/auth/login?returnUrl=%2F";
+        private readonly string DEFAULT_URL = TestUserManager.GetDefaultUrl();
         private readonly bool RUN_REMOTE = false;
         private readonly string PLATFORM = Constants.PLATFORM_WINDOWS;
         private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME;
@@ -55,6 +55,8 @@ namespace SeleniumPOC.Hooks
             Console.WriteLine("Time: " + DateTime.Now);
 
             ReportManager.CreateScenario(TEST_NAME); // Thread-safe
+
+            TestUserManager.Init();
 
             if (RUN_REMOTE)
                 driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
