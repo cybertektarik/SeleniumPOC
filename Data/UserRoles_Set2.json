@@ -1,0 +1,17 @@
+{
+  "DefaultUrl": "https://employee-external.live-test-domain.com/#/auth/login?returnUrl=%2F",
+  "Users": {
+    "LimitedAccountUser": {
+      "Username": "ExternalDev005"
+    },
+    "EnrolledUser": {
+      "Username": "ExternalDev023"
+    },
+    "PreEnrolledUser": {
+      "Username": "ExternalDev019"
+    },
+    "DefaultUser": {
+      "Username": "ExternalDev026"
+    }
+  }
+}
