@@ -107,8 +107,8 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
-	#And I enter name "Test Signature" in the name field
-	#And I click on the Sign Button
+	And I enter name "Test Signature" in the name field
+	And I click on the Sign Button
 	And I click on the Next Button
   #And I answer question "1" to "agree" from the questionnaire
   #And I answer question "2" to "agree" from the questionnaire
