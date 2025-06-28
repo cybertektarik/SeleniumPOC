@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 
@@ -24,6 +25,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         // Legacy "single-account" buttons
         private PageControl btnNoIWantToKeep => new PageControl(By.XPath(".//span[text()='No, I want to keep the investment account type I have']"));
+
+        private PageControl selectAdvisory => new PageControl(By.XPath("//*[@id='advisory-default']"));
+
+        private PageControl selectAdvisoryOtherText => new PageControl(By.XPath("//*[@type='text']"));
+
 
         public AdvisorAgreementDocPage AdvisorAgreementDocPage;
 
@@ -117,6 +123,25 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public void ReviewInvestmentProfileQuiz()
         {
             btnReviewInvestmentProfileQuiz.Click();
+            WaitForSpinners();
+        }
+
+        public void ISelectCloseAccountReason(string reasonType)
+        {
+            var select = new SelectElement((IWebElement)selectAdvisory);
+
+            if (reasonType.Contains("Other"))
+            {
+                select.SelectByText("Other (please specify)");
+                var input = selectAdvisoryOtherText;
+                input.Clear();
+                input.SendKeys("Closing Account");
+            }
+            else
+            {
+                // For any other input, just select first item
+                select.SelectByIndex(0);
+            }
             WaitForSpinners();
         }
     }

@@ -820,15 +820,15 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I close investment option if investment is active")]
         public void ThenICloseInvestmentOption()
         {
-            bool hsaInvest = (bool)(Pages?.ManageInvestmentsPage.IsDisplayedHSAInvestInfo());
+            bool hsaInvest = Pages?.ManageInvestmentsPage.IsDisplayedHSAInvestInfo() ?? false;
             if (hsaInvest)
             {
                 Pages?.ManageInvestmentsPage.HSAInvestInfo();
                 Pages?.ManageInvestmentsPage.PreferencesTab.ButtonCloseAccount();
+                Pages?.ManageInvestmentsPage.PreferencesTab.ISelectCloseAccountReason("other");
                 Pages?.ManageInvestmentsPage.PreferencesTab.IConfirm("Yes");
             }
         }
-
     }
 }
 
