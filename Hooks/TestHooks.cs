@@ -26,7 +26,7 @@ namespace SeleniumPOC.Hooks
         public static readonly bool RUN_MULTI_BROWSER = true;
 
         // Toggle this to enable/disable parallel execution behavior (report + driver safety)
-        private static readonly bool RUN_PARALLEL = false;
+        private static readonly bool RUN_PARALLEL = true;
 
         public TestHooks(ScenarioContext scenarioContext)
         {
