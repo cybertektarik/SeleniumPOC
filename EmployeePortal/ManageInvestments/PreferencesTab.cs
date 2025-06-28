@@ -19,7 +19,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHSAInvestTerms => new PageControl(By.LinkText("HSA Invest Terms and Conditions"), "HSA Invest Terms and Conditions");
         private PageControl stcDisclosureDocuments => new PageControl(By.XPath(".//p[@id='disclosure-documents']//.."));
 
-        private PageControl txtConfirm => new PageControl(By.XPath("(//*[@type='text'])[last()-1]"));
+        private PageControl txtConfirm => new PageControl(By.XPath("//*[@id='confirm-input']"));
         private PageControl btnCloseYes => new PageControl(By.XPath(".//span[text()='Yes']"), "Yes");
         private PageControl btnCloseNo => new PageControl(By.XPath(".//span[text()='No']"), "No");
 
@@ -128,17 +128,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void ISelectCloseAccountReason(string reasonType)
         {
+            selectAdvisory.SelectByText(reasonType);
             if (reasonType.Contains("Other"))
             {
-                selectAdvisory.SelectByText("Other (please specify)");
-                var input = selectAdvisoryOtherText;
-                input.Clear();
-                input.SendKeys("Closing Account");
-            }
-            else
-            {
-                // For any other input, just select first item
-                selectAdvisory.SelectByIndex(0);
+                selectAdvisoryOtherText.Clear();
+                selectAdvisoryOtherText.SendKeys("Closing Account");
             }
             WaitForSpinners();
         }

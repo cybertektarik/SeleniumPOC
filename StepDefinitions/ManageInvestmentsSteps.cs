@@ -825,7 +825,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             {
                 Pages?.ManageInvestmentsPage.HSAInvestInfo();
                 Pages?.ManageInvestmentsPage.PreferencesTab.ButtonCloseAccount();
-                Pages?.ManageInvestmentsPage.PreferencesTab.ISelectCloseAccountReason("Other");
+                Pages?.ManageInvestmentsPage.PreferencesTab.ISelectCloseAccountReason("The fees are too high");
                 Pages?.ManageInvestmentsPage.PreferencesTab.IConfirm("Yes");
             }
         }
