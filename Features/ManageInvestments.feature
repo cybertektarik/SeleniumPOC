@@ -326,8 +326,8 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on the Next Button
 	And I check on ESign checkbox
 	And I click on the Next Button
-	#And I enter name "Test Signature" in the name field
-	#And I click on the Sign Button
+	And I enter name "Test Signature" in the name field
+	And I click on the Sign Button
 	And I click on the Next Button
 	Given I Set Investment Funding threshold "500"
 	When I search for stock symbol "AMZN"
@@ -338,16 +338,17 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 		| stocks |
 		| AMZN   |
 		| NVDA   |
-	Then I allacote equal portion for all added stocks
+	And I allacote equal portion for all added stocks
 	And I click on the Stock "REVIEW" Button
 	And I click on the Stock "ACCEPT" Button
 	And I validate "Choice" account created
 	When I click on "Settings" from the navigation menu
 	And I click on the "HSA Invest Info" info link
 	And I click on the close Investment Option Button
+	Then I select the close investment option as "Other"
 	And I confirm "Yes"
 	And I click on "Manage Investment" from the navigation menu
-	Then I should see "Enroll in HSA Invest" banner link displays
+	And I should see "Enroll in HSA Invest" banner link displays
 
 
 Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type

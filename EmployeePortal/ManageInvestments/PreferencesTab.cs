@@ -19,7 +19,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl lnkHSAInvestTerms => new PageControl(By.LinkText("HSA Invest Terms and Conditions"), "HSA Invest Terms and Conditions");
         private PageControl stcDisclosureDocuments => new PageControl(By.XPath(".//p[@id='disclosure-documents']//.."));
 
-        private PageControl txtConfirm => new PageControl(By.XPath(".//input"));
+        private PageControl txtConfirm => new PageControl(By.XPath("(//*[@type='text'])[last()-1]"));
         private PageControl btnCloseYes => new PageControl(By.XPath(".//span[text()='Yes']"), "Yes");
         private PageControl btnCloseNo => new PageControl(By.XPath(".//span[text()='No']"), "No");
 
@@ -28,7 +28,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl selectAdvisory => new PageControl(By.XPath("//*[@id='advisory-default']"));
 
-        private PageControl selectAdvisoryOtherText => new PageControl(By.XPath("//*[@type='text']"));
+        private PageControl selectAdvisoryOtherText => new PageControl(By.XPath("(//*[@type='text'])[last()]"));
 
 
         public AdvisorAgreementDocPage AdvisorAgreementDocPage;
@@ -128,11 +128,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void ISelectCloseAccountReason(string reasonType)
         {
-            var select = new SelectElement((IWebElement)selectAdvisory);
-
             if (reasonType.Contains("Other"))
             {
-                select.SelectByText("Other (please specify)");
+                selectAdvisory.SelectByText("Other (please specify)");
                 var input = selectAdvisoryOtherText;
                 input.Clear();
                 input.SendKeys("Closing Account");
@@ -140,7 +138,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             else
             {
                 // For any other input, just select first item
-                select.SelectByIndex(0);
+                selectAdvisory.SelectByIndex(0);
             }
             WaitForSpinners();
         }

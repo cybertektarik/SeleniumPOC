@@ -829,6 +829,12 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 Pages?.ManageInvestmentsPage.PreferencesTab.IConfirm("Yes");
             }
         }
+
+        [Then(@"I select the close investment option as ""(.*)""")]
+        public void ThenISelectCLoseInvestmentOption(String reasonType)
+        {
+            Pages?.ManageInvestmentsPage.PreferencesTab.ISelectCloseAccountReason(reasonType);
+        }
     }
 }
 

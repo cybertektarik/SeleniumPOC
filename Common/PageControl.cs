@@ -169,6 +169,13 @@ namespace SeleniumPOC.Common
             SelectElement dropDown = new SelectElement(driver.FindElement(locator));
             return dropDown.SelectedOption.GetAttribute("value");
         }
+
+        public void SelectByIndex(int index)
+        {
+            SelectElement dropDown = new SelectElement(driver.FindElement(locator));
+            Console.WriteLine($"[Select] -> {controlName} -> {index}");
+            dropDown.SelectByIndex(index);
+        }
     }
 }
 

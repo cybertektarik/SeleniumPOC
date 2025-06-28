@@ -45,6 +45,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
 
         public void GoToSettings()
         {
+            WaitForElementToBeVisible(lnkSettings);
             GoToLink(lnkSettings);
         }
 
