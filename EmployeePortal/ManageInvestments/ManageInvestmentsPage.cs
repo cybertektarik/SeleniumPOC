@@ -415,7 +415,6 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             txtInvestAmount.Clear();
             txtInvestAmount.SendKeys(amount);
         }
-
     }
 }
 

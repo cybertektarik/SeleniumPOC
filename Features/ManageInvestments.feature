@@ -370,27 +370,29 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
 
 
-	Scenario: Validate Buy with Share on the Select account
+Scenario: Validate Buy with Share on the Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Select" Account
 	And I click on TRADE Button
 	And I click on BUY Button
-	Then I validate By Amount and By Share Radio Button
-	And I click on "By Share" Button
-	And I enter  shares "1"
+	Then I should see both "By Amount" and "By Share" radio buttons
+	And I validate that the minimum number of shares should be greater than 1
+	When I select "By Share"
+	And I enter "1" as the number of shares
 	And I click on confirm Buy Button
 	And I validate success message for buy
 
-	Scenario: Validate Sell with Share on the Choice account
+Scenario: Validate Sell with Share on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Choice" Account
 	And I click on TRADE Button
 	And I click on BUY Button
-	Then I validate By Amount and By Share Radio Button
-	And I click on "By Share" Button
-	And I enter  shares "1"
+	Then I should see both "By Amount" and "By Share" radio buttons
+	And I validate that the minimum number of shares should be greater than 1
+	When I select "By Share"
+	And I enter "1" as the number of shares
 	And I click on confirm Sell Button
 	And I validate success message for sell
 

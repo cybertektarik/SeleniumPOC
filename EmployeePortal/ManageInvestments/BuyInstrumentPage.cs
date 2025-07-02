@@ -14,6 +14,10 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl stcAvailableToInvest = new PageControl(By.XPath("//div[@role='main']//div/div/div[contains(., 'Available to invest:')]"));
         private PageControl btnBuy = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"), "BUY");
 
+        private PageControl btnByAmount = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
+        private PageControl btnByShare = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
+        private PageControl txtNumberOfShares = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
+
         public BuyInstrumentPage(IWebDriver driver) : base(driver)
         {
         }
@@ -29,7 +33,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             Assert.IsTrue(btnBuy.IsDisplayed(), "Button Buy is not displayed");
             btnBuy.Click();
         }
-    
+
         public void ClickConfirmBuy()
         {
             btnConfirmBuy.Click();
@@ -50,6 +54,40 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         {
             txtEnterAmount.Clear();
             txtEnterAmount.SendKeys(amount);
+        }
+
+        public bool IsByAmountRadioButtonVisible()
+        {
+            return btnByAmount.IsDisplayed();
+        }
+
+        public bool IsByShareRadioButtonVisible()
+        {
+            return btnByShare.IsDisplayed();
+        }
+
+        public int GetMinimumShares()
+        {
+            return txtNumberOfShares.GetText().Trim() == "0" ? 1 : int.Parse(txtNumberOfShares.GetText().Trim());
+        }
+
+        public void SelectByAmount()
+        {
+            WaitForSpinners();
+            btnByShare.Click();
+        }
+
+        public void SelectByShare()
+        {
+            WaitForSpinners();
+            btnByAmount.Click();
+        }
+
+        public void EnterNumberOfShares(string shareCount)
+        {
+            WaitForSpinners();
+            txtEnterAmount.Clear();
+            txtEnterAmount.SendKeys(shareCount);
         }
     }
 }

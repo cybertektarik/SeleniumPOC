@@ -478,26 +478,26 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void WhenIEnterMoreThanOneDollarAmount()
         {
             string amountToSell = CommonFunctions.GenerateRandomDollarAmount(1, 5);
-            Pages.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
         }
 
         [When("I click on confirm sell Button")]
         public void WhenIClickOnConfirmSellButton()
         {
-            Pages.ManageInvestmentsPage.SellInstrumentPage.ClickConfirmSell();
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickConfirmSell();
         }
 
         [When("I validate success message for sell")]
         public void WhenIValidateSuccessMessage()
         {
-            Pages.NotificationAlert.GetSuccessMessage().Should().Contain("Sale");
-            Pages.NotificationAlert.Dismiss();
+            Pages?.NotificationAlert.GetSuccessMessage().Should().Contain("Sale");
+            Pages?.NotificationAlert.Dismiss();
         }
 
         [When("I click on confirm buy Button")]
         public void WhenIClickOnConfirmBuyButton()
         {
-            Pages.ManageInvestmentsPage.BuyInstrumentPage.ClickConfirmBuy();
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickConfirmBuy();
         }
 
         [When("I validate success message for buy")]
@@ -834,6 +834,51 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void ThenISelectCLoseInvestmentOption(String reasonType)
         {
             Pages?.ManageInvestmentsPage.PreferencesTab.ISelectCloseAccountReason(reasonType);
+        }
+
+        [Then(@"I should see both ""(.*)"" and ""(.*)"" radio buttons")]
+        public void ThenIShouldSeeBothRadioButtons(string option1, string option2)
+        {
+            Assert.That(Pages?.ManageInvestmentsPage.BuyInstrumentPage.IsByAmountRadioButtonVisible(),
+                Is.True, $"{option1} radio button is not visible.");
+
+            Assert.That(Pages?.ManageInvestmentsPage.BuyInstrumentPage.IsByShareRadioButtonVisible(),
+                Is.True, $"{option2} radio button is not visible.");
+        }
+
+        [Then(@"I validate that the minimum number of shares should be greater than (.*)")]
+        public void ThenIValidateMinimumSharesGreaterThan(int minShares)
+        {
+            int? actualMinShares = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetMinimumShares();
+
+            Assert.That(actualMinShares, Is.Not.Null, "Minimum shares value is null.");
+
+            Assert.That(actualMinShares.Value,
+                Is.GreaterThan(minShares),
+                $"Minimum shares expected to be greater than {minShares}, but found {actualMinShares.Value}.");
+        }
+
+        [When(@"I select ""(.*)""")]
+        public void WhenISelectOption(string option)
+        {
+            if (option == "By Share")
+            {
+                Pages?.ManageInvestmentsPage.BuyInstrumentPage.SelectByShare();
+            }
+            else if (option == "By Amount")
+            {
+                Pages?.ManageInvestmentsPage.BuyInstrumentPage.SelectByAmount();
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid option: {option}. Expected 'By Share' or 'By Amount'.");
+            }
+        }
+
+        [When(@"I enter ""(.*)"" as the number of shares")]
+        public void WhenIEnterNumberOfShares(string shareCount)
+        {
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.EnterNumberOfShares(shareCount);
         }
     }
 }
