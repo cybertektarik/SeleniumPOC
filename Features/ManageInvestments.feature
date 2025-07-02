@@ -130,7 +130,6 @@ Scenario: Enrolling a new Choice Investment Account
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 Scenario: Enrolling a new Managed Investment Account
-	#Given I am logged in as a Pre enrolled user
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
 	Then I close investment option if investment is active
@@ -146,8 +145,8 @@ Scenario: Enrolling a new Managed Investment Account
 	And I click on the Next Button
 	When I check on ESign checkbox
 	And I click on the Next Button
-	And I enter name "Test Signature" in the name field
-	And I click on the Sign Button
+	#And I enter name "Test Signature" in the name field
+	#And I click on the Sign Button
 	And I click on the Next Button
 	And I answer question "1" to "stronglyAgree" from the questionnaire
 	And I answer question "2" to "stronglyAgree" from the questionnaire
@@ -333,8 +332,8 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on the Next Button
 	When I check on ESign checkbox
 	And I click on the Next Button
-	#And I enter name "Test Signature" in the name field
-	#And I click on the Sign Button
+	And I enter name "Test Signature" in the name field
+	And I click on the Sign Button
 	And I click on the Next Button
 	Given I Set Investment Funding threshold "500"
 	When I search for stock symbol "AMZN"
@@ -369,6 +368,33 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 		| Fees for Managed | Annual fee:1 0.80% of AUA2 Quarterly min: $2.50 Quarterly max: $50.00 |
 		| Fees for Select  | Annual fee:1 0.30% of AUA2 Quarterly min: $2.50 Quarterly max: $37.50 |
 		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
+
+
+	Scenario: Validate Buy with Share on the Select account
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Select" Account
+	And I click on TRADE Button
+	And I click on BUY Button
+	Then I validate By Amount and By Share Radio Button
+	And I click on "By Share" Button
+	And I enter  shares "1"
+	And I click on confirm Buy Button
+	And I validate success message for buy
+
+	Scenario: Validate Sell with Share on the Choice account
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Choice" Account
+	And I click on TRADE Button
+	And I click on BUY Button
+	Then I validate By Amount and By Share Radio Button
+	And I click on "By Share" Button
+	And I enter  shares "1"
+	And I click on confirm Sell Button
+	And I validate success message for sell
+
+   
    
 
 
