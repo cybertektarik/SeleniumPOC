@@ -377,7 +377,7 @@ Scenario: Validate Buy with Share on the Select account
 	And I click on TRADE Button
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
-	And I validate that the minimum number of shares should be greater than 1
+	And I validate that the minimum available to invest should be greater than "$1000"
 	When I select "By Share"
 	And I enter "1" as the number of shares
 	And I click on confirm Buy Button
@@ -390,7 +390,7 @@ Scenario: Validate Sell with Share on the Choice account
 	And I click on TRADE Button
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
-	And I validate that the minimum number of shares should be greater than 1
+	And I validate that the minimum available to sell should be greater than "1"
 	When I select "By Share"
 	And I enter "1" as the number of shares
 	And I click on confirm Sell Button

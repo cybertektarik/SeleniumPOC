@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace SeleniumPOC.Common
 {
@@ -80,6 +81,20 @@ namespace SeleniumPOC.Common
 
             return name;
         }
+
+        public static double ExtractNumberFromText(string rawText)
+        {
+            // Remove currency symbols and commas
+            string cleaned = Regex.Replace(rawText, @"[^\d.]", "");
+
+            if (double.TryParse(cleaned, out double result))
+            {
+                return result;
+            }
+
+            throw new FormatException($"Could not parse numeric value from: '{rawText}'");
+        }
+
     }
 }
 

@@ -14,9 +14,10 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl stcAvailableToInvest = new PageControl(By.XPath("//div[@role='main']//div/div/div[contains(., 'Available to invest:')]"));
         private PageControl btnBuy = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"), "BUY");
 
-        private PageControl btnByAmount = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
-        private PageControl btnByShare = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
-        private PageControl txtNumberOfShares = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"));
+        private PageControl btnByAmount = new PageControl(By.XPath("//*[contains(text(),'By Amount')]"));
+        private PageControl btnByShare = new PageControl(By.XPath("//*[contains(text(),'By Share')]"));
+        private PageControl txtAvailableToInvest = new PageControl(By.XPath("//*[contains(text(),'Available to invest')]"));
+        private PageControl txtAvailableToSell = new PageControl(By.XPath("//*[contains(text(),'Available to sell')]"));
 
         public BuyInstrumentPage(IWebDriver driver) : base(driver)
         {
@@ -66,9 +67,14 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             return btnByShare.IsDisplayed();
         }
 
-        public int GetMinimumShares()
+        public double GetAvailableToSellAmount()
         {
-            return txtNumberOfShares.GetText().Trim() == "0" ? 1 : int.Parse(txtNumberOfShares.GetText().Trim());
+            return CommonFunctions.ExtractNumberFromText(txtAvailableToSell.GetText());
+        }
+
+        public double GetAvailableToInvestAmount()
+        {
+            return CommonFunctions.ExtractNumberFromText(txtAvailableToInvest.GetText());
         }
 
         public void SelectByAmount()
