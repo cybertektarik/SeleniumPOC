@@ -84,17 +84,22 @@ namespace SeleniumPOC.Common
 
         public static double ExtractNumberFromText(string rawText)
         {
-            // Remove currency symbols and commas
+            if (string.IsNullOrWhiteSpace(rawText))
+                throw new ArgumentException("Input text is null or whitespace.", nameof(rawText));
+
+            // Remove any non-digit, non-dot characters
             string cleaned = Regex.Replace(rawText, @"[^\d.]", "");
+
+            // Optionally trim any whitespace or special chars
+            cleaned = cleaned.Trim();
 
             if (double.TryParse(cleaned, out double result))
             {
                 return result;
             }
 
-            throw new FormatException($"Could not parse numeric value from: '{rawText}'");
+            throw new FormatException($"Could not parse numeric value from: '{rawText}' (cleaned: '{cleaned}')");
         }
-
     }
 }
 

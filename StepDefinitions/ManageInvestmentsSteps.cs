@@ -847,27 +847,29 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
         [Then(@"I validate that the minimum available to sell should be greater than ""(.*)""")]
-        public void ThenIValidateAvailableToSellGreaterThan(double minShares)
+        public void ThenIValidateAvailableToSellGreaterThan(string minShares)
         {
+            double minSharesValue = CommonFunctions.ExtractNumberFromText(minShares);
             double? actualShares = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToSellAmount();
 
             Assert.That(actualShares, Is.Not.Null, "Available to Sell value is null.");
 
             Assert.That(actualShares.Value,
-                Is.GreaterThan(minShares),
-                $"Available to Sell expected to be greater than {minShares}, but found {actualShares.Value}.");
+                Is.GreaterThan(minSharesValue),
+                $"Available to Sell expected to be greater than {minSharesValue}, but found {actualShares.Value}.");
         }
 
         [Then(@"I validate that the minimum available to invest should be greater than ""(.*)""")]
-        public void ThenIValidateMinimumAmountGreaterThan(double minAmount)
+        public void ThenIValidateMinimumAmountGreaterThan(string minAmount)
         {
+            double minAmountValue = CommonFunctions.ExtractNumberFromText(minAmount);
             double? actualAmount = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToInvestAmount();
 
             Assert.That(actualAmount, Is.Not.Null, "Available to Invest value is null.");
 
             Assert.That(actualAmount.Value,
-                Is.GreaterThan(minAmount),
-                $"Available to Invest expected to be greater than {minAmount}, but found {actualAmount.Value}.");
+                Is.GreaterThan(minAmountValue),
+                $"Available to Invest expected to be greater than {minAmountValue}, but found {actualAmount.Value}.");
         }
 
         [When(@"I select ""(.*)""")]

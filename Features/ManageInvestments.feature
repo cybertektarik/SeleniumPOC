@@ -74,7 +74,7 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on the "Select" Investment account types
 	And I click "Retired" employment status
 	And I click on the Next Button
-	When I check on ESign checkbox
+	And I check on ESign checkbox
 	And I click on the Next Button
 	And I enter name "Test Signature" in the name field
 	And I click on the Sign Button
@@ -92,7 +92,7 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on the close Investment Option Button
 	Then I select the close investment option as "The platform is hard to use"
 	When I confirm "Yes"
-	When I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 Scenario: Enrolling a new Choice Investment Account
@@ -108,7 +108,7 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on the Next Button
 	And I click on the "Choice" Investment account types
 	And I click on the Next Button
-	When I check on ESign checkbox
+	And I check on ESign checkbox
 	And I click on the Next Button
 	And I enter name "Test Signature" in the name field
 	And I click on the Sign Button
@@ -126,7 +126,7 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on the close Investment Option Button
 	Then I select the close investment option as "The platform is hard to use"
 	When I confirm "Yes"
-	When I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 Scenario: Enrolling a new Managed Investment Account
@@ -143,7 +143,7 @@ Scenario: Enrolling a new Managed Investment Account
 	Then I validate the investment accounts displays
 	When I click on the "Managed" Investment account types
 	And I click on the Next Button
-	When I check on ESign checkbox
+	And I check on ESign checkbox
 	And I click on the Next Button
 	#And I enter name "Test Signature" in the name field
 	#And I click on the Sign Button
@@ -166,7 +166,7 @@ Scenario: Enrolling a new Managed Investment Account
 	And I click on the close Investment Option Button
 	Then I select the close investment option as "The platform is hard to use"
 	When I confirm "Yes"
-	When I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 # Scenario: Validate Select's Modal Dialog Message
@@ -268,7 +268,7 @@ Scenario: Validate Pre Enrollment for Select Account
 	And I click on the Next Button
 	And I click on the "Select" Investment account types
 	And I click on the Next Button
-	When I check on ESign checkbox
+	And I check on ESign checkbox
 	And I click on the Next Button
 	#When I enter name "Test Signature" in the name field
 	##When I click on the Sign Button
@@ -330,7 +330,7 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on the Next Button
 	And I click on the "Choice" Investment account types
 	And I click on the Next Button
-	When I check on ESign checkbox
+	And I check on ESign checkbox
 	And I click on the Next Button
 	And I enter name "Test Signature" in the name field
 	And I click on the Sign Button
@@ -353,7 +353,7 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on the close Investment Option Button
 	Then I select the close investment option as "Other (please specify)"
 	When I confirm "Yes"
-	When I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
 
@@ -380,7 +380,7 @@ Scenario: Validate Buy with Share on the Select account
 	And I validate that the minimum available to invest should be greater than "$1000"
 	When I select "By Share"
 	And I enter "1" as the number of shares
-	And I click on confirm Buy Button
+	And I click on confirm buy Button
 	And I validate success message for buy
 
 Scenario: Validate Sell with Share on the Choice account
@@ -388,12 +388,12 @@ Scenario: Validate Sell with Share on the Choice account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Choice" Account
 	And I click on TRADE Button
-	And I click on BUY Button
+	And I click on SELL Button
 	Then I should see both "By Amount" and "By Share" radio buttons
-	And I validate that the minimum available to sell should be greater than "1"
+	And I validate that the minimum available to sell should be greater than "10"
 	When I select "By Share"
 	And I enter "1" as the number of shares
-	And I click on confirm Sell Button
+	And I click on confirm sell Button
 	And I validate success message for sell
 
    

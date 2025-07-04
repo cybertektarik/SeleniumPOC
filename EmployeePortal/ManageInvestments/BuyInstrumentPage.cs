@@ -18,6 +18,8 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl btnByShare = new PageControl(By.XPath("//*[contains(text(),'By Share')]"));
         private PageControl txtAvailableToInvest = new PageControl(By.XPath("//*[contains(text(),'Available to invest')]"));
         private PageControl txtAvailableToSell = new PageControl(By.XPath("//*[contains(text(),'Available to sell')]"));
+        private PageControl txtEnterShares = new PageControl(By.XPath("//*[@data-vv-name='shares']"));
+
 
         public BuyInstrumentPage(IWebDriver driver) : base(driver)
         {
@@ -59,41 +61,45 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public bool IsByAmountRadioButtonVisible()
         {
+            WaitForSpinners();
             return btnByAmount.IsDisplayed();
         }
 
         public bool IsByShareRadioButtonVisible()
         {
+            WaitForSpinners();
             return btnByShare.IsDisplayed();
         }
 
         public double GetAvailableToSellAmount()
         {
+            WaitForSpinners();
             return CommonFunctions.ExtractNumberFromText(txtAvailableToSell.GetText());
         }
 
         public double GetAvailableToInvestAmount()
         {
+            WaitForSpinners();
             return CommonFunctions.ExtractNumberFromText(txtAvailableToInvest.GetText());
         }
 
         public void SelectByAmount()
         {
             WaitForSpinners();
-            btnByShare.Click();
+            btnByAmount.Click();
         }
 
         public void SelectByShare()
         {
             WaitForSpinners();
-            btnByAmount.Click();
+            btnByShare.Click();
         }
 
         public void EnterNumberOfShares(string shareCount)
         {
             WaitForSpinners();
-            txtEnterAmount.Clear();
-            txtEnterAmount.SendKeys(shareCount);
+            txtEnterShares.Clear();
+            txtEnterShares.SendKeys(shareCount);
         }
     }
 }
