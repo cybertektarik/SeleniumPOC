@@ -16,7 +16,7 @@ namespace SeleniumPOC.Common
     {
         private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
         private const string PERFECTO_TOKEN = "";
-        private ReportiumClient? _reportiumClient;
+        private static ReportiumClient? _reportiumClient;
 
         public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
         {
