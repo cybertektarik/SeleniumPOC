@@ -396,6 +396,96 @@ Scenario: Validate Sell with Share on the Choice account
 	And I click on confirm sell Button
 	And I validate success message for sell
 
+Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
+Given I am logged in as a user who has an enrolled account
+When I click on "Manage Investment" from the navigation menu
+And I click on the "Select" Account
+And I click on TRADE Button
+And I click on SELL Button
+Then I should see both "By Amount" and "By Share" radio buttons
+And I enter more than one dollar amount
+And I click on confirm sell Button
+And I validate success message for sell
+And I click on Dismiss
+And I refresh the page
+When I click on "Activity" tab
+And I refresh the page
+Then I validate "CANCEL" Button displays
+And I click on the "CANCEL" Button
+Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
+And I validate following
+    | Cancel               |
+    | Confirm Cancellation |
+And I click on "Cancel" button
+Then I validate Confirmation pop-up not displays
+And I click on the "CANCEL" Button
+Then I click on "Confirm Cancellation" button
+When I validate "Order was cancelled" message pop-up displays
+And I click "Dismiss"
+And I refresh the page
+And I validate following
+	| Date Initiated | Executed Date | Investsment | Transaction Type | Status                   | Amount |
+	| Current date   | Current date  | AGPXX       | Sell             | Canceled Iniated By User | $0.00  |
+And I refresh the page
+And I click on Notification Icon
+Then I validate Cancell notification displays
+
+
+Scenario: Verify CANCEL button functionality and cancellation notification after Buy By Amount from Select account
+Given I am logged in as a user who has an enrolled account
+When I click on "Manage Investment" from the navigation menu
+And I click on the "Select" Account
+And I click on TRADE Button
+And I click on BUY Button
+Then I should see both "By Amount" and "By Share" radio buttons
+And I enter more than one dollar amount
+And I click on confirm buy Button
+And I validate success message for buy
+And I click on Dismiss
+And I refresh the page
+When I click on "Activity" tab
+And I refresh the page
+Then I validate "CANCEL" Button displays
+And I click on the "CANCEL" Button
+Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
+And I validate following
+    | Cancel               |
+    | Confirm Cancellation |
+And I click on "Cancel" button
+Then I validate Confirmation pop-up not displays
+And I click on the "CANCEL" Button
+Then I click on "Confirm Cancellation" button
+When I validate "Order was cancelled" message pop-up displays
+And I click "Dismiss"
+And I refresh the page
+And I validate following
+	| Date Initiated | Executed Date | Investsment | Transaction Type | Status                   | Amount |
+	| Current date   | Current date  | AGPXX       | Buy              | Canceled Iniated By User | $0.00  |
+And I refresh the page
+And I click on Notification Icon
+Then I validate Cancell notification displays
+
+Scenario: Validate Buy with Share on the Choice account and validate from Activity page
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Choice" Account
+	And I click on TRADE Button
+	And I click on BUY Button
+	Then I should see both "By Amount" and "By Share" radio buttons
+	And I validate that the minimum available to invest should be greater than "$1000"
+	And I enter more than one dollar amount
+	And I click on confirm buy Button
+	And I validate success message for buy
+	And I click "Dismiss"
+	And I refresh the page
+	When I click on "Activity" tab
+    And I refresh the page
+	And I validate following
+	| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
+	| Current date   | Current date  | AAPL        | Buy              | Executed | $1.00  |
+
+
+
    
    
 
