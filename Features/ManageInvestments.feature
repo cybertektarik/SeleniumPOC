@@ -17,7 +17,7 @@ Examples:
 	| 123    | 0              |
 	| 12*^h  | 0              |
 
-	@feature2
+@feature2
 Scenario Outline: Validate Manage Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -32,7 +32,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
-	@feature2
+@feature2
 Scenario Outline: Validate Select Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -48,7 +48,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
-	@feature2
+@feature2
 Scenario Outline: Validate Choice Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -64,7 +64,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
-	@feature2
+@feature2
 Scenario: Enrolling a new Select Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -100,7 +100,7 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
-	@feature2
+@feature2
 Scenario: Enrolling a new Choice Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -135,7 +135,7 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
-	@feature2
+@feature2
 Scenario: Enrolling a new Managed Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -211,7 +211,7 @@ Scenario: Validate Sell Button on the Select account
 	And I click on confirm sell Button
 	And I validate success message for sell
 
-	@external
+@external
 Scenario: Validate TRADE Button on the Managed account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -222,7 +222,7 @@ Scenario: Validate TRADE Button on the Managed account
 	And I click on confirm buy Button
 	And I validate success message for buy
 	
-	@feature2
+@feature2
 Scenario: Validate Search Button on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -267,7 +267,7 @@ Scenario: Validate Search Button on the Choice account
 	And I validate zero investment products are available
 
 
-	@feature2
+@feature2
 Scenario: Validate Pre Enrollment for Select Account
 	Given I am logged in as a Pre enrolled user
 	When I click on "Manage Investment" from the navigation menu
@@ -298,7 +298,7 @@ Scenario: Validate Pre Enrollment for Select Account
 	When I click on the "Cancel Enrollment" Button
 	Then I validate message "Investment Enrollment has been cancelled"
 
-	@feature2
+@feature2
 Scenario: Validate HSA Advisory Agreements link for all investment types
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -311,7 +311,7 @@ Scenario: Validate HSA Advisory Agreements link for all investment types
 		| Managed         | abg_advisory_managed              |
 
 
-		@feature2
+@feature2
 Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed When Holdings Exist
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -382,7 +382,7 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 		| Fees for Select  | Annual fee:1 0.30% of AUA2 Quarterly min: $2.50 Quarterly max: $37.50 |
 		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
 
-		@external
+@external
 Scenario: Validate Buy with Share on the Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -396,7 +396,7 @@ Scenario: Validate Buy with Share on the Select account
 	And I click on confirm buy Button
 	And I validate success message for buy
 
-	@external
+@external
 Scenario: Validate Sell with Share on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -410,75 +410,76 @@ Scenario: Validate Sell with Share on the Choice account
 	And I click on confirm sell Button
 	And I validate success message for sell
 
-	@external
+@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
-Given I am logged in as a user who has an enrolled account
-When I click on "Manage Investment" from the navigation menu
-And I click on the "Select" Account
-And I click on TRADE Button
-And I click on SELL Button
-Then I should see both "By Amount" and "By Share" radio buttons
-And I enter more than one dollar amount
-And I click on confirm sell Button
-And I validate success message for sell
-And I click on Dismiss
-And I refresh the page
-When I click on "Activity" tab
-And I refresh the page
-Then I validate "CANCEL" Button displays
-And I click on the "CANCEL" Button
-Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
-And I validate following
-    | Cancel               |
-    | Confirm Cancellation |
-And I click on "Cancel" button
-Then I validate Confirmation pop-up not displays
-And I click on the "CANCEL" Button
-Then I click on "Confirm Cancellation" button
-When I validate "Order was cancelled" message pop-up displays
-And I click "Dismiss"
-And I refresh the page
-And I validate following
-	| Date Initiated | Executed Date | Investsment | Transaction Type | Status                   | Amount |
-	| Current date   | Current date  | AGPXX       | Sell             | Canceled Iniated By User | $0.00  |
-And I refresh the page
-And I click on Notification Icon
-Then I validate Cancell notification displays
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Select" Account
+	And I click on TRADE Button
+	And I click on SELL Button
+	Then I should see both "By Amount" and "By Share" radio buttons
+	And I enter more than one dollar amount
+	And I click on confirm sell Button
+	And I validate success message for sell
+	And I click on Dismiss
+	And I refresh the page
+	When I click on "Activity" tab
+	And I refresh the page
+	Then I validate "CANCEL" Button displays
+	And I click on the "CANCEL" Button
+	Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
+	And I validate following
+		| Cancel               |
+		| Confirm Cancellation |
+	And I click on "Cancel" button
+	Then I validate Confirmation pop-up not displays
+	And I click on the "CANCEL" Button
+	Then I click on "Confirm Cancellation" button
+	When I validate "Order was cancelled" message pop-up displays
+	And I click "Dismiss"
+	And I refresh the page
+	And I validate following details for the executed sell transaction on select account
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status                     | Amount |
+		| Current date   | Current date  | AGPXX       | Sell             | Canceled Initiated By User | $0.00  |
+	And I refresh the page
+	And I click on Notification Icon
+	Then I validate Cancel notification
 
 @external
 Scenario: Verify CANCEL button functionality and cancellation notification after Buy By Amount from Select account
-Given I am logged in as a user who has an enrolled account
-When I click on "Manage Investment" from the navigation menu
-And I click on the "Select" Account
-And I click on TRADE Button
-And I click on BUY Button
-Then I should see both "By Amount" and "By Share" radio buttons
-And I enter more than one dollar amount
-And I click on confirm buy Button
-And I validate success message for buy
-And I click on Dismiss
-And I refresh the page
-When I click on "Activity" tab
-And I refresh the page
-Then I validate "CANCEL" Button displays
-And I click on the "CANCEL" Button
-Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
-And I validate following
-    | Cancel               |
-    | Confirm Cancellation |
-And I click on "Cancel" button
-Then I validate Confirmation pop-up not displays
-And I click on the "CANCEL" Button
-Then I click on "Confirm Cancellation" button
-When I validate "Order was cancelled" message pop-up displays
-And I click "Dismiss"
-And I refresh the page
-And I validate following
-	| Date Initiated | Executed Date | Investsment | Transaction Type | Status                   | Amount |
-	| Current date   | Current date  | AGPXX       | Buy              | Canceled Iniated By User | $0.00  |
-And I refresh the page
-And I click on Notification Icon
-Then I validate Cancell notification displays
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Select" Account
+	And I click on TRADE Button
+	And I click on BUY Button
+	Then I should see both "By Amount" and "By Share" radio buttons
+	And I enter more than one dollar amount
+	And I click on confirm buy Button
+	And I validate success message for buy
+	And I click on Dismiss
+	And I refresh the page
+	When I click on "Activity" tab
+	And I refresh the page
+	Then I validate "CANCEL" Button displays
+	And I click on the "CANCEL" Button
+	Then I validate "Are you sure you want to cancel this for ASCGX with $1.00 trade?"
+	And I validate following
+		| Cancel               |
+		| Confirm Cancellation |
+	And I click on "Cancel" button
+	Then I validate Confirmation pop-up not displays
+	And I click on the "CANCEL" Button
+	Then I click on "Confirm Cancellation" button
+	When I validate "Order was cancelled" message pop-up displays
+	And I click "Dismiss"
+	And I refresh the page
+	And I validate following details for the executed buy transaction on select account
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status                     | Amount |
+		| Current date   | Current date  | AGPXX       | Buy              | Canceled Initiated By User | $0.00  |
+	And I refresh the page
+	And I click on Notification Icon
+	Then I validate Cancel notification
+
 @external
 Scenario: Validate Buy with Share on the Choice account and validate from Activity page
 	Given I am logged in as a user who has an enrolled account
@@ -494,10 +495,10 @@ Scenario: Validate Buy with Share on the Choice account and validate from Activi
 	And I click "Dismiss"
 	And I refresh the page
 	When I click on "Activity" tab
-    And I refresh the page
-	And I validate following
-	| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
-	| Current date   | Current date  | AAPL        | Buy              | Executed | $1.00  |
+	And I refresh the page
+	And I validate following details for the executed buy transaction on choice account
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
+		| Current date   | Current date  | AAPL        | Buy              | Executed | $1.00  |
 
 
 

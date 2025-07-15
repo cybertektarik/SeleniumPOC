@@ -15,10 +15,9 @@ namespace SeleniumPOC.Hooks
         private IWebDriver driver = null!;
         protected AllPages? Pages;
 
-        private readonly string DEFAULT_URL = TestUserManager.GetDefaultUrl();
         private readonly bool RUN_REMOTE = false;
         private readonly string PLATFORM = Constants.PLATFORM_WINDOWS;
-        private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME;
+        private readonly string BROWSER_TYPE = Constants.BROWSER_EDGE;
         private readonly bool RUN_HEADLESS = false;
         private readonly bool RUN_DESKTOP_SIZE = true;
         private readonly string TEST_NAME;
@@ -56,14 +55,15 @@ namespace SeleniumPOC.Hooks
 
             ReportManager.CreateScenario(TEST_NAME); // Thread-safe
 
-            TestUserManager.Init();
+            // Load test data based on scenario tag
+            SetTestDataFileBasedOnTags(_scenarioContext.ScenarioInfo.Tags);
 
             if (RUN_REMOTE)
                 driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
             else
                 driver = SeleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, RUN_HEADLESS, RUN_DESKTOP_SIZE);
 
-            NavigateToDefaultUrl(DEFAULT_URL);
+            NavigateToDefaultUrl(TestUserManager.GetDefaultUrl()); // Use TestUserManager after Init
             Thread.Sleep(2000);
 
             Pages = new AllPages(driver);
@@ -146,6 +146,21 @@ namespace SeleniumPOC.Hooks
         {
             Thread.Sleep(seconds * 1000);
         }
-    }
 
+        private void SetTestDataFileBasedOnTags(string[] tags)
+        {
+            string testDataPath = "Data/UserRoles_Set1.json"; // Default
+
+            if (tags.Contains("feature2"))
+            {
+                testDataPath = "Data/UserRoles_Set1.json";
+            }
+            else if (tags.Contains("external"))
+            {
+                testDataPath = "Data/UserRoles_Set2.json";
+            }
+            Console.WriteLine("Using Test Data File: " + testDataPath);
+            TestUserManager.SetDataFile(testDataPath);
+        }
+    }
 }
