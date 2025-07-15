@@ -191,7 +191,7 @@ Scenario: Validate Learn More Link on Account Selection Page
 	And I click on the "Managed Learn More" link
 	Then I verify the title of page should contains "Managed"
 	When I click on the "Return" link
-
+@external
 Scenario: Validate Sell Button on the Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -201,7 +201,7 @@ Scenario: Validate Sell Button on the Select account
 	And I enter more than one dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
-
+	@external
 Scenario: Validate TRADE Button on the Managed account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -211,7 +211,7 @@ Scenario: Validate TRADE Button on the Managed account
 	And I enter more than one dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-
+	
 Scenario: Validate Search Button on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -369,7 +369,7 @@ Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Acc
 		| Fees for Select  | Annual fee:1 0.30% of AUA2 Quarterly min: $2.50 Quarterly max: $37.50 |
 		| Fees for Choice  | Annual fee:1 0.15% of AUA2 Quarterly max: $24.00                      |
 
-
+		@external
 Scenario: Validate Buy with Share on the Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -382,7 +382,7 @@ Scenario: Validate Buy with Share on the Select account
 	And I enter "1" as the number of shares
 	And I click on confirm buy Button
 	And I validate success message for buy
-
+	@external
 Scenario: Validate Sell with Share on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -395,7 +395,7 @@ Scenario: Validate Sell with Share on the Choice account
 	And I enter "1" as the number of shares
 	And I click on confirm sell Button
 	And I validate success message for sell
-
+	@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
 Given I am logged in as a user who has an enrolled account
 When I click on "Manage Investment" from the navigation menu
@@ -430,7 +430,7 @@ And I refresh the page
 And I click on Notification Icon
 Then I validate Cancell notification displays
 
-
+@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Buy By Amount from Select account
 Given I am logged in as a user who has an enrolled account
 When I click on "Manage Investment" from the navigation menu
@@ -464,7 +464,7 @@ And I validate following
 And I refresh the page
 And I click on Notification Icon
 Then I validate Cancell notification displays
-
+@external
 Scenario: Validate Buy with Share on the Choice account and validate from Activity page
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu

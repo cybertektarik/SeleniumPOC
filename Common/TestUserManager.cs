@@ -7,7 +7,7 @@ namespace SeleniumProject.Common
     {
         private static TestAccountSet? _testAccountSet;
 
-        public static void Init(string filePath = "Data/UserRoles_Set1.json")
+        public static void Init(string filePath = "Data/UserRoles_Set2.json")
         {
             if (_testAccountSet != null) return;
 
