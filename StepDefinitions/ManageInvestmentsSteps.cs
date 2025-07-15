@@ -408,6 +408,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         {
             Pages?.ManageInvestmentsPage.ActivityTab.ClickOnManagementTab(tabName);
         }
+
         [When(@"I click on the ""(.*)"" tab in Manage Investments")]
         public void WhenIClickOnAndTradeTab(string tabName)
         {
@@ -893,6 +894,82 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void WhenIEnterNumberOfShares(string shareCount)
         {
             Pages?.ManageInvestmentsPage.BuyInstrumentPage.EnterNumberOfShares(shareCount);
+        }
+
+        //15 July
+        [When(@"I click on ""(.*)"" pop-up")]
+        public void WhenIClickOnPopUp(string buttonText)
+        {
+        }
+
+        [When(@"I refresh the application web page")]
+        public void RefreshApplicationWebPage()
+        {
+        }
+
+        [When(@"I click on ""(.*)"" tab under investment account")]
+        public void ClickTabUnderInvestmentAccount(string tabName)
+        {
+        }
+
+        [Then(@"I validate following details for the executed buy transaction on choice account")]
+        public void ThenIValidateBuyTransactionDetailsOnChoiceAccount(Table table)
+        {
+        }
+
+        [Then(@"I validate ""(.*)"" button displays")]
+        public void ValidateButtonDisplays(string buttonText)
+        {
+        }
+
+        [When(@"I click on the ""(.*)"" button in Activity tab")]
+        public void ClickButtonInActivityTab(string buttonText)
+        {
+        }
+
+        [Then(@"I validate ""(.*)""")]
+        public void ValidateConfirmationMessage(string expectedMessage)
+        {
+        }
+
+        [Then(@"I validate following details for cancellation")]
+        public void ValidateCancellationOptions(Table table)
+        {
+        }
+
+        [When(@"I click on ""(.*)"" button in pop-up")]
+        public void ClickButtonInPopup(string buttonText)
+        {
+        }
+
+        [Then(@"I validate Confirmation pop-up not displays")]
+        public void ValidateConfirmationPopupNotDisplayed()
+        {
+        }
+
+        [Then(@"I click on ""(.*)"" button")]
+        public void ClickGenericButton(string buttonText)
+        {
+        }
+
+        [When(@"I validate ""(.*)"" message pop-up displays")]
+        public void ValidateMessagePopupDisplays(string message)
+        {
+        }
+
+        [Then(@"I validate following details for the executed buy transaction on select account")]
+        public void ValidateBuyTransactionDetailsOnSelectAccount(Table table)
+        {
+        }
+
+        [When(@"I click on Notification Icon")]
+        public void ClickOnNotificationIcon()
+        {
+        }
+
+        [Then(@"I validate Cancel notification")]
+        public void ValidateCancelNotification()
+        {
         }
     }
 }
