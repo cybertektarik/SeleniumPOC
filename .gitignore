@@ -6,3 +6,4 @@ obj/
 *.vsix
 *.db
 *.cache
+/TestResults

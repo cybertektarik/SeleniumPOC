@@ -16,7 +16,7 @@ namespace SeleniumPOC.Common
     {
         private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
         private const string PERFECTO_TOKEN = "";
-        private ReportiumClient? _reportiumClient;
+        private static ReportiumClient? _reportiumClient;
 
         public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
         {
@@ -104,6 +104,7 @@ namespace SeleniumPOC.Common
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
                 driver.Manage().Window.Size = new Size(1920, 1080);
 
+                StartPerfectoReporting(driver, browserType, platformName, scriptName);
                 return driver;
             }
             catch (Exception e)
@@ -117,7 +118,7 @@ namespace SeleniumPOC.Common
         // The issue is that 'TestContextTags' is not a valid member of 'TestContext'.  
         // Instead, we should use 'TestContext.Builder' to build a TestContext object with tags.
 
-        public void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
+        public static void StartPerfectoReporting(WebDriver driver, string browserType, string platformName, string scriptName)
         {
             try
             {
