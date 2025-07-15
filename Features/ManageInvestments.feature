@@ -1,5 +1,6 @@
 Feature: Manage Investments - Search Funds
 
+@feature2
 Scenario Outline: Search for stock symbols in Available Investments tab
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -16,6 +17,7 @@ Examples:
 	| 123    | 0              |
 	| 12*^h  | 0              |
 
+	@feature2
 Scenario Outline: Validate Manage Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -30,6 +32,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
+	@feature2
 Scenario Outline: Validate Select Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -45,6 +48,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
+	@feature2
 Scenario Outline: Validate Choice Investments Page Tabs
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -60,6 +64,7 @@ Examples:
 	| Documents        | documents        |
 	| Fees             | fees             |
 
+	@feature2
 Scenario: Enrolling a new Select Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -95,6 +100,7 @@ Scenario: Enrolling a new Select Investment Account
 	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
+	@feature2
 Scenario: Enrolling a new Choice Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -129,6 +135,7 @@ Scenario: Enrolling a new Choice Investment Account
 	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
+	@feature2
 Scenario: Enrolling a new Managed Investment Account
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -176,6 +183,7 @@ Scenario: Enrolling a new Managed Investment Account
 # Then I should see the Select's Modal Dialog Message displayed
 # And I click on the Close button for windows pop-up
 
+@feature2
 Scenario: Validate Learn More Link on Account Selection Page
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -191,6 +199,7 @@ Scenario: Validate Learn More Link on Account Selection Page
 	And I click on the "Managed Learn More" link
 	Then I verify the title of page should contains "Managed"
 	When I click on the "Return" link
+
 @external
 Scenario: Validate Sell Button on the Select account
 	Given I am logged in as a user who has an enrolled account
@@ -201,6 +210,7 @@ Scenario: Validate Sell Button on the Select account
 	And I enter more than one dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
+
 	@external
 Scenario: Validate TRADE Button on the Managed account
 	Given I am logged in as a user who has an enrolled account
@@ -212,6 +222,7 @@ Scenario: Validate TRADE Button on the Managed account
 	And I click on confirm buy Button
 	And I validate success message for buy
 	
+	@feature2
 Scenario: Validate Search Button on the Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -256,7 +267,7 @@ Scenario: Validate Search Button on the Choice account
 	And I validate zero investment products are available
 
 
-
+	@feature2
 Scenario: Validate Pre Enrollment for Select Account
 	Given I am logged in as a Pre enrolled user
 	When I click on "Manage Investment" from the navigation menu
@@ -287,6 +298,7 @@ Scenario: Validate Pre Enrollment for Select Account
 	When I click on the "Cancel Enrollment" Button
 	Then I validate message "Investment Enrollment has been cancelled"
 
+	@feature2
 Scenario: Validate HSA Advisory Agreements link for all investment types
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -299,6 +311,7 @@ Scenario: Validate HSA Advisory Agreements link for all investment types
 		| Managed         | abg_advisory_managed              |
 
 
+		@feature2
 Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed When Holdings Exist
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -316,7 +329,7 @@ Scenario: Validate Close Investment Option Is Disabled and Message Is Displayed 
 		| Managed         | To close your investment option, you must first sell all your holdings to bring your balance to $0. |
 
 
-
+@feature2
 Scenario: Enrolling a new Choice Investment Account with Threshold
 	Given I am logged into the Employee Portal
 	When I click on "Settings" from the navigation menu
@@ -356,7 +369,7 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 	And I click on "Manage Investment" from the navigation menu
 	Then I should see "Enroll in HSA Invest" banner link displays
 
-
+@feature2
 Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -382,6 +395,7 @@ Scenario: Validate Buy with Share on the Select account
 	And I enter "1" as the number of shares
 	And I click on confirm buy Button
 	And I validate success message for buy
+
 	@external
 Scenario: Validate Sell with Share on the Choice account
 	Given I am logged in as a user who has an enrolled account
@@ -395,6 +409,7 @@ Scenario: Validate Sell with Share on the Choice account
 	And I enter "1" as the number of shares
 	And I click on confirm sell Button
 	And I validate success message for sell
+
 	@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
 Given I am logged in as a user who has an enrolled account
