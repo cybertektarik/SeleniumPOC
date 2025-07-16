@@ -1,10 +1,11 @@
-//using AngleSharp.Dom;
+﻿//using AngleSharp.Dom;
 using FluentAssertions;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 using SeleniumProject.Common;
+using System.Globalization;
 using System.Text.RegularExpressions;
 //using TechTalk.SpecFlow;
 
@@ -898,78 +899,173 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
 
         //15 July
         [When(@"I click on ""(.*)"" pop-up")]
-        public void WhenIClickOnPopUp(string buttonText)
+        public void WhenIClickOnPopUp(string popUp)
         {
+            if (popUp == "Dismiss")
+                Pages?.NotificationAlert.Dismiss();
+            else
+            {
+                throw new ArgumentException($"Invalid popUp: {popUp}. Expected 'Dismiss'.");
+            }
         }
 
         [When(@"I refresh the application web page")]
         public void RefreshApplicationWebPage()
         {
+            driver?.Navigate().Refresh();
         }
 
         [When(@"I click on ""(.*)"" tab under investment account")]
         public void ClickTabUnderInvestmentAccount(string tabName)
         {
+            if (tabName == "Current Holdings")
+                Pages?.ManageInvestmentsPage.ClickCurrentHoldingsTab();
+            else if (tabName == "Search & Trade")
+                Pages?.ManageInvestmentsPage.SearchAndTradeTab();
+            else if (tabName == "Activity")
+                Pages?.ManageInvestmentsPage.ClickActivityTab();
+            else if (tabName == "Documents")
+                Pages?.ManageInvestmentsPage.ClickDocumentsTab();
+            else if (tabName == "Fees")
+                Pages?.ManageInvestmentsPage.ClickFeesTab();
+            else
+            {
+                throw new ArgumentException($"Invalid tabName: {tabName}. Expected 'Activity'.");
+            }
         }
 
-        [Then(@"I validate following details for the executed buy transaction on choice account")]
+        [Then(@"I validate following details for the executed transaction")]
         public void ThenIValidateBuyTransactionDetailsOnChoiceAccount(Table table)
         {
+            foreach (var row in table.Rows)
+            {
+                string dateInitiated = row["Date Initiated"];
+                string executedDate = row["Executed Date"];
+                string investment = row["Investsment"];
+                string transactionType = row["Transaction Type"];
+                string status = row["Status"];
+                string amount = row["Amount"];
+
+                string today = DateTime.Today.ToString("MMM dd, yyyy", CultureInfo.InvariantCulture);
+
+                if (dateInitiated.Equals("Current date", StringComparison.OrdinalIgnoreCase))
+                    dateInitiated = today;
+
+                if (executedDate.Equals("Current date", StringComparison.OrdinalIgnoreCase))
+                    executedDate = today;
+
+                Pages?.ManageInvestmentsPage.ActivityTab.ValidateTransactionRow(
+                    dateInitiated,
+                    executedDate,
+                    investment,
+                    transactionType,
+                    status,
+                    amount
+                );
+            }
         }
+
 
         [Then(@"I validate ""(.*)"" button displays")]
         public void ValidateButtonDisplays(string buttonText)
         {
+            Assert.That(Pages?.ManageInvestmentsPage.ActivityTab.IsCancelButtonDisplayed(), Is.True, $"{buttonText} button should be displayed.");
         }
 
         [When(@"I click on the ""(.*)"" button in Activity tab")]
         public void ClickButtonInActivityTab(string buttonText)
         {
+            if (buttonText == "Cancel")
+                Pages?.ManageInvestmentsPage.ActivityTab.ClickCancelButton();
+            else
+                throw new ArgumentException($"Invalid buttonText: {buttonText}. Expected 'Cancel' or 'Close'.");
         }
 
-        [Then(@"I validate ""(.*)""")]
-        public void ValidateConfirmationMessage(string expectedMessage)
-        {
-        }
-
-        [Then(@"I validate following details for cancellation")]
+        [Then(@"I validate following details for cancellation pop-up in Activity tab")]
         public void ValidateCancellationOptions(Table table)
         {
+            foreach (var row in table.Rows)
+            {
+                string text = row[0];
+
+                if (text.Contains("Are you sure you want to cancel this for ASCGX with $1.00 trade?"))
+                {
+                    string actualMessage = Pages.ManageInvestmentsPage.ActivityTab.cancelPopupMessage.GetText().Trim();
+                    Assert.That(actualMessage, Is.EqualTo(text), "Cancel pop-up message mismatch.");
+                }
+                else if (text.Equals("Cancel", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.That(Pages.ManageInvestmentsPage.ActivityTab.cancelButton.IsDisplayed(), "Cancel button not displayed.");
+                }
+                else if (text.Equals("Confirm Cancellation", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.That(Pages.ManageInvestmentsPage.ActivityTab.confirmCancellationButton.IsDisplayed(), "Confirm Cancellation button not displayed.");
+                }
+                else
+                {
+                    Assert.Fail($"Unexpected row value: {text}");
+                }
+            }
+
+            Console.WriteLine("✅ Cancellation pop-up validated.");
         }
 
-        [When(@"I click on ""(.*)"" button in pop-up")]
-        public void ClickButtonInPopup(string buttonText)
+
+        [Then(@"I click on ""(.*)"" button in pop-up")]
+        public void ClickButtonInPopup(string buttonName)
         {
+            PageControl button = buttonName switch
+            {
+                "Cancel" => Pages.ManageInvestmentsPage.ActivityTab.cancelButton,
+                "Confirm Cancellation" => Pages.ManageInvestmentsPage.ActivityTab.confirmCancellationButton,
+                _ => throw new ArgumentException($"Unsupported button: {buttonName}")
+            };
+
+            Assert.That(button.IsDisplayed(), $"❌ '{buttonName}' button is not displayed.");
+            button.Click();
+            Console.WriteLine($"✅ Clicked '{buttonName}' button in pop-up.");
         }
 
-        [Then(@"I validate Confirmation pop-up not displays")]
-        public void ValidateConfirmationPopupNotDisplayed()
+
+        [Then(@"I validate ""(.*)"" pop-up not displays")]
+        public void ValidateCancellationPopupNotDisplayed(string popupName)
         {
+            PageControl popup = popupName switch
+            {
+                "Confirmation" => Pages.ManageInvestmentsPage.ActivityTab.cancelPopupMessage,
+                _ => throw new ArgumentException($"Unsupported pop-up: {popupName}")
+            };
+
+            Assert.That(!popup.IsDisplayed(), $"❌ '{popupName}' pop-up is still displayed.");
+            Console.WriteLine($"✅ '{popupName}' pop-up is not displayed.");
         }
 
-        [Then(@"I click on ""(.*)"" button")]
-        public void ClickGenericButton(string buttonText)
+        [When(@"I validate Order was cancelled message")]
+        public void ValidatOrderCancelledMessage()
         {
-        }
-
-        [When(@"I validate ""(.*)"" message pop-up displays")]
-        public void ValidateMessagePopupDisplays(string message)
-        {
-        }
-
-        [Then(@"I validate following details for the executed buy transaction on select account")]
-        public void ValidateBuyTransactionDetailsOnSelectAccount(Table table)
-        {
+            Pages.NotificationAlert.GetSuccessMessage().Should().Contain("Order was cancelled");
         }
 
         [When(@"I click on Notification Icon")]
         public void ClickOnNotificationIcon()
         {
+            Pages.NotificationAlert.ClickNotificationButton();
         }
 
-        [Then(@"I validate Cancel notification")]
-        public void ValidateCancelNotification()
+        [Then(@"I validate Cancel notification for ""(.*)""")]
+        public void ValidateCancelNotificationForAction(string actionType)
         {
+            string topNotification = Pages.NotificationAlert.GetTopNotificationText();
+
+            Console.WriteLine($"🔔 Top Notification: {topNotification}");
+
+            bool isMatch = topNotification.Contains("failed", StringComparison.OrdinalIgnoreCase)
+                           && topNotification.Contains(actionType, StringComparison.OrdinalIgnoreCase);
+
+            Assert.That(isMatch,
+                $"❌ Notification mismatch. Expected action '{actionType}' with failure, but found: '{topNotification}'");
+
+            Console.WriteLine($"✅ Cancel notification for '{actionType.ToUpper()}' validated successfully.");
         }
     }
 }

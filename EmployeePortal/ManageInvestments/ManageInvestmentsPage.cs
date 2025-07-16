@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using OpenQA.Selenium;
 //using OpenQA.Selenium.Bidi.Modules.BrowsingContext;
 using SeleniumPOC.Common;
@@ -63,6 +64,8 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl stockToVerify(string stockName) => new PageControl(By.XPath($"//ul[contains(@class, 'tabs-container')]/li/a[contains(text(), '{stockName}')]"), stockName);
 
+        //15July
+        private PageControl tabActivity = new PageControl(By.XPath("//*[text()='Activity']"), "Activity");
 
 
         // ======================== C H I L D   P A G E S ======================== 
@@ -414,6 +417,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             txtInvestAmount.Clear();
             txtInvestAmount.SendKeys(amount);
+        }
+
+        public void ClickFeesTab()
+        {
+            tabToSelect("Fees").Click();
+            WaitForSpinners();
         }
     }
 }

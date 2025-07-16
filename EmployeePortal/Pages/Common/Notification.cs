@@ -9,6 +9,11 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl stcErrorMessage(int index) => new PageControl(By.XPath("//div[@class='notification alert alert-danger']//p[" + index + "]"), "Manage Investments");
         private PageControl btnDismiss(int index) => new PageControl(By.XPath("//div[@class='notification-container']//button[text()='Dismiss'][" + index + "]"), "Dismiss");
 
+        //New Code
+        public PageControl notificationIcon => new(By.XPath("//*[normalize-space()='Confirm Cancellation']"), "Notification Button");
+        public PageControl notificationList => new(By.XPath("//*[normalize-space()='Confirm Cancellation']"), "Notification Button");
+
+
         public NotificationAlert(IWebDriver driver) : base(driver)
         {
         }
@@ -43,6 +48,14 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         {
             btnDismiss(1).Click();
         }
+
+        public void ClickNotificationButton()
+        {
+            WaitForSpinners();
+            notificationIcon.Click();
+        }
+
+        public string? GetTopNotificationText() => notificationList.GetText()?.Trim();
     }
 }
 
