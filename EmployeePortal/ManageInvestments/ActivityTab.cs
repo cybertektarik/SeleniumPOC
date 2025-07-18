@@ -100,34 +100,27 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                                   string expectedInvestment, string expectedType,
                                   string expectedStatus, string expectedAmount)
         {
-            var rows = driver.FindElements(By.CssSelector("table tr"));
+            var cells = driver.FindElements(By.XPath("((//table[@role='table'])[last()]//tr[@tabindex='0'])[position()=1]//td"));
 
-            foreach (var row in rows)
+            string dateInitiated = cells[1].Text.Trim();
+            string executedDate = cells[2].Text.Trim();
+            string investment = cells[3].Text.Trim();
+            string type = cells[4].Text.Trim();
+            string status = cells[5].Text.Trim();
+            string amount = cells[6].Text.Trim();
+
+            bool match =
+                dateInitiated.Equals(expectedDateInitiated, StringComparison.OrdinalIgnoreCase) &&
+                executedDate.Equals(expectedExecutedDate, StringComparison.OrdinalIgnoreCase) &&
+                investment.Equals(expectedInvestment, StringComparison.OrdinalIgnoreCase) &&
+                type.Equals(expectedType, StringComparison.OrdinalIgnoreCase) &&
+                status.StartsWith(expectedStatus, StringComparison.OrdinalIgnoreCase) &&  // partial match allowed
+                amount.Equals(expectedAmount, StringComparison.OrdinalIgnoreCase);
+
+            if (match)
             {
-                var cells = row.FindElements(By.TagName("td"));
-                if (cells.Count < 6)
-                    continue;
-
-                string dateInitiated = cells[0].Text.Trim();
-                string executedDate = cells[1].Text.Trim();
-                string investment = cells[2].Text.Trim();
-                string type = cells[3].Text.Trim();
-                string status = cells[4].Text.Trim();
-                string amount = cells[5].Text.Trim();
-
-                bool match =
-                    dateInitiated.Equals(expectedDateInitiated, StringComparison.OrdinalIgnoreCase) &&
-                    executedDate.Equals(expectedExecutedDate, StringComparison.OrdinalIgnoreCase) &&
-                    investment.Equals(expectedInvestment, StringComparison.OrdinalIgnoreCase) &&
-                    type.Equals(expectedType, StringComparison.OrdinalIgnoreCase) &&
-                    status.StartsWith(expectedStatus, StringComparison.OrdinalIgnoreCase) &&  // partial match allowed
-                    amount.Equals(expectedAmount, StringComparison.OrdinalIgnoreCase);
-
-                if (match)
-                {
-                    Console.WriteLine("✅ Executed transaction matched.");
-                    return;
-                }
+                Console.WriteLine("✅ Executed transaction matched.");
+                return;
             }
 
             throw new Exception($"❌ No matching transaction found for {expectedInvestment} - {expectedType} - {expectedStatus} - {expectedAmount}");

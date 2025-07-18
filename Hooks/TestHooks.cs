@@ -17,7 +17,7 @@ namespace SeleniumPOC.Hooks
 
         private readonly bool RUN_REMOTE = false;
         private readonly string PLATFORM = Constants.PLATFORM_WINDOWS;
-        private readonly string BROWSER_TYPE = Constants.BROWSER_EDGE;
+        private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME;
         private readonly bool RUN_HEADLESS = false;
         private readonly bool RUN_DESKTOP_SIZE = true;
         private readonly string TEST_NAME;
