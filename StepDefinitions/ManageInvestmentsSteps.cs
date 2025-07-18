@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 using SeleniumProject.Common;
@@ -476,13 +477,6 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickSellButton();
         }
 
-        [When("I enter more than one dollar amount")]
-        public void WhenIEnterMoreThanOneDollarAmount()
-        {
-            string amountToSell = CommonFunctions.GenerateRandomDollarAmount(1, 5);
-            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
-        }
-
         [When("I click on confirm sell Button")]
         public void WhenIClickOnConfirmSellButton()
         {
@@ -909,10 +903,18 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
         }
 
-        [When(@"I refresh the application web page")]
-        public void RefreshApplicationWebPage()
+        [Then(@"I refresh the application web page (.*) times")]
+        public void RefreshApplicationWebPageMultipleTimes(int numberOfTimes)
         {
-            driver?.Navigate().Refresh();
+            for (int i = 0; i < numberOfTimes; i++)
+            {
+                driver?.Navigate().Refresh();
+                Console.WriteLine($"Refreshed page {i + 1} time(s).");
+
+                // Optional: wait until page is fully loaded
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+            }
         }
 
         [When(@"I click on ""(.*)"" tab under investment account")]
@@ -1014,36 +1016,24 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I click on ""(.*)"" button in pop-up")]
         public void ClickButtonInPopup(string buttonName)
         {
-            PageControl button = buttonName switch
-            {
-                "Cancel" => Pages.ManageInvestmentsPage.ActivityTab.cancelButton,
-                "Confirm Cancellation" => Pages.ManageInvestmentsPage.ActivityTab.confirmCancellationButton,
-                _ => throw new ArgumentException($"Unsupported button: {buttonName}")
-            };
-
-            Assert.That(button.IsDisplayed(), $"❌ '{buttonName}' button is not displayed.");
-            button.Click();
-            Console.WriteLine($"✅ Clicked '{buttonName}' button in pop-up.");
+            if (buttonName == "Cancel")
+                Pages.ManageInvestmentsPage.ActivityTab.ClickPopUpCancelButton();
+            else if (buttonName == "Confirm Cancellation")
+                Pages.ManageInvestmentsPage.ActivityTab.ClickConfirmCancellationButton();
         }
 
 
-        [Then(@"I validate ""(.*)"" pop-up not displays")]
-        public void ValidateCancellationPopupNotDisplayed(string popupName)
+        [Then(@"I validate cancel pop-up not displays")]
+        public void ValidateCancellationPopupNotDisplayed()
         {
-            PageControl popup = popupName switch
-            {
-                "Confirmation" => Pages.ManageInvestmentsPage.ActivityTab.cancelPopupMessage,
-                _ => throw new ArgumentException($"Unsupported pop-up: {popupName}")
-            };
-
-            Assert.That(!popup.IsDisplayed(), $"❌ '{popupName}' pop-up is still displayed.");
-            Console.WriteLine($"✅ '{popupName}' pop-up is not displayed.");
+            Assert.That(Pages?.ManageInvestmentsPage.ActivityTab.IsCancelPopUpMessageDisplayed(), Is.False, $"Cancel pop up should not be displayed.");
         }
 
         [When(@"I validate Order was cancelled message")]
         public void ValidatOrderCancelledMessage()
         {
             Pages.NotificationAlert.GetSuccessMessage().Should().Contain("Order was cancelled");
+            Pages.NotificationAlert.Dismiss();
         }
 
         [When(@"I click on Notification Icon")]
@@ -1066,6 +1056,13 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 $"❌ Notification mismatch. Expected action '{actionType}' with failure, but found: '{topNotification}'");
 
             Console.WriteLine($"✅ Cancel notification for '{actionType.ToUpper()}' validated successfully.");
+        }
+
+        [When("I enter (.*) dollar amount")]
+        public void WhenIEnterDollarAmount(int dollar)
+        {
+            string amountToSell = CommonFunctions.GenerateFixedDollarAmount(dollar, 0);
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
         }
     }
 }

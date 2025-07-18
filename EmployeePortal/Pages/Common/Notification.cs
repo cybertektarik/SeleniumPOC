@@ -9,9 +9,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl stcErrorMessage(int index) => new PageControl(By.XPath("//div[@class='notification alert alert-danger']//p[" + index + "]"), "Manage Investments");
         private PageControl btnDismiss(int index) => new PageControl(By.XPath("//div[@class='notification-container']//button[text()='Dismiss'][" + index + "]"), "Dismiss");
 
-        //New Code
-        public PageControl notificationIcon => new(By.XPath("//*[normalize-space()='Confirm Cancellation']"), "Notification Button");
-        public PageControl notificationList => new(By.XPath("//*[normalize-space()='Confirm Cancellation']"), "Notification Button");
+        public PageControl notificationIcon => new(By.XPath("//*[@data-icon='bell']"), "Notification Bell");
+        public PageControl notificationList => new(By.XPath("//*[contains(text(),'Your request to')]"), "Notification panel list");
+
 
 
         public NotificationAlert(IWebDriver driver) : base(driver)

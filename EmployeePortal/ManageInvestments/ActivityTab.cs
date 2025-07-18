@@ -13,10 +13,10 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl managementPreferencesTab => new PageControl(By.XPath("//ul[contains(@class,'tabs-container')]/li/a[contains(text(),'Preferences')]"));
 
-        //New Code
-        public PageControl cancelPopupMessage => new(By.XPath("//div[contains(text(), 'Are you sure you want to cancel')]"), "Cancel Message");
-        public PageControl cancelButton => new(By.XPath("//button[normalize-space()='Cancel']"), "Cancel Button");
-        public PageControl confirmCancellationButton => new(By.XPath("//button[normalize-space()='Confirm Cancellation']"), "Confirm Cancellation Button");
+        public PageControl cancelButton => new(By.XPath("//*[@id='cancelButton']"), "Cancel Button");
+        public PageControl cancelPopupMessage => new(By.XPath("//*[@class='modal-body']//strong"), "Cancel pop-up Message");
+        public PageControl popUpCancelButton => new(By.XPath("//*[@class='modal-footer']//button[text()='Cancel']"), "Cancel Button");
+        public PageControl confirmCancellationButton => new(By.XPath("//*[@class='modal-footer']//button[text()='Confirm Cancellation']"), "Confirm Cancellation Button");
 
         public ActivityTab(IWebDriver driver) : base(driver)
         {
@@ -105,16 +105,20 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             string dateInitiated = cells[1].Text.Trim();
             string executedDate = cells[2].Text.Trim();
             string investment = cells[3].Text.Trim();
+            string[] parts = investment.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string investmentTicker = parts.Length > 0 ? parts[0].Trim() : string.Empty;
+
             string type = cells[4].Text.Trim();
             string status = cells[5].Text.Trim();
+            string mainStatus = status.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
             string amount = cells[6].Text.Trim();
 
             bool match =
                 dateInitiated.Equals(expectedDateInitiated, StringComparison.OrdinalIgnoreCase) &&
                 executedDate.Equals(expectedExecutedDate, StringComparison.OrdinalIgnoreCase) &&
-                investment.Equals(expectedInvestment, StringComparison.OrdinalIgnoreCase) &&
+                investmentTicker.Equals(expectedInvestment, StringComparison.OrdinalIgnoreCase) &&
                 type.Equals(expectedType, StringComparison.OrdinalIgnoreCase) &&
-                status.StartsWith(expectedStatus, StringComparison.OrdinalIgnoreCase) &&  // partial match allowed
+                mainStatus.StartsWith(expectedStatus, StringComparison.OrdinalIgnoreCase) &&  // partial match allowed
                 amount.Equals(expectedAmount, StringComparison.OrdinalIgnoreCase);
 
             if (match)
@@ -128,13 +132,32 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public bool IsCancelButtonDisplayed()
         {
-            return true;
+            WaitForSpinners();
+            return cancelButton.IsDisplayed();
         }
 
         public void ClickCancelButton()
         {
             WaitForSpinners();
             cancelButton.Click();
+        }
+
+        public void ClickPopUpCancelButton()
+        {
+            WaitForSpinners();
+            popUpCancelButton.Click();
+        }
+
+        public void ClickConfirmCancellationButton()
+        {
+            WaitForSpinners();
+            confirmCancellationButton.Click();
+        }
+
+        public bool IsCancelPopUpMessageDisplayed()
+        {
+            WaitForSpinners();
+            return cancelPopupMessage.IsDisplayed();
         }
     }
 }

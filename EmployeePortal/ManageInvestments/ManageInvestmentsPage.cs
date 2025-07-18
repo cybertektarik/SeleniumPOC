@@ -195,6 +195,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void ClickActivityTab()
         {
+            WaitForSpinners();
             ClickActivityTab(true);
         }
 

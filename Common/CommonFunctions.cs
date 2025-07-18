@@ -100,6 +100,11 @@ namespace SeleniumPOC.Common
 
             throw new FormatException($"Could not parse numeric value from: '{rawText}' (cleaned: '{cleaned}')");
         }
+
+        public static string GenerateFixedDollarAmount(int dollars, int cents = 0)
+        {
+            return $"${dollars}.{cents.ToString().PadLeft(2, '0')}";
+        }
     }
 }
 

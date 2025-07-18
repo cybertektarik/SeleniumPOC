@@ -207,7 +207,7 @@ Scenario: Validate Sell Button on the Select account
 	And I click on the "Select" Account
 	And I click on TRADE Button
 	And I click on SELL Button
-	And I enter more than one dollar amount
+	And I enter 2 dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
 
@@ -218,7 +218,7 @@ Scenario: Validate TRADE Button on the Managed account
 	And I click on the "Managed" Account
 	And I click on TRADE Button
 	And I click on BUY Button
-	And I enter more than one dollar amount
+	And I enter 2 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
 	
@@ -410,7 +410,7 @@ Scenario: Validate Sell with Share on the Choice account
 	And I click on confirm sell Button
 	And I validate success message for sell
 
-
+@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -418,36 +418,35 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	And I click on TRADE Button
 	And I click on SELL Button
 	Then I should see both "By Amount" and "By Share" radio buttons
-	And I enter more than one dollar amount
+	When I enter 1 dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
-	And I click on "Dismiss" pop-up
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I validate "Cancel" button displays
-	And I click on the "Cancel" button in Activity tab
-	And I validate following details for cancellation pop-up in Activity tab
+	Then I refresh the application web page 3 times
+	When I click on "Activity" tab under investment account
+	Then I validate "Cancel" button displays
+	When I click on the "Cancel" button in Activity tab
+	Then I validate following details for cancellation pop-up in Activity tab
 		| Are you sure you want to cancel this for ASCGX with $1.00 trade? |
 		| Cancel                                                           |
 		| Confirm Cancellation                                             |
 	And I click on "Cancel" button in pop-up
-	And I validate "cancellation" pop-up not displays
-	And I click on the "Cancel" button in Activity tab
-	And I click on "Confirm Cancellation" button in pop-up
+	And I validate cancel pop-up not displays
+	When I click on the "Cancel" button in Activity tab
+	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	And I click on "Dismiss" pop-up
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I validate following details for the executed transaction
-		| Date Initiated | Executed Date | Investsment | Transaction Type | Status                     | Amount |
-		| Current date   | Current date  | AGPXX       | Sell             | Canceled Initiated By User | $0.00  |
-	And I refresh the application web page
-	And I click on Notification Icon
+	Then I refresh the application web page 2 times
+	When I click on "Activity" tab under investment account
+	Then I validate following details for the executed transaction
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
+		| Current date   | Current date  | ASCGX       | Sell             | Canceled | $0.00  |
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Select" Account
+	Then I refresh the application web page 1 times
+	When I click on Notification Icon
 	Then I validate Cancel notification for "sell"
 
 
+@external
 Scenario: Verify CANCEL button functionality and cancellation notification after Buy By Amount from Select account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
@@ -455,34 +454,32 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	And I click on TRADE Button
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
-	And I enter more than one dollar amount
+	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	And I click on "Dismiss" pop-up
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I validate "Cancel" button displays
-	And I click on the "Cancel" button in Activity tab
-	And I validate following details for cancellation pop-up in Activity tab
+	Then I refresh the application web page 5 times
+	When I click on "Activity" tab under investment account
+	Then I validate "Cancel" button displays
+	When I click on the "Cancel" button in Activity tab
+	Then I validate following details for cancellation pop-up in Activity tab
 		| Are you sure you want to cancel this for ASCGX with $1.00 trade? |
 		| Cancel                                                           |
 		| Confirm Cancellation                                             |
 	And I click on "Cancel" button in pop-up
-	And I validate "cancellation" pop-up not displays
-	And I click on the "Cancel" button in Activity tab
-	And I click on "Confirm Cancellation" button in pop-up
+	And I validate cancel pop-up not displays
+	When I click on the "Cancel" button in Activity tab
+	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	Then I click on "Dismiss" pop-up
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I validate following details for the executed transaction
-		| Date Initiated | Executed Date | Investsment | Transaction Type | Status                     | Amount |
-		| Current date   | Current date  | AGPXX       | Buy              | Canceled Initiated By User | $0.00  |
-	And I refresh the application web page
-	And I click on Notification Icon
-	And I validate Cancel notification for "buy"
+	Then I refresh the application web page 2 times
+	When I click on "Activity" tab under investment account
+	Then I validate following details for the executed transaction
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
+		| Current date   | Current date  | ASCGX       | Buy              | Canceled | $0.00  |
+	When I click on "Manage Investment" from the navigation menu
+	And I click on the "Select" Account
+	Then I refresh the application web page 1 times
+	When I click on Notification Icon
+	Then I validate Cancel notification for "buy"
 
 
 @external
@@ -490,20 +487,19 @@ Scenario: Validate Buy with Share on the Choice account and validate from Activi
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Choice" Account
-	And I click on TRADE Button
+	And I click on the "Search & Trade" tab in Manage Investments
+	And I search for stock symbol "AMZN"
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
 	And I validate that the minimum available to invest should be greater than "$1000"
-	When I enter more than one dollar amount
+	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
-	And I refresh the application web page
-	And I click on "Activity" tab under investment account
+	Then I refresh the application web page 5 times
+	When I click on "Activity" tab under investment account
 	Then I validate following details for the executed transaction
-		| Date Initiated | Executed Date | Investsment | Transaction Type | Status                     | Amount |
-		| Current date   | Current date  | AGPXX       | Buy              | Canceled Initiated By User | $0.00  |
+		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
+		| Current date   | Current date  | AMZN        | Buy              | Executed | $1.00  |
 
 
 
