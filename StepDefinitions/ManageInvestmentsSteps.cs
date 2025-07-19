@@ -1088,6 +1088,12 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             string amountToSell = CommonFunctions.GenerateFixedDollarAmount(dollar, 0);
             Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(amountToSell);
         }
+
+        [Then(@"I click on cancel button for pending transcations")]
+        public void ClickOnCancelButtonInPendingTransactions()
+        {
+            Pages?.ManageInvestmentsPage.ActivityTab.CancelAllPendingTransactions();
+        }
     }
 }
 
