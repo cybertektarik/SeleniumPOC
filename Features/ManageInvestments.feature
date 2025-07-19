@@ -421,7 +421,10 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I enter 1 dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
-	Then I refresh the application web page 3 times
+	And I click on "Manage Investment" from the navigation menu
+	Then I refresh the application web page 2 times
+	When I click on the "Select" Account
+	Then I refresh the application web page 1 times
 	When I click on "Activity" tab under investment account
 	Then I validate "Cancel" button displays
 	When I click on the "Cancel" button in Activity tab
@@ -434,16 +437,17 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I click on the "Cancel" button in Activity tab
 	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	Then I refresh the application web page 2 times
-	When I click on "Activity" tab under investment account
+	And I click on "Manage Investment" from the navigation menu
+	Then I refresh the application web page 1 times
+	When I click on the "Select" Account
+	And I click on "Activity" tab under investment account
 	Then I validate following details for the executed transaction
 		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
 		| Current date   | Current date  | ASCGX       | Sell             | Canceled | $0.00  |
 	When I click on "Manage Investment" from the navigation menu
-	And I click on the "Select" Account
 	Then I refresh the application web page 1 times
 	When I click on Notification Icon
-	Then I validate Cancel notification for "sell"
+	Then I validate Cancel notification for "Sell"
 
 
 @external
@@ -457,7 +461,10 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	Then I refresh the application web page 5 times
+	And I click on "Manage Investment" from the navigation menu
+	Then I refresh the application web page 2 times
+	When I click on the "Select" Account
+	Then I refresh the application web page 1 times
 	When I click on "Activity" tab under investment account
 	Then I validate "Cancel" button displays
 	When I click on the "Cancel" button in Activity tab
@@ -470,16 +477,17 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I click on the "Cancel" button in Activity tab
 	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	Then I refresh the application web page 2 times
-	When I click on "Activity" tab under investment account
+	And I click on "Manage Investment" from the navigation menu
+	Then I refresh the application web page 1 times
+	When I click on the "Select" Account
+	And I click on "Activity" tab under investment account
 	Then I validate following details for the executed transaction
 		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
 		| Current date   | Current date  | ASCGX       | Buy              | Canceled | $0.00  |
 	When I click on "Manage Investment" from the navigation menu
-	And I click on the "Select" Account
 	Then I refresh the application web page 1 times
 	When I click on Notification Icon
-	Then I validate Cancel notification for "buy"
+	Then I validate Cancel notification for "Buy"
 
 
 @external
@@ -495,11 +503,13 @@ Scenario: Validate Buy with Share on the Choice account and validate from Activi
 	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	Then I refresh the application web page 5 times
-	When I click on "Activity" tab under investment account
-	Then I validate following details for the executed transaction
-		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
-		| Current date   | Current date  | AMZN        | Buy              | Executed | $1.00  |
+	And I click on "Manage Investment" from the navigation menu
+	Then I refresh the application web page 1 times
+	When I click on the "Choice" Account
+	And I click on "Activity" tab under investment account
+	Then I validate following details for the pending transaction
+		| Date Initiated | Investsment | Transaction Type | Amount |
+		| Current date   | AMZN        | Buy              | $1.00  |
 
 
 

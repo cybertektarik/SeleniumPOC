@@ -109,8 +109,10 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             string investmentTicker = parts.Length > 0 ? parts[0].Trim() : string.Empty;
 
             string type = cells[4].Text.Trim();
+
             string status = cells[5].Text.Trim();
             string mainStatus = status.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+
             string amount = cells[6].Text.Trim();
 
             bool match =
@@ -127,7 +129,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                 return;
             }
 
-            throw new Exception($"❌ No matching transaction found for {expectedInvestment} - {expectedType} - {expectedStatus} - {expectedAmount}");
+            throw new Exception($"❌ No matching transaction found.\n" +
+                                $"Expected: {expectedDateInitiated} - {expectedExecutedDate} - {expectedInvestment} - {expectedType} - {expectedStatus} - {expectedAmount}\n" +
+                                $"Actual: {dateInitiated} - {executedDate} - {investmentTicker} - {type} - {mainStatus} - {amount}");
         }
 
         public bool IsCancelButtonDisplayed()
@@ -158,6 +162,39 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         {
             WaitForSpinners();
             return cancelPopupMessage.IsDisplayed();
+        }
+
+        public void ValidatePendingTransactionRow(string expectedDateInitiated, string expectedInvestment, string expectedType, string expectedAmount)
+        {
+            var cells = driver.FindElements(By.XPath("(//table[@role='table'])[position()=1]//tr//td"));
+
+            string dateInitiated = cells[0].Text.Trim();
+            string investment = cells[1].Text.Trim();
+            string[] parts = investment.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string investmentTicker = parts.Length > 0 ? parts[0].Trim() : string.Empty;
+            string type = cells[2].Text.Trim();
+            string amount = cells[3].Text.Trim();
+
+            bool match =
+                dateInitiated.Equals(expectedDateInitiated, StringComparison.OrdinalIgnoreCase) &&
+                investmentTicker.Equals(expectedInvestment, StringComparison.OrdinalIgnoreCase) &&
+                type.Equals(expectedType, StringComparison.OrdinalIgnoreCase) &&
+                amount.Equals(expectedAmount, StringComparison.OrdinalIgnoreCase);
+
+            if (match)
+            {
+                Console.WriteLine("✅ Pending transaction matched.");
+                return;
+            }
+
+            throw new Exception($"❌ No matching transaction found.\n" +
+                                $"Expected: {expectedDateInitiated} - {expectedInvestment} - {expectedType} - {expectedAmount}\n" +
+                                $"Actual: {dateInitiated} - {investmentTicker} - {type} - {amount}");
+        }
+
+        public void ClickOnCancelButtonInPendingTransaction()
+        {
+            var cells = driver.FindElements(By.XPath("(//table[@role='table'])[position()=1]//tr//td"));
         }
     }
 }

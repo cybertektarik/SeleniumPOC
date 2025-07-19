@@ -937,7 +937,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
         [Then(@"I validate following details for the executed transaction")]
-        public void ThenIValidateBuyTransactionDetailsOnChoiceAccount(Table table)
+        public void ThenIValidateExecutedTransactionDetailsOnChoiceAccount(Table table)
         {
             foreach (var row in table.Rows)
             {
@@ -948,7 +948,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 string status = row["Status"];
                 string amount = row["Amount"];
 
-                string today = DateTime.Today.ToString("MMM dd, yyyy", CultureInfo.InvariantCulture);
+                string today = DateTime.Today.AddDays(1).ToString("MMM dd, yyyy", CultureInfo.InvariantCulture);
 
                 if (dateInitiated.Equals("Current date", StringComparison.OrdinalIgnoreCase))
                     dateInitiated = today;
@@ -962,6 +962,30 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                     investment,
                     transactionType,
                     status,
+                    amount
+                );
+            }
+        }
+
+        [Then(@"I validate following details for the pending transaction")]
+        public void ThenIValidatePendingTransactionDetailsOnChoiceAccount(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                string dateInitiated = row["Date Initiated"];
+                string investment = row["Investsment"];
+                string transactionType = row["Transaction Type"];
+                string amount = row["Amount"];
+
+                string today = DateTime.Today.AddDays(1).ToString("MMM dd, yyyy", CultureInfo.InvariantCulture);
+
+                if (dateInitiated.Equals("Current date", StringComparison.OrdinalIgnoreCase))
+                    dateInitiated = today;
+
+                Pages?.ManageInvestmentsPage.ActivityTab.ValidatePendingTransactionRow(
+                    dateInitiated,
+                    investment,
+                    transactionType,
                     amount
                 );
             }
