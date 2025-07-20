@@ -1,4 +1,5 @@
 ﻿//using AngleSharp.Dom;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
@@ -195,31 +196,58 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void CancelAllPendingTransactions()
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.Until(d => d.FindElement(By.XPath("(//table[@role='table'])[1]")));
+            string cancelButtonXPath = "(//table[@role='table'])[1]//tbody//tr//td//span[@id='cancelButton']";
 
-            // Keep canceling until no buttons are found
-            while (driver.FindElements(By.XPath("(//table[@role='table'])[1]//button[normalize-space()='CANCEL']"))
-                         .FirstOrDefault(b => b.Displayed && b.Enabled) is IWebElement cancelButton)
+            try
             {
-                cancelButton.Click();
-
-                // Wait and click the confirm button
-                var confirmButton = wait.Until(d => d.FindElement(By.XPath("//button[normalize-space()='Confirm']")));
-                confirmButton.Click();
-
-                // Wait for the cancel button to disappear (stale or hidden)
-                wait.Until(d =>
-                    !d.FindElements(By.XPath("//button[normalize-space()='Confirm']")).Any() &&
-                    !cancelButton.Displayed
-                );
+                wait.Until(d => d.FindElement(By.XPath(cancelButtonXPath)));
+            }
+            catch (WebDriverTimeoutException)
+            {
+                Console.WriteLine("✅ No CANCEL buttons found. Skipping cancellation.");
+                return;
             }
 
-            // Final assertion using LINQ Any()
-            if (driver.FindElements(By.XPath("(//table[@role='table'])[1]//button[normalize-space()='CANCEL']")).Any())
-                throw new Exception("Some CANCEL buttons are still present after attempted cancellations.");
-        }
+            while (true)
+            {
+                var cancelButtons = driver.FindElements(By.XPath(cancelButtonXPath))
+                                          .Where(b => b.Displayed && b.Enabled)
+                                          .ToList();
 
+                if (!cancelButtons.Any())
+                {
+                    Console.WriteLine("✅ No more CANCEL buttons found.");
+                    break;
+                }
+
+                foreach (var button in cancelButtons)
+                {
+                    try
+                    {
+                        button.Click();
+                        confirmCancellationButton.Click();
+                        driver.Navigate().Refresh();
+                        WaitForSpinners();
+                        break; // After refresh, break to refetch buttons
+                    }
+                    catch (StaleElementReferenceException)
+                    {
+                        Console.WriteLine("⚠️ Stale element detected. Re-fetching elements...");
+                        break; // Re-fetch buttons in next iteration
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ Error: {ex.Message}");
+                    }
+                }
+            }
+
+            // Final check
+            Assert.That(driver.FindElements(By.XPath(cancelButtonXPath)).Any(b => b.Displayed && b.Enabled), Is.False,
+                         "❌ Some CANCEL buttons are still present after attempted cancellations.");
+
+            Console.WriteLine("✅ All pending transactions successfully canceled.");
+        }
     }
 }
 

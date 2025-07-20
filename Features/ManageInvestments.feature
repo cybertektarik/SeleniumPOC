@@ -417,7 +417,7 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	And I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I click on cancel button for pending transcations
-	And I click on "Current Holdings" tab under investment account
+	When I click on "Current Holdings" tab under investment account
 	And I click on TRADE Button
 	And I click on SELL Button
 	Then I should see both "By Amount" and "By Share" radio buttons
@@ -460,7 +460,7 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	And I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I click on cancel button for pending transcations
-	And I click on "Current Holdings" tab under investment account
+	When I click on "Current Holdings" tab under investment account
 	And I click on TRADE Button
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
@@ -503,7 +503,7 @@ Scenario: Validate Buy with Share on the Choice account and validate from Activi
 	And I click on the "Choice" Account
 	And I click on "Activity" tab under investment account
 	Then I click on cancel button for pending transcations
-	And I click on the "Search & Trade" tab in Manage Investments
+	When I click on the "Search & Trade" tab in Manage Investments
 	And I search for stock symbol "AMZN"
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
