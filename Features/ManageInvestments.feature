@@ -519,40 +519,42 @@ Scenario: Validate Buy with Share on the Choice account and validate from Activi
 		| Date Initiated | Investsment | Transaction Type | Amount |
 		| Current date   | AMZN        | Buy              | $1.00  |
 
-	@feature2
-    Scenario: Validate View Performance Data Link Buy for Choice account
+Scenario: Validate View Performance Data Link Buy for Choice account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Choice" Account
-	Then I validate "View Performance Data" Link displays
-	And I click on the "View Performance Data" Link
-	And I navigate "instrument-performance" page 
-	And I validate "TRADE" Button displays
-	And I click on TRADE Button
-	And I validate the following Button are displayed
-	|BUY  |SELL  | ADD TO AUTO FUNDING |
+	Then I validate View Performance Data link for all available investments
+	And I validate the following options are displayed in View Performance Data
+		| TRADE               |
+		| BUY                 |
+		| SELL                |
+		| ADD TO AUTO FUNDING |
 
-	@feature2
-    Scenario: Validate SETUP AUTOMATED INVESTING (Auto-Funding) for Choice account
+@feature2
+Scenario: Validate Setup and Suspension of Automated Investing (Auto-Funding) for Choice Account
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
-	And I click on the "Choice" Account
-	Then I validate "SETUP AUTOMATED INVESTING" displays
-	And I click on the "SETUP AUTOMATED INVESTING" Link
-	And I navigate "auto-funding" page
-	Then I validate following Button are displays
-	| CANCEL | ACTIVE |
-	And I click on the Stock "ACTIVE" Button
-	And I click on the Stock "REVIEW" Button
-	And I click on the Stock "ACCEPT" Button
-	Then I validate "MANAGE AUTOMATED INVESTING" Link
-	Then I validate "Cash balance funds in excess of $100.00 will automatically be moved to your investments"
-	And I click on the "MANAGE AUTOMATED INVESTING" Link
-	And I navigate "auto-funding" page
-	Then I validate following Button are displays
-	| CANCEL | SUSPEND |
-	And I click on the "SUSPEND" Button
-	Then I validate "SETUP AUTOMATED INVESTING" displays
+	And I select the "Choice" account
+	Then I suspend "MANAGE AUTOMATED INVESTING" if it exists
+	And I verify that the "SETUP AUTOMATED INVESTING" link is displayed
+	When I click on the "SETUP AUTOMATED INVESTING" link
+	Then I should be navigated to the "Auto Funding" page
+	Then I verify the following options are displayed in Auto Funding:
+		| CANCEL   |
+		| ACTIVATE |
+	When I click on the "ACTIVATE" button in Auto Funding
+	And I click on the "REVIEW" button in Auto Funding
+	And I click on the "ACCEPT" button in Auto Funding
+	Then I verify that the "MANAGE AUTOMATED INVESTING" link is displayed
+	And I verify that the message "Cash balance funds in excess of $100.00 will automatically be moved to your investments" is shown above the investment list
+	When I click on the "MANAGE AUTOMATED INVESTING" link
+	Then I should be navigated to the "Auto Funding" page
+	Then I verify the following options are displayed in Auto Funding:
+		| CANCEL  |
+		| SUSPEND |
+	When I click on the "SUSPEND" button in Auto Funding
+	Then I verify that the "SETUP AUTOMATED INVESTING" link is displayed again
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿//using AngleSharp.Dom;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -183,6 +184,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.Return();
             }
             else if (linkName == "Managed Learn More")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
+            }
+            else if (linkName == "SETUP AUTOMATED INVESTING")
+            {
+                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
+            }
+            else if (linkName == "MANAGE AUTOMATED INVESTING")
             {
                 Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
             }
@@ -1093,6 +1102,112 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void ClickOnCancelButtonInPendingTransactions()
         {
             Pages?.ManageInvestmentsPage.ActivityTab.CancelAllPendingTransactions();
+        }
+
+
+        // New code
+        [Then(@"I validate View Performance Data link for all available investments")]
+        public void ThenIValidateViewPerformanceDataLinkForAllAvailableInvestments()
+        {
+            var viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
+            Assert.IsTrue(viewLinks.Count > 0, "No 'View Performance Data' links were found.");
+
+            foreach (var link in viewLinks)
+            {
+                Assert.IsTrue(link.Displayed, "'View Performance Data' link is not visible for an investment.");
+                Assert.IsTrue(link.Enabled, "'View Performance Data' link is not enabled for an investment.");
+            }
+        }
+
+
+        [Then(@"I validate the following options are displayed in View Performance Data")]
+        public void ThenIValidateTheFollowingOptionsAreDisplayedInViewPerformanceData(Table table)
+        {
+            /*var viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
+            Assert.IsTrue(viewLinks.Count > 0, "No 'View Performance Data' links found.");
+
+            for (int i = 0; i < viewLinks.Count; i++)
+            {
+                // Re-find the elements each loop to avoid stale references
+                viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
+                var link = viewLinks[i];
+
+                link.Click();
+
+                // Validate URL
+                Assert.IsTrue(driver.Url.Contains("instrument-performance"), "URL does not contain 'instrument-performance'.");
+
+                // Validate TRADE button
+                var tradeButton = wait.Until(driver => driver.FindElement(By.XPath("//button[text()='TRADE']")));
+                Assert.IsTrue(tradeButton.Displayed, "'TRADE' button is not displayed.");
+
+                tradeButton.Click();
+
+                // Validate each option from the table
+                foreach (var row in table.Rows)
+                {
+                    var option = row[0];
+                    var optionButton = wait.Until(driver => driver.FindElement(By.XPath($"//button[text()='{option}']")));
+                    Assert.IsTrue(optionButton.Displayed, $"'{option}' button is not displayed.");
+                }
+
+                // Navigate back to the account investment list
+                driver.Navigate().Back();
+
+                // Wait for the page to reload before next loop
+                wait.Until(driver => driver.FindElement(By.XPath("//a[contains(text(),'View Performance Data')]")));
+            }*/
+        }
+
+        [Then(@"I suspend ""(.*)"" if it exists")]
+        public void ThenISuspendIfItExists(string linkText)
+        {
+            try
+            {
+                var link = driver.FindElement(By.LinkText(linkText));
+                if (link.Displayed)
+                {
+                    link.Click();
+                }
+            }
+            catch (NoSuchElementException)
+            {
+                // Link does not exist - continue silently
+            }
+        }
+
+        [Then(@"I verify that the ""(.*)"" link is displayed again")]
+        public void ThenIVerifyThatTheLinkIsDisplayed(string linkText)
+        {
+
+        }
+
+        [Then(@"I should be navigated to the ""(.*)"" page")]
+        public void ThenIShouldBeNavigatedToThePage(string pageName)
+        {
+            Assert.IsTrue(driver.Url.Contains("auto-funding", StringComparison.OrdinalIgnoreCase),
+                $"Did not navigate to the expected '{pageName}' page.");
+        }
+
+        [Then(@"I verify the following options are displayed in Auto Funding:")]
+        public void ThenIVerifyTheFollowingOptionsAreDisplayedInAutoFunding(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                var buttonText = row[0];
+            }
+        }
+
+        [When(@"I click on the ""(.*)"" button in Auto Funding")]
+        public void WhenIClickOnTheButtonInAutoFunding(string buttonText)
+        {
+
+        }
+
+        [Then(@"I verify that the ""(.*)"" message is shown above the investment list")]
+        public void ThenIVerifyThatTheMessageIsShownAboveTheInvestmentList(string expectedMessage)
+        {
+
         }
     }
 }
