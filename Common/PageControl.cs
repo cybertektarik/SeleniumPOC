@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.BiDi.BrowsingContext;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System.Collections.ObjectModel;
@@ -176,6 +177,10 @@ namespace SeleniumPOC.Common
             Console.WriteLine($"[Select] -> {controlName} -> {index}");
             dropDown.SelectByIndex(index);
         }
+
+        public IList<IWebElement> FindElements() => driver.FindElements(locator);
+
+        public By Locator => locator;
     }
 }
 

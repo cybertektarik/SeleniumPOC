@@ -19,12 +19,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         private readonly ScenarioContext _scenarioContext;
         private IWebDriver? driver;
         protected AllPages? Pages;
+        protected WebDriverWait wait;
 
         public ManageInvestmentsSearchFundsSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
             driver = _scenarioContext["driver"] as IWebDriver;
             Pages = _scenarioContext["Pages"] as AllPages;
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
 
         [Given(@"I am logged in as a user who has not created a Choice account")]
@@ -189,11 +191,11 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             }
             else if (linkName == "SETUP AUTOMATED INVESTING")
             {
-                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
+                Pages?.ManageInvestmentsPage.AutoFundingPage.ClickOnSetupAutomatedInvestment();
             }
             else if (linkName == "MANAGE AUTOMATED INVESTING")
             {
-                Pages?.ManageInvestmentsPage.ChooseYourInvestmentPage.LearnMoreManaged();
+                Pages?.ManageInvestmentsPage.AutoFundingPage.ClickOnManageAutomatedInvestment();
             }
         }
 
@@ -921,7 +923,6 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 Console.WriteLine($"Refreshed page {i + 1} time(s).");
 
                 // Optional: wait until page is fully loaded
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                 wait.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
             }
         }
@@ -1109,105 +1110,117 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I validate View Performance Data link for all available investments")]
         public void ThenIValidateViewPerformanceDataLinkForAllAvailableInvestments()
         {
-            var viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
-            Assert.IsTrue(viewLinks.Count > 0, "No 'View Performance Data' links were found.");
+            var page = Pages.ManageInvestmentsPage.AutoFundingPage;
 
-            foreach (var link in viewLinks)
+            // Get the list of links
+            var links = page.GetViewPerformanceDataLinks();
+
+            // Validate count > 0
+            Assert.That(links.Count, Is.GreaterThan(0), "No 'View Performance Data' links were found.");
+
+            // Validate all links are visible and enabled
+            foreach (var link in links)
             {
-                Assert.IsTrue(link.Displayed, "'View Performance Data' link is not visible for an investment.");
-                Assert.IsTrue(link.Enabled, "'View Performance Data' link is not enabled for an investment.");
+                Assert.That(link.Displayed, Is.True, "'View Performance Data' link is not visible.");
+                Assert.That(link.Enabled, Is.True, "'View Performance Data' link is not enabled.");
             }
         }
-
 
         [Then(@"I validate the following options are displayed in View Performance Data")]
         public void ThenIValidateTheFollowingOptionsAreDisplayedInViewPerformanceData(Table table)
         {
-            /*var viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
-            Assert.IsTrue(viewLinks.Count > 0, "No 'View Performance Data' links found.");
-
-            for (int i = 0; i < viewLinks.Count; i++)
-            {
-                // Re-find the elements each loop to avoid stale references
-                viewLinks = driver.FindElements(By.XPath("//a[contains(text(),'View Performance Data')]"));
-                var link = viewLinks[i];
-
-                link.Click();
-
-                // Validate URL
-                Assert.IsTrue(driver.Url.Contains("instrument-performance"), "URL does not contain 'instrument-performance'.");
-
-                // Validate TRADE button
-                var tradeButton = wait.Until(driver => driver.FindElement(By.XPath("//button[text()='TRADE']")));
-                Assert.IsTrue(tradeButton.Displayed, "'TRADE' button is not displayed.");
-
-                tradeButton.Click();
-
-                // Validate each option from the table
-                foreach (var row in table.Rows)
-                {
-                    var option = row[0];
-                    var optionButton = wait.Until(driver => driver.FindElement(By.XPath($"//button[text()='{option}']")));
-                    Assert.IsTrue(optionButton.Displayed, $"'{option}' button is not displayed.");
-                }
-
-                // Navigate back to the account investment list
-                driver.Navigate().Back();
-
-                // Wait for the page to reload before next loop
-                wait.Until(driver => driver.FindElement(By.XPath("//a[contains(text(),'View Performance Data')]")));
-            }*/
+            Pages.ManageInvestmentsPage.AutoFundingPage.ValidateViewPerformanceDataOptions(table);
         }
 
-        [Then(@"I suspend ""(.*)"" if it exists")]
-        public void ThenISuspendIfItExists(string linkText)
+        [Then(@"I suspend MANAGE AUTOMATED INVESTING if it exists")]
+        public void ThenISuspendIfItExists()
         {
-            try
-            {
-                var link = driver.FindElement(By.LinkText(linkText));
-                if (link.Displayed)
-                {
-                    link.Click();
-                }
-            }
-            catch (NoSuchElementException)
-            {
-                // Link does not exist - continue silently
-            }
+            Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnManageAutomatedInvestment();
+            Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend();
+            Assert.That(Pages?.NotificationAlert.GetSuccessMessage(), Does.Contain("Automated investing is now inactive."),
+                "Expected success message after suspending auto funding.");
+            Pages?.NotificationAlert.Dismiss();
         }
 
-        [Then(@"I verify that the ""(.*)"" link is displayed again")]
-        public void ThenIVerifyThatTheLinkIsDisplayed(string linkText)
+        [Then(@"I verify that the ""(.*)"" link is displayed")]
+        public void ThenIVerifyThatTheLinkIsDisplayed(string investmentFundType)
         {
+            investmentFundType = investmentFundType.Trim().ToUpperInvariant();
+            bool isDisplayed;
 
+            if (investmentFundType == "SETUP AUTOMATED INVESTING")
+                isDisplayed = Pages.ManageInvestmentsPage.AutoFundingPage.IsSetupAutomatedInvestmentDisplayed();
+            else if (investmentFundType == "MANAGE AUTOMATED INVESTING")
+                isDisplayed = Pages.ManageInvestmentsPage.AutoFundingPage.IsManageAutomatedInvestmentDisplayed();
+            else
+                throw new ArgumentException($"'{investmentFundType}' is not supported. Use 'SETUP AUTOMATED INVESTING' or 'MANAGE AUTOMATED INVESTING'.");
+
+            Assert.That(isDisplayed, Is.True, $"'{investmentFundType}' link is not visible.");
         }
 
         [Then(@"I should be navigated to the ""(.*)"" page")]
         public void ThenIShouldBeNavigatedToThePage(string pageName)
         {
-            Assert.IsTrue(driver.Url.Contains("auto-funding", StringComparison.OrdinalIgnoreCase),
-                $"Did not navigate to the expected '{pageName}' page.");
+            var expectedFragment = pageName.Trim().ToLowerInvariant().Replace(" ", "-");
+
+            wait.Until(d => d.Url.Contains(expectedFragment, StringComparison.OrdinalIgnoreCase));
+
+            Assert.That(driver.Url, Does.Contain(expectedFragment),
+                $"Expected to be on '{pageName}' page, but URL was: {driver.Url}");
         }
 
         [Then(@"I verify the following options are displayed in Auto Funding:")]
         public void ThenIVerifyTheFollowingOptionsAreDisplayedInAutoFunding(Table table)
         {
             foreach (var row in table.Rows)
-            {
-                var buttonText = row[0];
-            }
+                Assert.That(wait.Until(d => d.FindElement(By.XPath($"//button[normalize-space(text())='{row[0].Trim()}']")).Displayed),
+                            Is.True, $"'{row[0]}' button is not visible.");
         }
 
         [When(@"I click on the ""(.*)"" button in Auto Funding")]
-        public void WhenIClickOnTheButtonInAutoFunding(string buttonText)
+        public void WhenIClickOnTheButtonInAutoFunding(string autoFundingOption)
         {
+            autoFundingOption = autoFundingOption.Trim().ToUpperInvariant();
 
+            var actions = new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["ACTIVATE"] = () => Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnActivate(),
+                ["SUSPEND"] = () => Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend(),
+                ["CANCEL"] = () => Pages.ManageInvestmentsPage.AutoFundingPage.Cancel(),
+                ["REVIEW"] = () => Pages.ManageInvestmentsPage.AutoFundingPage.Review(),
+                ["ACCEPT"] = () => Pages.ManageInvestmentsPage.AutoFundingPage.Accept()
+            };
+
+            if (!actions.TryGetValue(autoFundingOption, out var action))
+                throw new ArgumentException(
+                    $"Invalid auto funding option: '{autoFundingOption}'. Expected one of: {string.Join(", ", actions.Keys)}");
+
+            action.Invoke();
+
+            // Success message validation only for ACCEPT and SUSPEND
+            if (autoFundingOption == "ACCEPT")
+            {
+                var message = Pages?.NotificationAlert.GetSuccessMessage();
+                Assert.That(message, Does.Contain("Automatic investment funding is now active."),
+                    "Expected success message after accepting auto funding.");
+                Pages?.NotificationAlert.Dismiss();
+            }
+            else if (autoFundingOption == "SUSPEND")
+            {
+                var message = Pages?.NotificationAlert.GetSuccessMessage();
+                Assert.That(message, Does.Contain("Automated investing is now inactive."),
+                    "Expected success message after suspending auto funding.");
+                Pages?.NotificationAlert.Dismiss();
+            }
         }
+
 
         [Then(@"I verify that the ""(.*)"" message is shown above the investment list")]
         public void ThenIVerifyThatTheMessageIsShownAboveTheInvestmentList(string expectedMessage)
         {
-
+            string actualMessage = Pages.ManageInvestmentsPage.AutoFundingPage.getTextAboveInvestmentList();
+            Assert.That(actualMessage, Does.Contain(expectedMessage),
+                $"Expected message '{expectedMessage}' not found above the investment list.");
         }
     }
 }

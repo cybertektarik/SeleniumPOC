@@ -524,7 +524,7 @@ Scenario: Validate View Performance Data Link Buy for Choice account
 	When I click on "Manage Investment" from the navigation menu
 	And I click on the "Choice" Account
 	Then I validate View Performance Data link for all available investments
-	And I validate the following options are displayed in View Performance Data
+	Then I validate the following options are displayed in View Performance Data
 		| TRADE               |
 		| BUY                 |
 		| SELL                |
@@ -535,25 +535,25 @@ Scenario: Validate Setup and Suspension of Automated Investing (Auto-Funding) fo
 	Given I am logged in as a user who has an enrolled account
 	When I click on "Manage Investment" from the navigation menu
 	And I select the "Choice" account
-	Then I suspend "MANAGE AUTOMATED INVESTING" if it exists
-	And I verify that the "SETUP AUTOMATED INVESTING" link is displayed
+	Then I suspend MANAGE AUTOMATED INVESTING if it exists
+	Then I verify that the "SETUP AUTOMATED INVESTING" link is displayed
 	When I click on the "SETUP AUTOMATED INVESTING" link
 	Then I should be navigated to the "Auto Funding" page
 	Then I verify the following options are displayed in Auto Funding:
 		| CANCEL   |
 		| ACTIVATE |
-	When I click on the "ACTIVATE" button in Auto Funding
-	And I click on the "REVIEW" button in Auto Funding
-	And I click on the "ACCEPT" button in Auto Funding
+	Then I click on the "ACTIVATE" button in Auto Funding
+	Then I click on the "REVIEW" button in Auto Funding
+	Then I click on the "ACCEPT" button in Auto Funding
 	Then I verify that the "MANAGE AUTOMATED INVESTING" link is displayed
-	And I verify that the message "Cash balance funds in excess of $100.00 will automatically be moved to your investments" is shown above the investment list
+	Then I verify that the message "Cash balance funds in excess of $100.00 will automatically be moved to your investments" is shown above the investment list
 	When I click on the "MANAGE AUTOMATED INVESTING" link
 	Then I should be navigated to the "Auto Funding" page
 	Then I verify the following options are displayed in Auto Funding:
 		| CANCEL  |
 		| SUSPEND |
 	When I click on the "SUSPEND" button in Auto Funding
-	Then I verify that the "SETUP AUTOMATED INVESTING" link is displayed again
+	Then I verify that the "SETUP AUTOMATED INVESTING" link is displayed
 
 
 

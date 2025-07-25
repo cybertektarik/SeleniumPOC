@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 
@@ -7,7 +8,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
     public class AutoFundingPage : BasePage
     {
         private PageControl stcAutomatedInvestmentFunding = new PageControl(By.XPath("//h4[contains(text(),'Automated Investment Funding')]"));
-        private PageControl txtActivate = new PageControl(By.XPath("//h4[contains(text(),'Set investment funding threshold')]//..//input"), "ACTIVATE");
+
         private PageControl txtThreshold = new PageControl(By.XPath("//h4[contains(text(),'Set investment funding threshold')]//..//input"), "Threshold");
         private PageControl stcThresholdError = new PageControl(By.XPath("//h4[contains(text(),'Set investment funding threshold')]//..//div[contains(@class,'invalid-feedback')]"), "Threshold");
 
@@ -24,12 +25,21 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl stcCategoryHeaders(int index) => new PageControl(By.XPath("//div[@data-auto-test='GetInstrumentListAssetCategory(instrumentList)'][" + index + "]"));
 
         private PageControl btnCancel => new PageControl(By.XPath("//span[text()='Cancel']"), "Cancel");
-        private PageControl btnReview => new PageControl(By.XPath("//span[text()='Review']"), "Review");
+        private PageControl btnReview => new PageControl(By.XPath("//span[text()='REVIEW']"), "REVIEW");
         private PageControl btnAccept => new PageControl(By.XPath("//span[text()='ACCEPT']"), "ACCEPT");
 
-         private PageControl btnSkip => new PageControl(By.XPath("(//button[span[text()='Skip']])[2]"), "Skip");
+        private PageControl btnSkip => new PageControl(By.XPath("(//button[span[text()='Skip']])[2]"), "Skip");
         private PageControl txtSearchForLimitedLegacy => new PageControl(By.XPath("//h4[contains(text(),'Select Investments')]/..//input[@type='text']"), "Stock symbol");
         private PageControl switchShowAllFunds => new PageControl(By.XPath("//div[@class='custom-control' custom-switch"), "Show all funds");
+
+        //New Code
+        private PageControl lnkViewPerformanceData => new PageControl(By.XPath("//*[contains(text(),'View Performance Data')]"));
+        private PageControl stSetupAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'SETUP AUTOMATED INVESTMENT')]"));
+        private PageControl stManageAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'MANAGE AUTOMATED INVESTING')]"));
+        private PageControl btnSuspend => new PageControl(By.XPath("//span[text()='SUSPEND']"), "SUSPEND");
+        private PageControl btnActivate = new PageControl(By.XPath("//span[text()='ACTIVATE']"), "ACTIVATE");
+        private PageControl txtCashBalanceFunds = new PageControl(By.XPath("//*[contains(text(),'Cash balance funds in excess')]"));
+
         public AutoFundingPage(IWebDriver driver) : base(driver) { }
 
         public void VerifyIsCurrentPage()
@@ -142,6 +152,89 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
             return result;
         }
+
+        //New code
+        public IList<IWebElement> GetViewPerformanceDataLinks()
+        {
+            WaitForSpinners();
+            return lnkViewPerformanceData.FindElements();
+        }
+
+        public void ValidateViewPerformanceDataOptions(Table table)
+        {
+            var links = GetViewPerformanceDataLinks();
+
+            Assert.That(links.Count, Is.GreaterThan(0), "No 'View Performance Data' links found.");
+            for (int i = 0; i < links.Count; i++)
+            {
+                // Re-locate to avoid stale references
+                links = GetViewPerformanceDataLinks();
+                var link = links[i];
+
+                wait.Until(_ => link.Displayed && link.Enabled);
+                link.Click();
+
+                // Verify URL contains "instrument-performance"
+                wait.Until(d => d.Url.Contains("instrument-performance", StringComparison.OrdinalIgnoreCase));
+                Assert.That(driver.Url, Does.Contain("instrument-performance"), "Incorrect performance page URL.");
+
+
+                // Validate Trade, Buy, Sell, Auto Funding
+                foreach (var row in table.Rows)
+                {
+                    var buttonText = row[0];
+                    var optionButton = wait.Until(d => d.FindElement(By.XPath($"//button[text()='{buttonText}']")));
+                    Assert.That(optionButton.Displayed, Is.True, $"'{buttonText}' button is not visible.");
+                    if (optionButton.Text.Contains("TRADE"))
+                        optionButton.Click();
+                }
+
+                // Go back and wait for page to reload
+                driver.Navigate().Back();
+                wait.Until(d => GetViewPerformanceDataLinks().Count > 0);
+            }
+        }
+
+        public void ClickOnManageAutomatedInvestment()
+        {
+            stManageAutomatedInvestment.Click();
+            WaitForSpinners();
+        }
+
+        public void ClickOnSetupAutomatedInvestment()
+        {
+            stSetupAutomatedInvestment.Click();
+            WaitForSpinners();
+        }
+
+        public bool IsManageAutomatedInvestmentDisplayed()
+        {
+            return stManageAutomatedInvestment.IsDisplayed();
+        }
+
+        public bool IsSetupAutomatedInvestmentDisplayed()
+        {
+            return stSetupAutomatedInvestment.IsDisplayed();
+        }
+
+        public void ClickOnActivate()
+        {
+            btnActivate.Click();
+            WaitForSpinners();
+        }
+
+        public void ClickOnSuspend()
+        {
+            btnSuspend.Click();
+            WaitForSpinners();
+        }
+
+        public string getTextAboveInvestmentList()
+        {
+            WaitForSpinners();
+            return txtCashBalanceFunds.GetText().Trim();
+        }
+
     }
 }
 

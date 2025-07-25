@@ -81,6 +81,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             Assert.IsTrue(btnSell.IsDisplayed(), "Button Sell is not displayed");
             btnSell.Click();
         }
+
+        public bool IsTradeButtonDisplayed()
+        {
+            WaitForSpinners();
+            return tradeButton.IsDisplayed();
+        }
     }
 }
 
