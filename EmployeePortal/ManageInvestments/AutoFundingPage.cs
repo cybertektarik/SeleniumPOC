@@ -183,10 +183,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                 {
                     var buttonText = row[0];
                     var optionButton = wait.Until(d => d.FindElement(By.XPath($"//*[normalize-space(text())='{buttonText}']")));
-                    if (optionButton.Text.Contains("Trade"))
+                    if (optionButton.Text.Contains("TRADE"))
                         optionButton.Click();
                     Assert.That(optionButton.Displayed, Is.True, $"'{buttonText}' button is not visible.");
-
                 }
 
                 // Go back and wait for page to reload
@@ -209,11 +208,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public bool IsManageAutomatedInvestmentDisplayed()
         {
+            WaitForSpinners();
             return stManageAutomatedInvestment.IsDisplayed();
         }
 
         public bool IsSetupAutomatedInvestmentDisplayed()
         {
+            WaitForSpinners();
             return stSetupAutomatedInvestment.IsDisplayed();
         }
 
@@ -233,6 +234,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         {
             WaitForSpinners();
             return txtCashBalanceFunds.GetText().Trim();
+        }
+
+        public bool IsButtonCancelTopDisplayed()
+        {
+            WaitForSpinners();
+            return btnCancelTop.IsDisplayed();
         }
 
     }

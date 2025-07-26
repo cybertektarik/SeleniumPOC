@@ -1135,11 +1135,15 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         [Then(@"I suspend MANAGE AUTOMATED INVESTING if it exists")]
         public void ThenISuspendIfItExists()
         {
-            Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnManageAutomatedInvestment();
-            Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend();
-            Assert.That(Pages?.NotificationAlert.GetSuccessMessage(), Does.Contain("Automated investing is now inactive."),
-                "Expected success message after suspending auto funding.");
-            Pages?.NotificationAlert.Dismiss();
+            if (Pages.ManageInvestmentsPage.AutoFundingPage.IsManageAutomatedInvestmentDisplayed())
+            {
+                Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnManageAutomatedInvestment();
+                Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend();
+                Assert.That(Pages?.NotificationAlert.GetSuccessMessage(), Does.Contain("Automated investing is now inactive."),
+                    "Expected success message after suspending auto funding.");
+                Pages?.NotificationAlert.Dismiss();
+            }
+            else Assert.That(Pages.ManageInvestmentsPage.AutoFundingPage.IsSetupAutomatedInvestmentDisplayed(), Is.True, $"SETUP AUTOMATED INVESTING' link is not visible.");
         }
 
         [Then(@"I verify that the ""(.*)"" link is displayed")]
@@ -1173,8 +1177,13 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void ThenIVerifyTheFollowingOptionsAreDisplayedInAutoFunding(Table table)
         {
             foreach (var row in table.Rows)
-                Assert.That(wait.Until(d => d.FindElement(By.XPath($"//button[normalize-space(text())='{row[0].Trim()}']")).Displayed),
-                            Is.True, $"'{row[0]}' button is not visible.");
+            {
+                if (row[0].Contains("Cancel"))
+                    Assert.That(Pages?.ManageInvestmentsPage.AutoFundingPage.IsButtonCancelTopDisplayed(), Is.True, $"'{row[0]}' button on topleft  is not visible.");
+                else
+                    Assert.That(wait.Until(d => d.FindElement(By.XPath($"//*[normalize-space(text())='{row[0].Trim()}']")).Displayed),
+                                Is.True, $"'{row[0]}' button is not visible.");
+            }
         }
 
         [Then(@"I click on the ""(.*)"" button in Auto Funding")]

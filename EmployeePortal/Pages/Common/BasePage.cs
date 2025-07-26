@@ -93,6 +93,8 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
             Assert.That(currentUrl, Does.Contain(expectedPart).IgnoreCase,
                 $"Expected URL to contain '{expectedPart}', but got '{currentUrl}'.");
         }
+
+      
     }
 }
 

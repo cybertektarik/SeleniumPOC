@@ -180,6 +180,15 @@ namespace SeleniumPOC.Common
         }
 
         public IList<IWebElement> FindElements() => driver.FindElements(locator);
+
+        public void ScrollToElement(IWebElement element)
+        {
+            if (driver == null) throw new ArgumentNullException(nameof(driver));
+            if (element == null) throw new ArgumentNullException(nameof(element));
+
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+        }
     }
 }
 
