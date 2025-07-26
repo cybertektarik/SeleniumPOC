@@ -176,18 +176,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                 link.Click();
 
                 // Verify URL contains "instrument-performance"
-                wait.Until(d => d.Url.Contains("instrument-performance", StringComparison.OrdinalIgnoreCase));
-                Assert.That(driver.Url, Does.Contain("instrument-performance"), "Incorrect performance page URL.");
-
+                VerifyCurrentUrlIncludes("instrument-performance");
 
                 // Validate Trade, Buy, Sell, Auto Funding
                 foreach (var row in table.Rows)
                 {
                     var buttonText = row[0];
                     var optionButton = wait.Until(d => d.FindElement(By.XPath($"//*[normalize-space(text())='{buttonText}']")));
-                    Assert.That(optionButton.Displayed, Is.True, $"'{buttonText}' button is not visible.");
                     if (optionButton.Text.Contains("Trade"))
                         optionButton.Click();
+                    Assert.That(optionButton.Displayed, Is.True, $"'{buttonText}' button is not visible.");
+
                 }
 
                 // Go back and wait for page to reload

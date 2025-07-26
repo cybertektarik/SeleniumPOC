@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.BiDi.BrowsingContext;
 using OpenQA.Selenium.Interactions;
@@ -179,8 +180,6 @@ namespace SeleniumPOC.Common
         }
 
         public IList<IWebElement> FindElements() => driver.FindElements(locator);
-
-        public By Locator => locator;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using OpenQA.Selenium.Support.UI;
+using NUnit.Framework;
 
 namespace SeleniumPOC.EmployeePortal.Pages.Common
 {
@@ -80,6 +81,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         {
             driver.Close();
             driver.SwitchTo().Window(driver.WindowHandles[0]);
+        }
+
+        public void VerifyCurrentUrlIncludes(string expectedPart)
+        {
+            if (driver == null) throw new ArgumentNullException(nameof(driver));
+            if (string.IsNullOrWhiteSpace(expectedPart)) throw new ArgumentException("Expected part cannot be null or empty.");
+
+            string currentUrl = driver.Url;
+
+            Assert.That(currentUrl, Does.Contain(expectedPart).IgnoreCase,
+                $"Expected URL to contain '{expectedPart}', but got '{currentUrl}'.");
         }
     }
 }
