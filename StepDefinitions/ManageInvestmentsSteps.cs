@@ -1177,7 +1177,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                             Is.True, $"'{row[0]}' button is not visible.");
         }
 
-        [When(@"I click on the ""(.*)"" button in Auto Funding")]
+        [Then(@"I click on the ""(.*)"" button in Auto Funding")]
         public void WhenIClickOnTheButtonInAutoFunding(string autoFundingOption)
         {
             autoFundingOption = autoFundingOption.Trim().ToUpperInvariant();
@@ -1215,7 +1215,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
 
-        [Then(@"I verify that the ""(.*)"" message is shown above the investment list")]
+        [Then(@"I verify the message ""(.*)"" is shown above the investment list")]
         public void ThenIVerifyThatTheMessageIsShownAboveTheInvestmentList(string expectedMessage)
         {
             string actualMessage = Pages.ManageInvestmentsPage.AutoFundingPage.getTextAboveInvestmentList();

@@ -24,9 +24,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         private PageControl stcCategoryHeaders(int index) => new PageControl(By.XPath("//div[@data-auto-test='GetInstrumentListAssetCategory(instrumentList)'][" + index + "]"));
 
-        private PageControl btnCancel => new PageControl(By.XPath("//span[text()='Cancel']"), "Cancel");
-        private PageControl btnReview => new PageControl(By.XPath("//span[text()='REVIEW']"), "REVIEW");
-        private PageControl btnAccept => new PageControl(By.XPath("//span[text()='ACCEPT']"), "ACCEPT");
+        private PageControl btnCancelTop => new PageControl(By.XPath("(//span[text()='Cancel'])[last()-1]"), "Cancel");
+        private PageControl btnReview => new PageControl(By.XPath("//span[text()='Review']"), "REVIEW");
+        private PageControl btnAccept => new PageControl(By.XPath("//span[text()='Accept']"), "ACCEPT");
 
         private PageControl btnSkip => new PageControl(By.XPath("(//button[span[text()='Skip']])[2]"), "Skip");
         private PageControl txtSearchForLimitedLegacy => new PageControl(By.XPath("//h4[contains(text(),'Select Investments')]/..//input[@type='text']"), "Stock symbol");
@@ -34,11 +34,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         //New Code
         private PageControl lnkViewPerformanceData => new PageControl(By.XPath("//*[contains(text(),'View Performance Data')]"));
-        private PageControl stSetupAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'SETUP AUTOMATED INVESTMENT')]"));
-        private PageControl stManageAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'MANAGE AUTOMATED INVESTING')]"));
-        private PageControl btnSuspend => new PageControl(By.XPath("//span[text()='SUSPEND']"), "SUSPEND");
-        private PageControl btnActivate = new PageControl(By.XPath("//span[text()='ACTIVATE']"), "ACTIVATE");
+        private PageControl stSetupAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'Setup Automated Investing')]"));
+        private PageControl stManageAutomatedInvestment = new PageControl(By.XPath("//*[contains(text(),'Manage Automated Investing')]"));
+        private PageControl btnSuspend => new PageControl(By.XPath("//span[text()='Suspend']"), "SUSPEND");
+        private PageControl btnActivate = new PageControl(By.XPath("//span[text()='Activate']"), "ACTIVATE");
         private PageControl txtCashBalanceFunds = new PageControl(By.XPath("//*[contains(text(),'Cash balance funds in excess')]"));
+        private PageControl btnEdit = new PageControl(By.XPath("//span[text()='Edit']"), "EDIT");
 
         public AutoFundingPage(IWebDriver driver) : base(driver) { }
 
@@ -107,7 +108,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void Cancel()
         {
-            btnCancel.Click();
+            btnCancelTop.Click();
             WaitForSpinners();
         }
 
@@ -183,9 +184,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
                 foreach (var row in table.Rows)
                 {
                     var buttonText = row[0];
-                    var optionButton = wait.Until(d => d.FindElement(By.XPath($"//button[text()='{buttonText}']")));
+                    var optionButton = wait.Until(d => d.FindElement(By.XPath($"//*[normalize-space(text())='{buttonText}']")));
                     Assert.That(optionButton.Displayed, Is.True, $"'{buttonText}' button is not visible.");
-                    if (optionButton.Text.Contains("TRADE"))
+                    if (optionButton.Text.Contains("Trade"))
                         optionButton.Click();
                 }
 
