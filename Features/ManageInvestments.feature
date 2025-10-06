@@ -372,7 +372,8 @@ Scenario: Enrolling a new Choice Investment Account with Threshold
 @feature2
 Scenario: Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
+	When I click on "Manage Investments" sub menu dropdown
+	And I click on "Investment Summary" from the navigation menu
 	And I click on the "Managed" Account
 	And I click on the "Fees" tab
 	Then I should see the url contains "Fees"
