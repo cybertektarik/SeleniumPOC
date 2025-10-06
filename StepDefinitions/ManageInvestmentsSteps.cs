@@ -80,10 +80,25 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                     Pages.SidebarNavPage.GoToAutomatedInvestments();
                     break;
                 case "Automated Investments":
+                    // Click on "Automated Investments" from the expanded dropdown
                     Pages.SidebarNavPage.GoToAutomatedInvestments();
                     break;
                 default:
                     throw new ArgumentException($"No navigation action defined for tab: {tabName}");
+            }
+        }
+
+        [When(@"I click on ""(.*)"" sub menu dropdown")]
+        public void WhenIClickOnSubMenuDropdown(string menuName)
+        {
+            switch (menuName)
+            {
+                case "Manage Investments":
+                    Pages.SidebarNavPage.GoToManageInvestments();
+                    Thread.Sleep(1000); // Wait for dropdown to expand
+                    break;
+                default:
+                    throw new ArgumentException($"No sub menu dropdown action defined for: {menuName}");
             }
         }
 

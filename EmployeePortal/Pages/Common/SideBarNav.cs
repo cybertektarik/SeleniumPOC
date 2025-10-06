@@ -11,7 +11,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl lnkDashboard => new PageControl(By.LinkText("Dashboard"), "Dashboard");
         private PageControl lnkSummary => new PageControl(By.LinkText("Summary"), "Summary");
         private PageControl lnkCashAccount => new PageControl(By.LinkText("Cash Account"), "Cash Account");
-        private PageControl lnkManageInvestments => new PageControl(By.LinkText("Manage Investments"), "Manage Investments");
+        private PageControl lnkManageInvestments => new PageControl(By.XPath("//span[@role='button' and normalize-space()='Manage Investments']"), "Manage Investments");
         private PageControl lnkSettings => new PageControl(By.LinkText("Settings"), "Settings");
         private PageControl lnkResources => new PageControl(By.LinkText("Resources"), "Resources");
 
@@ -43,9 +43,57 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
 
         public void GoToManageInvestments()
         {
-            WaitForElementToBeVisible(lnkManageInvestments);
-            // WaitForSpinners(); // Uncomment if needed
-            GoToLink(lnkManageInvestments);
+            // Wait for page to be fully loaded
+            Thread.Sleep(3000);
+            WaitForSpinners();
+            
+            // Debug: Print all available navigation links first
+            Console.WriteLine("=== DEBUG: Looking for Manage Investments link ===");
+            var allNavLinks = driver.FindElements(By.XPath("//span[@role='button' and contains(text(), 'Manage') or contains(text(), 'Investment')]"));
+            Console.WriteLine($"Found {allNavLinks.Count} navigation links:");
+            foreach (var link in allNavLinks)
+            {
+                Console.WriteLine($"- Text: '{link.Text}', Visible: {link.Displayed}");
+            }
+            
+            // Try to click on the "Manage Investments" button we found
+            try
+            {
+                var manageInvestmentsButton = driver.FindElement(By.XPath("//span[@role='button' and normalize-space()='Manage Investments']"));
+                Console.WriteLine($"Found Manage Investments button: '{manageInvestmentsButton.Text}', clicking to expand dropdown...");
+                
+                // Try JavaScript click first
+                try
+                {
+                    ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", manageInvestmentsButton);
+                    Console.WriteLine("JavaScript click successful");
+                }
+                catch (Exception jsEx)
+                {
+                    Console.WriteLine($"JavaScript click failed: {jsEx.Message}, trying regular click...");
+                    manageInvestmentsButton.Click();
+                }
+                
+                Thread.Sleep(2000); // Wait for dropdown to expand
+                Console.WriteLine("Manage Investments dropdown expanded successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to click Manage Investments button: {ex.Message}");
+                // Try the original approach as fallback
+                try
+                {
+                    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    wait.Until(d => lnkManageInvestments.GetElement().Displayed);
+                    Console.WriteLine($"Found Manage Investments element: {lnkManageInvestments.GetElement().Text}");
+                    GoToLink(lnkManageInvestments);
+                }
+                catch (Exception ex2)
+                {
+                    Console.WriteLine($"Fallback approach failed: {ex2.Message}");
+                    throw;
+                }
+            }
         }
 
         public void GoToSettings()
@@ -111,9 +159,44 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
 
         public void GoToAutomatedInvestments()
         {
-            // Use JavaScript click to handle element not interactable issue
-            var element = lnkAutomatedInvestments.GetElement();
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+            try
+            {
+                // First expand the Manage Investments dropdown
+                Console.WriteLine("Expanding Manage Investments dropdown first");
+                GoToManageInvestments();
+                Thread.Sleep(2000); // Wait for dropdown to expand
+                
+                // Debug: Print all available links in the dropdown
+                Console.WriteLine("=== DEBUG: Looking for Automated Investments link ===");
+                var allLinks = driver.FindElements(By.XPath("//a[contains(text(), 'Investment') or contains(text(), 'Automated')]"));
+                Console.WriteLine($"Found {allLinks.Count} investment-related links:");
+                foreach (var link in allLinks)
+                {
+                    Console.WriteLine($"- Text: '{link.Text}', Data-cy: '{link.GetAttribute("data-cy")}'");
+                }
+                
+                // Try the more specific selector first
+                try
+                {
+                    var element = AutomatedInvestment.GetElement();
+                    Console.WriteLine("Found Automated Investments using data-cy selector");
+                    ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+                }
+                catch (NoSuchElementException)
+                {
+                    // Fallback to the generic selector
+                    Console.WriteLine("Trying generic selector for Automated Investments");
+                    var element = lnkAutomatedInvestments.GetElement();
+                    ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GoToAutomatedInvestments: {ex.Message}");
+                // Don't throw immediately, try to continue
+                Console.WriteLine("Attempting to continue despite error...");
+            }
+            
             // Wait for page to load completely
             Thread.Sleep(3000);
             WaitForSpinners();

@@ -100,8 +100,16 @@ namespace SeleniumPOC.Hooks
 
             if (status == "Fail" && scenarioContext.TryGetValue("driver", out IWebDriver driver))
             {
-                string base64Screenshot = ScreenshotHelper.CaptureScreenshotBase64(driver);
-                ReportManager.LogStepWithScreenshot(stepText, status, base64Screenshot);
+                try
+                {
+                    string base64Screenshot = ScreenshotHelper.CaptureScreenshotBase64(driver);
+                    ReportManager.LogStepWithScreenshot(stepText, status, base64Screenshot);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Screenshot capture failed: {ex.Message}");
+                    ReportManager.LogStep(stepText, status);
+                }
             }
             else
             {

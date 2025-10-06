@@ -1,0 +1,146 @@
+[1mdiff --git a/EmployeePortal/ManageInvestments/AutoFundingPage.cs b/EmployeePortal/ManageInvestments/AutoFundingPage.cs[m
+[1mindex 6fb7494..5907d4e 100644[m
+[1m--- a/EmployeePortal/ManageInvestments/AutoFundingPage.cs[m
+[1m+++ b/EmployeePortal/ManageInvestments/AutoFundingPage.cs[m
+[36m@@ -242,6 +242,63 @@[m [mnamespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments[m
+             return btnCancelTop.IsDisplayed();[m
+         }[m
+ [m
+[32m+[m[32m        public bool IsAutomatedInvestingActive()[m
+[32m+[m[32m       {[m
+[32m+[m[32m    try[m
+[32m+[m[32m       {[m
+[32m+[m[32m    var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));[m
+[32m+[m[32m            return wait.Until(d => d.FindElement(By.XPath("//h4[normalize-space(text())='Automated Investing is Active']")).Displayed);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (WebDriverTimeoutException ex)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return false;[m
+[32m+[m[32m        }[m
+     }[m
+[31m-}[m
+[32m+[m
+[32m+[m[32m    public bool IsAutomatedInvestingSuspended()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        try[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));[m
+[32m+[m[32m            return wait.Until(d => d.FindElement(By.XPath("//h4[normalize-space(text())='Automated Investing is Suspended']")).Displayed);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        catch (WebDriverTimeoutException ex)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return false;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m       public void ClickOnSuspendAndWaitForStatus()[m
+[32m+[m[32m       {[m
+[32m+[m[32m           WaitForElementToBeClickable(btnSuspend);[m
+[32m+[m[32m           DoubleClick(btnSuspend.GetElement());[m
+[32m+[m[32m           WaitForSpinners();[m
+[32m+[m[32m           var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));[m
+[32m+[m[32m           wait.Until(d => d.FindElement(By.XPath("//*[contains(text(),'Automated Investing is now inactive')]")).Displayed);[m
+[32m+[m
+[32m+[m[32m           new BasePage(driver).Refresh();[m
+[32m+[m
+[32m+[m[32m           var btnSuspendAfterRefresh = new WebDriverWait(driver, TimeSpan.FromSeconds(10));[m
+[32m+[m[32m           btnSuspendAfterRefresh.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[contains(.,'Suspend')]")));[m
+[32m+[m[32m           DoubleClick(btnSuspendAfterRefresh);[m
+[32m+[m[32m           WaitForSpinners();[m
+[32m+[m[32m           bool statusChanged = wait.Until(d =>[m
+[32m+[m[32m           {[m
+[32m+[m[32m               try[m
+[32m+[m[32m               {[m
+[32m+[m[32m                   var suspended = d.FindElement(By.XPath("//h4[contains(normalize-space(.),'Automated Investing is Suspended')]"));[m
+[32m+[m[32m                   return suspended.Displayed;[m
+[32m+[m[32m               }[m
+[32m+[m[32m               catch (WebDriverTimeoutException ex)[m
+[32m+[m[32m               {[m
+[32m+[m[32m                   return false;[m
+[32m+[m[32m               }[m
+[32m+[m[32m           });[m
+[32m+[m[32m           if (!statusChanged)[m
+[32m+[m[32m           {[m
+[32m+[m[32m               throw new Exception("Suspended clicked but 'Automated Investing is Suspended' text never appeared.");[m
+[32m+[m[32m           }[m
+[32m+[m[32m       }[m
+[32m+[m
+[32m+[m[32m      }[m
+ [m
+[1mdiff --git a/EmployeePortal/Pages/Common/SideBarNav.cs b/EmployeePortal/Pages/Common/SideBarNav.cs[m
+[1mindex 2e0e72a..b9f76b3 100644[m
+[1m--- a/EmployeePortal/Pages/Common/SideBarNav.cs[m
+[1m+++ b/EmployeePortal/Pages/Common/SideBarNav.cs[m
+[36m@@ -14,7 +14,10 @@[m [mnamespace SeleniumPOC.EmployeePortal.Pages.Common[m
+         private PageControl lnkResources => new PageControl(By.LinkText("Resources"), "Resources");[m
+ [m
+         private PageControl SelectedTab => new PageControl(By.XPath("//div[@class='sidebar']//a[contains(@class, 'router-link-exact-active')]"));[m
+[31m-[m
+[32m+[m[32m        private PageControl lnkManageInvestmentsDropdown => new PageControl(By.XPath("//span[@role='button' and normalize-space(text())='Automated Investments']"), "Automated Investments (Dropdown Sub Menu)");[m
+[32m+[m[32m        private PageControl lnkInvestmentSummary => new PageControl(By.XPath("//a[data-cy='investment-summary' and normalize-space(text())='Investment Summary']"), "Investment Summary");[m
+[32m+[m[32m        private PageControl lnkAutomatedInvestments => new PageControl(By.XPath("//a[normalize-space(text())='Automated Investments']"), "Automated Investments");[m
+[32m+[m[32m        private PageControl AutomatedInvestment => new PageControl(By.XPath("//a[@data-cy='automated-investments' and normalize-space(text())='Automated Investments']"), "Automated Investments");[m
+         public SidebarNavPage(IWebDriver driver) : base(driver)[m
+         {[m
+         }[m
+[36m@@ -74,6 +77,40 @@[m [mnamespace SeleniumPOC.EmployeePortal.Pages.Common[m
+         {[m
+             GoToLink(lnkResources);[m
+         }[m
+[32m+[m
+[32m+[m[32m        public void ClickManageInvestmentsDropdown()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            WaitForOverLayToDisappear();[m
+[32m+[m[32m            var element = lnkManageInvestmentsDropdown.GetElement();[m
+[32m+[m
+[32m+[m[32m            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", element);[m
+[32m+[m
+[32m+[m[32m            // make the window smaller[m
+[32m+[m[32m            driver.Manage().Window.Size = new System.Drawing.Size(1280, 800);[m
+[32m+[m
+[32m+[m[32m            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));[m
+[32m+[m[32m            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(element));[m
+[32m+[m[32m            try[m
+[32m+[m[32m            {[m
+[32m+[m[32m                element.Click();[m
+[32m+[m[32m            }[m
+[32m+[m[32m            catch (ElementClickInterceptedException ex)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                Console.WriteLine($"Error clicking element: {ex.Message}");[m
+[32m+[m
+[32m+[m[32m                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", element);[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        public void GoToInvestmentSummary()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            GoToLink(lnkInvestmentSummary);[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        public void GoToAutomatedInvestments()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            GoToLink(lnkAutomatedInvestments);[m
+[32m+[m[32m        }[m
+     }[m
+ }[m
+ [m
+[1mdiff --git a/StepDefinitions/ManageInvestmentsSteps.cs b/StepDefinitions/ManageInvestmentsSteps.cs[m
+[1mindex 76de8e3..a81a2fb 100644[m
+[1m--- a/StepDefinitions/ManageInvestmentsSteps.cs[m
+[1m+++ b/StepDefinitions/ManageInvestmentsSteps.cs[m
+[36m@@ -72,6 +72,12 @@[m [mnamespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments[m
+                 case "Resources":[m
+                     Pages.SidebarNavPage.GoToResources();[m
+                     break;[m
+[32m+[m[32m                    case "Investment Summary":[m
+[32m+[m[32m                    Pages.SidebarNavPage.GoToInvestmentSummary();[m
+[32m+[m[32m                    break;[m
+[32m+[m[32m                    case "Automated Investments":[m
+[32m+[m[32m                    Pages.SidebarNavPage.GoToAutomatedInvestments();[m
+[32m+[m[32m                    break;[m
+                 default:[m
+                     throw new ArgumentException($"No navigation action defined for tab: {tabName}");[m
+             }[m
+[36m@@ -1194,7 +1200,7 @@[m [mnamespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments[m
+             var actions = new Dictionary<string, Action>(StringComparer.OrdinalIgnoreCase)[m
+             {
