@@ -114,7 +114,10 @@ namespace SeleniumPOC.Hooks
         {
             ReportManager.FlushReport();
         }
-
+        //NavigateToDefaultUrl(string url) method
+        // first asserts the driver is initialized (throws if driver == null) and then runs driver.Navigate().GoToUrl(url)
+        // it’s a simple wrapper that logs the URL and navigates.
+        // So the flow is: pick JSON → load JSON → get DefaultUrl → drive.Navigate to that URL
         public void NavigateToDefaultUrl(string url)
         {
             if (driver == null)

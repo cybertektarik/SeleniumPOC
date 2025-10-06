@@ -189,6 +189,14 @@ namespace SeleniumPOC.Common
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
+
+        public IWebElement GetElement()
+        {
+            if (driver == null)
+                throw new InvalidOperationException("PageControl driver not initialized. Call PageControl.InitDriver in AllPages.");
+            return driver.FindElement(locator);
+        }
+
     }
 }
 

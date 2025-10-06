@@ -1,4 +1,5 @@
 ﻿//using AngleSharp.Dom;
+using AventStack.ExtentReports.Gherkin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
@@ -71,6 +72,12 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                     break;
                 case "Resources":
                     Pages.SidebarNavPage.GoToResources();
+                    break;
+                case "Investment Summary":
+                    Pages.SidebarNavPage.GoTolnkInvestmentSummary();
+                    break;
+                case "Automated Investment":
+                    Pages.SidebarNavPage.GoToAutomatedInvestments();
                     break;
                 default:
                     throw new ArgumentException($"No navigation action defined for tab: {tabName}");
@@ -1231,6 +1238,40 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Assert.That(actualMessage, Does.Contain(expectedMessage),
                 $"Expected message '{expectedMessage}' not found above the investment list.");
         }
+
+        [When(@"I click on Manage Investment Sub Menu Dropdown")]
+        public void WhenIClickOnManageInvestmentSubMenuDropdown()
+        {
+            Pages.SidebarNavPage.ClickManageInvestmentsDropdown();
+        }
+
+        [Then(@"I validate Automated Investing status is '(.*)'")]
+        public void ThenIValidateAutomatedInvestingStatus(string expectedStatus)
+        {
+            if (expectedStatus.Equals("Active", StringComparison.OrdinalIgnoreCase))
+            {
+                Assert.That(Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingActive(),
+                    Is.True, "Expected 'Automated Investing is Active' but it was not found.");
+            }
+            else if (expectedStatus.Equals("Suspended", StringComparison.OrdinalIgnoreCase))
+            {
+                Assert.That(Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended(),
+                    Is.True, "Expected 'Automated Investing is Suspended' but it was not found.");
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid status: {expectedStatus}. Expected 'Active' or 'Suspended'.");
+            }
+        }
+
+        [Then(@"I hard refresh the application page")]
+        public void ThenIHardRefreshTheApplicationPage()
+        {
+            Pages.ManageInvestmentsPage.HardRefresh();
+        }
+
+
+
     }
 }
 

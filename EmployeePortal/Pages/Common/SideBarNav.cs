@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 
 namespace SeleniumPOC.EmployeePortal.Pages.Common
@@ -14,6 +15,13 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl lnkResources => new PageControl(By.LinkText("Resources"), "Resources");
 
         private PageControl SelectedTab => new PageControl(By.XPath("//div[@class='sidebar']//a[contains(@class, 'router-link-exact-active')]"));
+
+        private PageControl lnkManageInvestmentsDropdown => new PageControl(By.XPath("//span[@role='button' and normalize-space()='Manage Investments']"), "Manage Investments (Dropdown Sub Menu)");
+
+        private PageControl lnkInvestmentSummary => new PageControl(By.XPath("//a[@data-cy='nav-investment' and normalize-space()='Investment Summary']"), "Investment Summary");
+
+        private PageControl AutomatedInvestment => new PageControl(By.XPath("//a[@data-cy='nav-investment' and normalize-space()='Automated Investments']"), "Automated Investment");
+
 
         public SidebarNavPage(IWebDriver driver) : base(driver)
         {
@@ -70,9 +78,56 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
             }
         }
 
-        public void GoToResources()
+        public void  GoToResources()
         {
             GoToLink(lnkResources);
+        }
+
+        public void ClickManageInvestmentsDropdown()
+        {
+            WaitForOverlayToDisappear();
+
+            var element = lnkManageInvestmentsDropdown.GetElement();
+            // Bring it into view
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
+            // Make viewport smaller if needed
+            driver.Manage().Window.Size = new System.Drawing.Size(1280, 800);
+
+            // Wait until clickable
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(3));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(element));
+
+            try
+            {
+                element.Click(); // normal click
+            }
+            catch (ElementClickInterceptedException)
+            {
+                // fallback: JS click
+                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+            }
+        }
+        public void GoTolnkInvestmentSummary()
+        {
+            WaitForElementToBeVisible(lnkInvestmentSummary);
+            GoToLink(lnkInvestmentSummary);
+        }
+
+        public void GoToAutomatedInvestments()
+        {
+            AdjustViewport(1200, 800, 0.9);
+            WaitForElementToBeVisible(AutomatedInvestment, 10);
+            WaitForElementToBeClickable(AutomatedInvestment, 10);
+
+        }
+        public void GoToManageInvestmentSubMenu()
+        {
+            AdjustViewport(1200, 800, 0.9);
+            WaitForElementToBeVisible(lnkManageInvestmentsDropdown, 10);
+            WaitForElementToBeClickable(lnkManageInvestmentsDropdown, 10);
+
+            lnkManageInvestmentsDropdown.Click();
         }
     }
 }

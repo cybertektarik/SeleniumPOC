@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 
@@ -241,6 +242,33 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             return btnCancelTop.IsDisplayed();
         }
+
+        public bool IsAutomatedInvestingActive()
+        {
+            try
+            {
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                return wait.Until(d => d.FindElement(By.XPath("//h4[normalize-space(text())='Automated Investing is Active']")).Displayed);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+        }
+
+        public bool IsAutomatedInvestingSuspended()
+        {
+            try
+            {
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                return wait.Until(d => d.FindElement(By.XPath("//h4[normalize-space(text())='Automated Investing is Suspended']")).Displayed);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
+        }
+
 
     }
 }
