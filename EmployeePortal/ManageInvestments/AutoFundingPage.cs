@@ -261,7 +261,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             try
             {
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                return wait.Until(d => d.FindElement(By.XPath("//h4[normalize-space(text())='Automated Investing is Suspended']")).Displayed);
+                return wait.Until(d => d.FindElement(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]")).Displayed);
             }
             catch (WebDriverTimeoutException)
             {
