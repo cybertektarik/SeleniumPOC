@@ -7,7 +7,6 @@
     "missingOrPendingStepsOutcome": "Inconclusive"
   },
   "execution": {
-    //"order": "declare" // Or remove "order" to allow default parallel behavior
-     "stopAtFirstError": false
+    "stopAtFirstError": false
   }
 }

@@ -8,16 +8,34 @@ using System.Collections.ObjectModel;
 
 namespace SeleniumPOC.Common
 {
+    // CLASS: PageControl
+    // PURPOSE: Wrapper class that provides element interaction methods using stored WebDriver
+    // FLOW: Receives driver from AllPages → Stores it statically → Provides element operations
+    // CONNECTS TO: AllPages (via InitDriver) → All page objects (via element operations)
     public class PageControl
     {
+        // FIELD: driver - Static WebDriver instance shared by all PageControl objects
+        // PURPOSE: Stores the WebDriver so all PageControl methods can access it
         [ThreadStatic] private static IWebDriver driver;
+        
+        // FIELD: remote - Flag for remote execution (currently unused)
         [ThreadStatic] private static bool remote;
+        
+        // FIELD: locator - The By locator for finding elements
         private By locator;
+        
+        // FIELD: name - Optional name for the element (used in logging)
         private string? name = null;
+        
+        // PROPERTY: controlName - Returns name if set, otherwise returns locator string
         private string controlName => name == null ? locator.ToString() : name;
 
+        // CONSTRUCTOR: PageControl(By locator)
+        // PURPOSE: Creates PageControl with just a locator
         public PageControl(By locator) => this.locator = locator;
 
+        // CONSTRUCTOR: PageControl(By locator, string name)
+        // PURPOSE: Creates PageControl with locator and descriptive name
         public PageControl(By locator, string name)
         {
             this.locator = locator;
@@ -33,9 +51,13 @@ namespace SeleniumPOC.Common
         public bool IsSelected => driver.FindElement(locator).Selected;
         public bool IsEnabled => driver.FindElement(locator).Enabled;
 
+        // METHOD: InitDriver
+        // PURPOSE: Stores the WebDriver globally so that PageControl methods can access it
+        // FLOW: Called by AllPages → Stores driver → All PageControl methods can use it
+        // DRIVER FLOW: AllPages calls this → Stores driver → All element operations use stored driver
         public static void InitDriver(IWebDriver webDriver)
         {
-            driver = webDriver;
+            driver = webDriver;  // Store the driver for all PageControl instances
         }
 
         public bool IsDisplayed()
@@ -63,10 +85,13 @@ namespace SeleniumPOC.Common
             return count;
         }
 
+        // METHOD: Click
+        // PURPOSE: Clicks on the element using the stored WebDriver
+        // FLOW: Uses stored driver → Finds element → Clicks it
         public void Click()
         {
-            Console.WriteLine($"[Click] -> {controlName}");
-            driver.FindElement(locator).Click();
+            Console.WriteLine($"[Click] -> {controlName}");  // Log the action
+            driver.FindElement(locator).Click();             // Use stored driver to click element
         }
 
         public void SendKeys(string keys)
@@ -190,11 +215,15 @@ namespace SeleniumPOC.Common
             js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
 
+        // METHOD: GetElement
+        // PURPOSE: Returns the WebElement using the stored WebDriver
+        // FLOW: Checks if driver is initialized → Uses stored driver → Returns element
+        // ERROR HANDLING: Throws exception if driver not initialized
         public IWebElement GetElement()
         {
             if (driver == null)
                 throw new InvalidOperationException("PageControl driver not initialized. Call PageControl.InitDriver in AllPages.");
-            return driver.FindElement(locator);
+            return driver.FindElement(locator);  // Use stored driver to find element
         }
 
     }
