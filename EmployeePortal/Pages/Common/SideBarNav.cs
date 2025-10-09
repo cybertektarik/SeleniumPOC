@@ -16,7 +16,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
         private PageControl lnkResources => new PageControl(By.LinkText("Resources"), "Resources");
 
         private PageControl SelectedTab => new PageControl(By.XPath("//div[@class='sidebar']//a[contains(@class, 'router-link-exact-active')]"));
-        private PageControl lnkManageInvestmentsDropdown => new PageControl(By.XPath("//span[@role='button' and normalize-space(text())='Automated Investments']"), "Automated Investments (Dropdown Sub Menu)");
+        private PageControl lnkManageInvestmentsDropdown => new PageControl(By.XPath("//span[@role='button' and normalize-space()='Manage Investments']"), "Manage Investments (Dropdown Sub Menu)");
         private PageControl lnkInvestmentSummary => new PageControl(By.XPath("//a[@data-cy='nav-investment' and normalize-space(text())='Investment Summary']"), "Investment Summary");
         private PageControl lnkAutomatedInvestments => new PageControl(By.XPath("//a[normalize-space(text())='Automated Investments']"), "Automated Investments");
         private PageControl AutomatedInvestment => new PageControl(By.XPath("//a[@data-cy='automated-investments' and normalize-space(text())='Automated Investments']"), "Automated Investments");

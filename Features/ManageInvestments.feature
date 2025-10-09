@@ -560,24 +560,24 @@ Scenario: Validate Setup and Suspension of Automated Investing Auto-Funding for 
 	And I click on the "SUSPEND" button in Auto Funding
 	And I verify that the "SETUP AUTOMATED INVESTING" link is displayed
 
-		@feature2
-		Scenario: Validate suspension and activation cycle of Automated Investing Auto-Funding
-		Given I am logged in as a user who has an enrolled account
-		When I click on "Manage Investments" sub menu dropdown
-		And I click on "Automated Investments" from the navigation menu
-		Then I validate Automated Investing status is "Suspended"
+@feature2
+Scenario: Validate suspension and activation cycle of Automated Investing Auto-Funding
+	Given I am logged in as a user who has an enrolled account
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Automated Investments" from the navigation menu
+	Then I validate Automated Investing status is "Suspended"
 	Then I verify the following options are displayed in Auto Funding:
-		|options|
-		|Cancel |
-		|ACTIVATE|
-
-		Then I click on the "ACTIVATE" button in Auto Funding
-		When I click on "Manage Investments" sub menu dropdown
-		And I click on "Automated Investments" from the navigation menu
-		Then I validate Automated Investing status is "Suspended"
-		Then I click on the "ACTIVATE" button in Auto Funding
-		Then I hard refresh the application page
-		When I click on "Manage Investments" sub menu dropdown
-		And I click on "Automated Investments" from the navigation menu
-		Then I validate Automated Investing status is "Suspended"
+		| options |
+		| Cancel  |
+		| Activate |
+	Then I click on the "ACTIVATE" button in Auto Funding
+	And I click on the "REVIEW" button in Auto Funding
+	And I click on the "ACCEPT" button in Auto Funding
+	When I click on "Automated Investments" from the navigation menu
+	Then I validate Automated Investing status is "Active"
+	Then I click on the "SUSPEND" button in Auto Funding
+	Then I hard refresh the application page
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Automated Investments" from the navigation menu
+	Then I validate Automated Investing status is "Suspended"
 
