@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 
@@ -14,16 +15,27 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         private PageControl txtErrorText = new PageControl(By.XPath("//*[contains(@class, 'invalid-feedback')]"));
         private PageControl stcAvailableToSell = new PageControl(By.XPath("//div[@role='main']//div/div/div[contains(., 'Available to sell:')]"));
         private PageControl stcSharePrice = new PageControl(By.XPath("//table[@class='table not-too-wide']//tbody/tr/td[1]"));
-        private PageControl btnSell = new PageControl(By.XPath("(//*[contains(text(),'Sell')])[last()]"), "Sell");
+        private PageControl btnSell = new PageControl(By.XPath("//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//a[normalize-space()='Sell']"), "Sell");
         private PageControl tradeButton = new PageControl(By.XPath("(//*[normalize-space(text())='Trade'])[last()]"), "TRADE Button");
 
         public SellInstrumentPage(IWebDriver driver) : base(driver) { }
 
-        public void ClickTradeButton()
+        /* public void ClickTradeButton()
+         {
+             WaitForSpinners();
+             Assert.IsTrue(tradeButton.IsDisplayed(), "Button Trade is not displayed");
+             tradeButton.SendKeysUsingActions(Keys.End);
+         }*/
+
+        public void ClickTradeBtnSpecific(string stockName)
         {
-            WaitForSpinners();
-            Assert.IsTrue(tradeButton.IsDisplayed(), "Button Trade is not displayed");
-            tradeButton.SendKeysUsingActions(Keys.End);
+            var tradeButtonLocator = By.XPath(
+                $"//tr[.//text()[normalize-space()='{stockName}']]//button[normalize-space()='Trade']"
+            );
+
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var tradeButton = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(tradeButtonLocator));
+            tradeButton.Click();
         }
 
         public void VerifyOnTradeBtnBuyAndSellBtn()

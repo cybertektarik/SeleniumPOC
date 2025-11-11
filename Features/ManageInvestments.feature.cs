@@ -744,24 +744,30 @@ this.ScenarioInitialize(scenarioInfo);
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 206
- await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I click on Manage Investment Sub Menu Dropdown", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 207
- await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.WhenAsync("I click on \"Investment Summary\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 208
- await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 209
- await testRunner.AndAsync("I click on SELL Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.WhenAsync("I click on \"Current Holdings\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 210
- await testRunner.AndAsync("I enter 2 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.WhenAsync("I click on the \"ASCGX\" Trade button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 211
- await testRunner.AndAsync("I click on confirm sell Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on SELL Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 212
+ await testRunner.AndAsync("I enter 1 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 213
+ await testRunner.AndAsync("I click on confirm sell Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 214
  await testRunner.AndAsync("I validate success message for sell", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -777,7 +783,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "external"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate TRADE Button on the Managed account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 215
+#line 217
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -787,28 +793,28 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 216
+#line 218
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 217
+#line 219
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 218
+#line 220
  await testRunner.AndAsync("I click on the \"Managed\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 219
+#line 221
  await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 220
+#line 222
  await testRunner.AndAsync("I click on BUY Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 221
+#line 223
  await testRunner.AndAsync("I enter 2 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 222
+#line 224
  await testRunner.AndAsync("I click on confirm buy Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 223
+#line 225
  await testRunner.AndAsync("I validate success message for buy", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -824,7 +830,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Search Button on the Choice account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 226
+#line 228
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -834,107 +840,107 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 227
+#line 229
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 228
+#line 230
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 229
+#line 231
  await testRunner.AndAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 230
+#line 232
  await testRunner.AndAsync("I click on the \"Search & Trade\" tab in Manage Investments", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 231
+#line 233
  await testRunner.AndAsync("I search for stock symbol \"AMZN\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 232
+#line 234
  await testRunner.ThenAsync("I validate Status \"Active\" Funds displays and \"Buy\" button should be \"enable\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 234
+#line 236
  await testRunner.WhenAsync("I search for stock symbol \"QABA\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 235
+#line 237
  await testRunner.AndAsync("I check Include Unavailable To Buy checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 236
+#line 238
  await testRunner.ThenAsync("I validate Status \"Unavailable To Purchase\" Funds displays and \"Buy\" button shoul" +
                         "d be \"disable\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 237
+#line 239
  await testRunner.AndAsync("I uncheck Include Unavailable To Buy checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 239
+#line 241
  await testRunner.AndAsync("I select Fund Type as \"Stocks\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 240
+#line 242
  await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 241
+#line 243
  await testRunner.AndAsync("I deslect Fund Type as \"Stocks\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 242
- await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 244
- await testRunner.AndAsync("I select Fund Type as \"ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 245
- await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 246
- await testRunner.AndAsync("I deslect Fund Type as \"ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I select Fund Type as \"ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 247
- await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 248
+ await testRunner.AndAsync("I deslect Fund Type as \"ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 249
- await testRunner.AndAsync("I select Fund Type as \"Mutual Funds\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 250
- await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 251
- await testRunner.AndAsync("I deslect Fund Type as \"Mutual Funds\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I select Fund Type as \"Mutual Funds\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 252
- await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 253
+ await testRunner.AndAsync("I deslect Fund Type as \"Mutual Funds\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 254
- await testRunner.AndAsync("I select Fund Company as \"6 Meridian ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 255
- await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 256
- await testRunner.AndAsync("I select Fund Company as \"All\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I select Fund Company as \"6 Meridian ETF\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 257
- await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 258
+ await testRunner.AndAsync("I select Fund Company as \"All\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 259
- await testRunner.AndAsync("I select Asset Class as \"Equity\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 260
- await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 261
- await testRunner.AndAsync("I select Asset Class as \"All\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 262
  await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 264
- await testRunner.AndAsync("I toggle on index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 261
+ await testRunner.AndAsync("I select Asset Class as \"Equity\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 265
+#line 262
  await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
+#line 263
+ await testRunner.AndAsync("I select Asset Class as \"All\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 264
+ await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
 #line 266
- await testRunner.AndAsync("I toggle off index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I toggle on index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 267
+ await testRunner.AndAsync("I validate one or more investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 268
+ await testRunner.AndAsync("I toggle off index fund", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 269
  await testRunner.AndAsync("I validate zero investment products are available", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -950,7 +956,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Pre Enrollment for Select Account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 271
+#line 273
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -960,83 +966,83 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 272
+#line 274
  await testRunner.GivenAsync("I am logged in as a Pre enrolled user", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 273
+#line 275
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 274
+#line 276
  await testRunner.AndAsync("I click on the \"Enroll in HSA Invest\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 275
+#line 277
  await testRunner.AndAsync("I click on the \"START ENROLLMENT\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 276
+#line 278
  await testRunner.ThenAsync("I should see the \"HsaBank Investment Esign Agreement\" letter displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 277
+#line 279
  await testRunner.WhenAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 278
- await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 279
- await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 280
- await testRunner.AndAsync("I click on the \"Select\" Investment account types", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 281
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 282
- await testRunner.AndAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the \"Select\" Investment account types", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 283
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 286
- await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 284
+ await testRunner.AndAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 287
- await testRunner.AndAsync("I answer question \"1\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line 285
+ await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 288
- await testRunner.AndAsync("I answer question \"2\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 289
- await testRunner.AndAsync("I answer question \"3\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 290
- await testRunner.AndAsync("I answer question \"4\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 291
- await testRunner.AndAsync("I answer question \"5\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 292
- await testRunner.AndAsync("I click on the SUBMIT Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 293
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
+#line 289
+ await testRunner.AndAsync("I answer question \"1\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 290
+ await testRunner.AndAsync("I answer question \"2\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 291
+ await testRunner.AndAsync("I answer question \"3\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 292
+ await testRunner.AndAsync("I answer question \"4\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 293
+ await testRunner.AndAsync("I answer question \"5\" to \"agree\" from the questionnaire", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
 #line 294
- await testRunner.AndAsync("I click on the Skip Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the SUBMIT Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 295
- await testRunner.ThenAsync("I should see the \"Manage HSA Invest Enrollment\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 296
- await testRunner.WhenAsync("I click on the \"Manage HSA Invest Enrollment\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("I click on the Skip Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 297
+ await testRunner.ThenAsync("I should see the \"Manage HSA Invest Enrollment\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 298
+ await testRunner.WhenAsync("I click on the \"Manage HSA Invest Enrollment\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 299
  await testRunner.ThenAsync("I validate message \"Your investments will activate after you reach a minimum HSA " +
                         "cash balance of $1,000.00.Your current HSA cash balance is $0.00.\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 298
+#line 300
  await testRunner.WhenAsync("I click on the \"Cancel Enrollment\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 299
+#line 301
  await testRunner.ThenAsync("I validate message \"Investment Enrollment has been cancelled\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1052,7 +1058,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate HSA Advisory Agreements link for all investment types", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 302
+#line 304
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1062,16 +1068,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 303
+#line 305
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 304
+#line 306
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 305
+#line 307
  await testRunner.AndAsync("I click on \"Resources\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 306
+#line 308
  await testRunner.AndAsync("I click on the \"HSA Invest\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
@@ -1086,7 +1092,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table1.AddRow(new string[] {
                             "Managed",
                             "abg_advisory_managed"});
-#line 307
+#line 309
  await testRunner.ThenAsync("I validate the HSA Advisory Agreements links for following investment types", ((string)(null)), table1, "Then ");
 #line hidden
             }
@@ -1104,7 +1110,7 @@ this.ScenarioInitialize(scenarioInfo);
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Close Investment Option Is Disabled and Message Is Displayed When Holdin" +
                     "gs Exist", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 315
+#line 317
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1114,16 +1120,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 316
+#line 318
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 317
+#line 319
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 318
+#line 320
  await testRunner.AndAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 319
+#line 321
  await testRunner.AndAsync("I click on the \"HSA Invest Info\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
@@ -1134,7 +1140,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Choice"});
                 table2.AddRow(new string[] {
                             "Managed"});
-#line 320
+#line 322
  await testRunner.ThenAsync("I validate the following close investment options are disabled", ((string)(null)), table2, "Then ");
 #line hidden
                 global::Reqnroll.Table table3 = new global::Reqnroll.Table(new string[] {
@@ -1152,7 +1158,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Managed",
                             "To close your investment option, you must first sell all your holdings to bring y" +
                                 "our balance to $0."});
-#line 325
+#line 327
  await testRunner.AndAsync("I validate the following close investment messages are displayed", ((string)(null)), table3, "And ");
 #line hidden
             }
@@ -1168,7 +1174,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Enrolling a new Choice Investment Account with Threshold", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 333
+#line 335
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1178,70 +1184,70 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 334
+#line 336
  await testRunner.GivenAsync("I am logged into the Employee Portal", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 335
+#line 337
  await testRunner.WhenAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 336
+#line 338
  await testRunner.ThenAsync("I close investment option if investment is active", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 337
+#line 339
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 338
+#line 340
  await testRunner.AndAsync("I click on the \"Enroll in HSA Invest\" banner link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 339
+#line 341
  await testRunner.AndAsync("I click on the \"ENROLL\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 340
+#line 342
  await testRunner.ThenAsync("I should see the \"HsaBank Investment ESign Agreement\" letter displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 341
+#line 343
  await testRunner.WhenAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 342
- await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 343
- await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 344
- await testRunner.AndAsync("I click on the \"Choice\" Investment account types", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 345
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 346
- await testRunner.AndAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the \"Choice\" Investment account types", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 347
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 348
- await testRunner.AndAsync("I enter name \"Test Signature\" in the name field", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I check on ESign checkbox", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 349
- await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 350
  await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
+#line 350
+ await testRunner.AndAsync("I enter name \"Test Signature\" in the name field", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
 #line 351
- await testRunner.GivenAsync("I Set Investment Funding threshold \"500\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+ await testRunner.AndAsync("I click on the Sign Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 352
- await testRunner.WhenAsync("I search for stock symbol \"AMZN\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("I click on the Next Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 353
- await testRunner.ThenAsync("I click on the Stock \"ADD\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.GivenAsync("I Set Investment Funding threshold \"500\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 354
- await testRunner.WhenAsync("I search for stock symbol \"NVDA\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I search for stock symbol \"AMZN\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 355
+ await testRunner.ThenAsync("I click on the Stock \"ADD\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 356
+ await testRunner.WhenAsync("I search for stock symbol \"NVDA\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 357
  await testRunner.ThenAsync("I click on the Stock \"ADD\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table4 = new global::Reqnroll.Table(new string[] {
@@ -1250,40 +1256,40 @@ this.ScenarioInitialize(scenarioInfo);
                             "AMZN"});
                 table4.AddRow(new string[] {
                             "NVDA"});
-#line 356
+#line 358
  await testRunner.AndAsync("I validate stocks added in the allocated section", ((string)(null)), table4, "And ");
 #line hidden
-#line 360
+#line 362
  await testRunner.AndAsync("I allacote equal portion for all added stocks", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 361
+#line 363
  await testRunner.AndAsync("I click on the Stock \"REVIEW\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 362
+#line 364
  await testRunner.AndAsync("I click on the Stock \"ACCEPT\" Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 363
+#line 365
  await testRunner.AndAsync("I validate \"Choice\" account created", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 364
+#line 366
  await testRunner.WhenAsync("I click on \"Settings\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 365
+#line 367
  await testRunner.AndAsync("I click on the \"HSA Invest Info\" info link", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 366
+#line 368
  await testRunner.AndAsync("I click on the close Investment Option Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 367
+#line 369
  await testRunner.ThenAsync("I select the close investment option as \"Other (please specify)\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 368
+#line 370
  await testRunner.WhenAsync("I confirm \"Yes\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 369
+#line 371
  await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 370
+#line 372
  await testRunner.ThenAsync("I should see \"Enroll in HSA Invest\" banner link displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1299,7 +1305,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Fees Tab Displays Correct Annual Fees for Each Investment Account Type", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 373
+#line 375
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1309,22 +1315,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 374
+#line 376
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 375
+#line 377
  await testRunner.WhenAsync("I click on \"Manage Investments\" sub menu dropdown", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 376
+#line 378
  await testRunner.AndAsync("I click on \"Investment Summary\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 377
+#line 379
  await testRunner.AndAsync("I click on the \"Managed\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 378
+#line 380
  await testRunner.AndAsync("I click on the \"Fees\" tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 379
+#line 381
  await testRunner.ThenAsync("I should see the url contains \"Fees\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table5 = new global::Reqnroll.Table(new string[] {
@@ -1339,7 +1345,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table5.AddRow(new string[] {
                             "Fees for Choice",
                             "Annual fee:1 0.15% of AUA2 Quarterly max: $24.00"});
-#line 380
+#line 382
  await testRunner.AndAsync("I validate the following Fee messages are displayed for each investment type", ((string)(null)), table5, "And ");
 #line hidden
             }
@@ -1355,7 +1361,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "external"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Buy with Share on the Select account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 387
+#line 389
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1365,37 +1371,37 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 388
+#line 390
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 389
+#line 391
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 390
+#line 392
  await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 391
+#line 393
  await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 392
+#line 394
  await testRunner.AndAsync("I click on BUY Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 393
+#line 395
  await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 394
+#line 396
  await testRunner.AndAsync("I validate that the minimum available to invest should be greater than \"$1000\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 395
+#line 397
  await testRunner.WhenAsync("I select \"By Share\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 396
+#line 398
  await testRunner.AndAsync("I enter \"1\" as the number of shares", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 397
+#line 399
  await testRunner.AndAsync("I click on confirm buy Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 398
+#line 400
  await testRunner.AndAsync("I validate success message for buy", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -1411,7 +1417,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "external"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Sell with Share on the Choice account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 401
+#line 403
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1421,37 +1427,37 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 402
+#line 404
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 403
+#line 405
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 404
+#line 406
  await testRunner.AndAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 405
+#line 407
  await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 406
+#line 408
  await testRunner.AndAsync("I click on SELL Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 407
+#line 409
  await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 408
+#line 410
  await testRunner.AndAsync("I validate that the minimum available to sell should be greater than \"10\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 409
+#line 411
  await testRunner.WhenAsync("I select \"By Share\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 410
+#line 412
  await testRunner.AndAsync("I enter \"1\" as the number of shares", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 411
+#line 413
  await testRunner.AndAsync("I click on confirm sell Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 412
+#line 414
  await testRunner.AndAsync("I validate success message for sell", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -1469,7 +1475,7 @@ this.ScenarioInitialize(scenarioInfo);
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Verify CANCEL button functionality and cancellation notification after Sell By Am" +
                     "ount from Select account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 415
+#line 417
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1479,61 +1485,76 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 416
+#line 418
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 417
- await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 418
- await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
 #line 419
- await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.WhenAsync("I click on Manage Investment Sub Menu Dropdown", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 420
- await testRunner.ThenAsync("I click on cancel button for pending transcations", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("I click on \"Investment Summary\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 421
- await testRunner.WhenAsync("I click on \"Current Holdings\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 422
- await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 423
- await testRunner.AndAsync("I click on SELL Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.ThenAsync("I click on cancel button for pending transcations", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 424
- await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("I click on \"Current Holdings\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 425
- await testRunner.WhenAsync("I enter 1 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I click on the \"ASCGX\" Trade button", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 426
- await testRunner.AndAsync("I click on confirm sell Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 427
- await testRunner.AndAsync("I validate success message for sell", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 428
- await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.ThenAsync("I click on cancel button for pending transcations", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 429
- await testRunner.ThenAsync("I refresh the application web page 2 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("I click on \"Current Holdings\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 430
- await testRunner.WhenAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("I click on SELL Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 431
- await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 432
- await testRunner.WhenAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("I enter 1 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 433
- await testRunner.ThenAsync("I validate \"Cancel\" button displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.AndAsync("I click on confirm sell Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 434
+ await testRunner.AndAsync("I validate success message for sell", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 435
+ await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 436
+ await testRunner.ThenAsync("I refresh the application web page 2 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 437
+ await testRunner.WhenAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 438
+ await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 439
+ await testRunner.WhenAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 440
+ await testRunner.ThenAsync("I validate \"Cancel\" button displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 441
  await testRunner.WhenAsync("I click on the \"Cancel\" button in Activity tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
                 global::Reqnroll.Table table6 = new global::Reqnroll.Table(new string[] {
@@ -1542,34 +1563,34 @@ this.ScenarioInitialize(scenarioInfo);
                             "Cancel"});
                 table6.AddRow(new string[] {
                             "Confirm Cancellation"});
-#line 435
+#line 442
  await testRunner.ThenAsync("I validate following details for cancellation pop-up in Activity tab", ((string)(null)), table6, "Then ");
 #line hidden
-#line 439
+#line 446
  await testRunner.AndAsync("I click on \"Cancel\" button in pop-up", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 440
+#line 447
  await testRunner.AndAsync("I validate cancel pop-up not displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 441
+#line 448
  await testRunner.WhenAsync("I click on the \"Cancel\" button in Activity tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 442
+#line 449
  await testRunner.ThenAsync("I click on \"Confirm Cancellation\" button in pop-up", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 443
+#line 450
  await testRunner.WhenAsync("I validate Order was cancelled message", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 444
+#line 451
  await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 445
+#line 452
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 446
+#line 453
  await testRunner.WhenAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 447
+#line 454
  await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table7 = new global::Reqnroll.Table(new string[] {
@@ -1586,19 +1607,19 @@ this.ScenarioInitialize(scenarioInfo);
                             "Sell",
                             "Canceled",
                             "$0.00"});
-#line 448
+#line 455
  await testRunner.ThenAsync("I validate following details for the executed transaction", ((string)(null)), table7, "Then ");
 #line hidden
-#line 451
+#line 458
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 452
+#line 459
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 453
+#line 460
  await testRunner.WhenAsync("I click on Notification Icon", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 454
+#line 461
  await testRunner.ThenAsync("I validate Cancel notification for \"Sell\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1616,7 +1637,7 @@ this.ScenarioInitialize(scenarioInfo);
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Verify CANCEL button functionality and cancellation notification after Buy By Amo" +
                     "unt from Select account", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 458
+#line 465
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1626,61 +1647,61 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 459
+#line 466
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 460
+#line 467
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 461
+#line 468
  await testRunner.AndAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 462
+#line 469
  await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 463
+#line 470
  await testRunner.ThenAsync("I click on cancel button for pending transcations", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 464
+#line 471
  await testRunner.WhenAsync("I click on \"Current Holdings\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 465
+#line 472
  await testRunner.AndAsync("I click on TRADE Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 466
+#line 473
  await testRunner.AndAsync("I click on BUY Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 467
+#line 474
  await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 468
+#line 475
  await testRunner.WhenAsync("I enter 1 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 469
+#line 476
  await testRunner.AndAsync("I click on confirm buy Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 470
+#line 477
  await testRunner.AndAsync("I validate success message for buy", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 471
+#line 478
  await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 472
+#line 479
  await testRunner.ThenAsync("I refresh the application web page 2 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 473
+#line 480
  await testRunner.WhenAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 474
+#line 481
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 475
+#line 482
  await testRunner.WhenAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 476
+#line 483
  await testRunner.ThenAsync("I validate \"Cancel\" button displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 477
+#line 484
  await testRunner.WhenAsync("I click on the \"Cancel\" button in Activity tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
                 global::Reqnroll.Table table8 = new global::Reqnroll.Table(new string[] {
@@ -1689,34 +1710,34 @@ this.ScenarioInitialize(scenarioInfo);
                             "Cancel"});
                 table8.AddRow(new string[] {
                             "Confirm Cancellation"});
-#line 478
+#line 485
  await testRunner.ThenAsync("I validate following details for cancellation pop-up in Activity tab", ((string)(null)), table8, "Then ");
 #line hidden
-#line 482
+#line 489
  await testRunner.AndAsync("I click on \"Cancel\" button in pop-up", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 483
+#line 490
  await testRunner.AndAsync("I validate cancel pop-up not displays", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 484
+#line 491
  await testRunner.WhenAsync("I click on the \"Cancel\" button in Activity tab", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 485
+#line 492
  await testRunner.ThenAsync("I click on \"Confirm Cancellation\" button in pop-up", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 486
+#line 493
  await testRunner.WhenAsync("I validate Order was cancelled message", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 487
+#line 494
  await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 488
+#line 495
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 489
+#line 496
  await testRunner.WhenAsync("I click on the \"Select\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 490
+#line 497
  await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
@@ -1733,19 +1754,19 @@ this.ScenarioInitialize(scenarioInfo);
                             "Buy",
                             "Canceled",
                             "$0.00"});
-#line 491
+#line 498
  await testRunner.ThenAsync("I validate following details for the executed transaction", ((string)(null)), table9, "Then ");
 #line hidden
-#line 494
+#line 501
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 495
+#line 502
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 496
+#line 503
  await testRunner.WhenAsync("I click on Notification Icon", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 497
+#line 504
  await testRunner.ThenAsync("I validate Cancel notification for \"Buy\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -1761,7 +1782,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "external"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Buy with Share on the Choice account and validate from Activity page", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 501
+#line 508
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1771,55 +1792,55 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 502
+#line 509
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 503
+#line 510
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 504
+#line 511
  await testRunner.AndAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 505
+#line 512
  await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 506
+#line 513
  await testRunner.ThenAsync("I click on cancel button for pending transcations", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 507
+#line 514
  await testRunner.WhenAsync("I click on the \"Search & Trade\" tab in Manage Investments", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 508
+#line 515
  await testRunner.AndAsync("I search for stock symbol \"AMZN\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 509
+#line 516
  await testRunner.AndAsync("I click on BUY Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 510
+#line 517
  await testRunner.ThenAsync("I should see both \"By Amount\" and \"By Share\" radio buttons", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 511
+#line 518
  await testRunner.AndAsync("I validate that the minimum available to invest should be greater than \"$1000\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 512
+#line 519
  await testRunner.WhenAsync("I enter 1 dollar amount", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 513
+#line 520
  await testRunner.AndAsync("I click on confirm buy Button", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 514
+#line 521
  await testRunner.AndAsync("I validate success message for buy", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 515
+#line 522
  await testRunner.AndAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 516
+#line 523
  await testRunner.ThenAsync("I refresh the application web page 1 times", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 517
+#line 524
  await testRunner.WhenAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 518
+#line 525
  await testRunner.AndAsync("I click on \"Activity\" tab under investment account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
                 global::Reqnroll.Table table10 = new global::Reqnroll.Table(new string[] {
@@ -1832,7 +1853,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "AMZN",
                             "Buy",
                             "$1.00"});
-#line 519
+#line 526
  await testRunner.ThenAsync("I validate following details for the pending transaction", ((string)(null)), table10, "Then ");
 #line hidden
             }
@@ -1848,7 +1869,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate View Performance Data link for all available investments", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 524
+#line 531
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1858,16 +1879,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 525
+#line 532
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 526
+#line 533
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 527
+#line 534
  await testRunner.AndAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 528
+#line 535
  await testRunner.ThenAsync("I validate View Performance Data link for all available investments", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table11 = new global::Reqnroll.Table(new string[] {
@@ -1880,7 +1901,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Sell"});
                 table11.AddRow(new string[] {
                             "Add To Auto Funding"});
-#line 529
+#line 536
  await testRunner.AndAsync("I validate the following options are displayed in View Performance Data", ((string)(null)), table11, "And ");
 #line hidden
             }
@@ -1898,7 +1919,7 @@ this.ScenarioInitialize(scenarioInfo);
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate Setup and Suspension of Automated Investing Auto-Funding for Choice Acco" +
                     "unt", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 537
+#line 544
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1908,25 +1929,25 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 538
+#line 545
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 539
+#line 546
  await testRunner.WhenAsync("I click on \"Manage Investment\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 540
+#line 547
  await testRunner.AndAsync("I click on the \"Choice\" Account", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 541
+#line 548
  await testRunner.ThenAsync("I suspend MANAGE AUTOMATED INVESTING if it exists", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 542
+#line 549
  await testRunner.AndAsync("I verify that the \"SETUP AUTOMATED INVESTING\" link is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 543
+#line 550
  await testRunner.WhenAsync("I click on the \"SETUP AUTOMATED INVESTING\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 544
+#line 551
  await testRunner.ThenAsync("I should be navigated to the \"Auto Funding\" page", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table12 = new global::Reqnroll.Table(new string[] {
@@ -1935,29 +1956,29 @@ this.ScenarioInitialize(scenarioInfo);
                             "Cancel"});
                 table12.AddRow(new string[] {
                             "Activate"});
-#line 545
+#line 552
  await testRunner.AndAsync("I verify the following options are displayed in Auto Funding:", ((string)(null)), table12, "And ");
 #line hidden
-#line 549
+#line 556
  await testRunner.AndAsync("I click on the \"ACTIVATE\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 550
+#line 557
  await testRunner.AndAsync("I click on the \"REVIEW\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 551
+#line 558
  await testRunner.AndAsync("I click on the \"ACCEPT\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 552
+#line 559
  await testRunner.AndAsync("I verify that the \"MANAGE AUTOMATED INVESTING\" link is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 553
+#line 560
  await testRunner.AndAsync("I verify the message \"Cash balance funds in excess of $1,000.00 will automaticall" +
                         "y be moved to your investments\" is shown above the investment list", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 554
+#line 561
  await testRunner.WhenAsync("I click on the \"MANAGE AUTOMATED INVESTING\" link", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 555
+#line 562
  await testRunner.ThenAsync("I should be navigated to the \"Auto Funding\" page", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table13 = new global::Reqnroll.Table(new string[] {
@@ -1966,13 +1987,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Cancel"});
                 table13.AddRow(new string[] {
                             "Suspend"});
-#line 556
+#line 563
  await testRunner.AndAsync("I verify the following options are displayed in Auto Funding:", ((string)(null)), table13, "And ");
 #line hidden
-#line 560
+#line 567
  await testRunner.AndAsync("I click on the \"SUSPEND\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 561
+#line 568
  await testRunner.AndAsync("I verify that the \"SETUP AUTOMATED INVESTING\" link is displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
@@ -1988,7 +2009,7 @@ this.ScenarioInitialize(scenarioInfo);
                     "feature2"};
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Validate suspension and activation cycle of Automated Investing Auto-Funding", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 564
+#line 571
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -1998,16 +2019,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 565
+#line 572
  await testRunner.GivenAsync("I am logged in as a user who has an enrolled account", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 566
+#line 573
  await testRunner.WhenAsync("I click on Manage Investment Sub Menu Dropdown", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 567
+#line 574
  await testRunner.WhenAsync("I click on \"Automated Investments\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 568
+#line 575
  await testRunner.ThenAsync("I validate Automated Investing status is \"Suspended\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
                 global::Reqnroll.Table table14 = new global::Reqnroll.Table(new string[] {
@@ -2016,37 +2037,37 @@ this.ScenarioInitialize(scenarioInfo);
                             "Cancel"});
                 table14.AddRow(new string[] {
                             "Activate"});
-#line 569
+#line 576
  await testRunner.ThenAsync("I verify the following options are displayed in Auto Funding:", ((string)(null)), table14, "Then ");
 #line hidden
-#line 573
+#line 580
  await testRunner.ThenAsync("I click on the \"ACTIVATE\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 574
+#line 581
  await testRunner.AndAsync("I click on the \"REVIEW\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 575
+#line 582
  await testRunner.AndAsync("I click on the \"ACCEPT\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 576
+#line 583
  await testRunner.WhenAsync("I click on \"Automated Investments\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 577
+#line 584
  await testRunner.ThenAsync("I validate Automated Investing status is \"Active\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 578
+#line 585
  await testRunner.ThenAsync("I click on the \"SUSPEND\" button in Auto Funding", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 579
+#line 586
  await testRunner.ThenAsync("I hard refresh the application page", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
-#line 580
+#line 587
  await testRunner.WhenAsync("I click on Manage Investment Sub Menu Dropdown", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 581
+#line 588
  await testRunner.WhenAsync("I click on \"Automated Investments\" from the navigation menu", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 582
+#line 589
  await testRunner.ThenAsync("I validate Automated Investing status is \"Suspended\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

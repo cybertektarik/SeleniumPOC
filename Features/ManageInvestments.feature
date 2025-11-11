@@ -203,11 +203,13 @@ Scenario: Validate Learn More Link on Account Selection Page
 @external
 Scenario: Validate Sell Button on the Select account
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	And I click on the "Select" Account
-	And I click on TRADE Button
+	When I click on "Current Holdings" tab under investment account
+	When I click on the "ASCGX" Trade button
 	And I click on SELL Button
-	And I enter 2 dollar amount
+	And I enter 1 dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
 
@@ -414,12 +416,17 @@ Scenario: Validate Sell with Share on the Choice account
 @external
 Scenario: Verify CANCEL button functionality and cancellation notification after Sell By Amount from Select account
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	And I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I click on cancel button for pending transcations
 	When I click on "Current Holdings" tab under investment account
-	And I click on TRADE Button
+	When I click on the "ASCGX" Trade button
+	And I click on the "Select" Account
+	And I click on "Activity" tab under investment account
+	Then I click on cancel button for pending transcations
+	When I click on "Current Holdings" tab under investment account
 	And I click on SELL Button
 	Then I should see both "By Amount" and "By Share" radio buttons
 	When I enter 1 dollar amount

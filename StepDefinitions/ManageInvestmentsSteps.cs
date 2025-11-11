@@ -495,11 +495,18 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 because: "Modal should display the correct message");
         }*/
 
-        [When(@"I click on TRADE Button")]
-        public void WhenIClickOnTradeButton()
+        /* [When(@"I click on TRADE Button")]
+         public void WhenIClickOnTradeButton()
+         {
+             Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickTradeButton();
+         }*/
+
+        [When(@"I click on the ""(.*)"" Trade button")]
+        public void WhenIClickOnTheTradeButton(string stockName)
         {
-            Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickTradeButton();
+            Pages.ManageInvestmentsPage.SellInstrumentPage.ClickTradeBtnSpecific(stockName);
         }
+
 
         [When(@"I click on BUY Button")]
         public void WhenIClickOnBuyButton()
