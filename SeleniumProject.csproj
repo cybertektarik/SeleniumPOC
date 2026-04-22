@@ -16,6 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Prevent the Selenium test project from compiling the Playwright test project's sources -->
+    <Compile Remove="PlaywrightProject\**" />
+    <EmbeddedResource Remove="PlaywrightProject\**" />
+    <None Remove="PlaywrightProject\**" />
+    <ReqnrollFeatureFiles Remove="PlaywrightProject\**" />
+    <ReqnrollObsoleteCodeBehindFiles Remove="PlaywrightProject\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="ExtentReports" Version="5.0.4" />
     <PackageReference Include="FluentAssertions" Version="8.5.0" />
@@ -28,7 +37,7 @@
     <PackageReference Include="Reqnroll.Tools.MsBuild.Generation" Version="2.4.1" />
     <PackageReference Include="Selenium.Support" Version="4.34.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.34.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="138.0.7204.16800" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="142.0.7444.5900" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="138.0.3351.95" />
     <PackageReference Include="System.Reactive.Windows.Forms" Version="6.0.1" />
     <Folder Include="Support\" />

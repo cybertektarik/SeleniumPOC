@@ -1,4 +1,4 @@
-﻿//using AngleSharp.Dom;
+//using AngleSharp.Dom;
 using AventStack.ExtentReports.Gherkin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -65,6 +65,7 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             switch (tabName)
             {
                 case "Manage Investment":
+                case "Manage Investments":
                     Pages.SidebarNavPage.GoToManageInvestments();
                     break;
                 case "Settings":
@@ -495,11 +496,11 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
                 because: "Modal should display the correct message");
         }*/
 
-        /* [When(@"I click on TRADE Button")]
-         public void WhenIClickOnTradeButton()
-         {
-             Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickTradeButton();
-         }*/
+        [When(@"I click on TRADE Button")]
+        public void WhenIClickOnTradeButton()
+        {
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickTradeButton();
+        }
 
         [When(@"I click on the ""(.*)"" Trade button")]
         public void WhenIClickOnTheTradeButton(string stockName)
@@ -512,6 +513,12 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void WhenIClickOnBuyButton()
         {
             Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickBuyButton();
+        }
+
+        [When(@"I click search result BUY Button")]
+        public void WhenIClickOnSearchBUYButton()
+        {
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickSearchBuyButton();
         }
 
         [When("I click on SELL Button")]
@@ -537,6 +544,52 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void WhenIClickOnConfirmBuyButton()
         {
             Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickConfirmBuy();
+        }
+
+        [When(@"I click on ""(.*)"" Button")]
+        [Then(@"I click on ""(.*)"" Button")]
+        public void ClickOnActionButtonStep(string buttonAction)
+        {
+            ClickOnActionButton(buttonAction);
+        }
+
+        private void ClickOnActionButton(string buttonAction)
+        {
+            // Make it case-insensitive and handle variations
+            string action = buttonAction.ToLower().Trim();
+            
+            if (action.Contains("confirm buy") || action == "confirm buy")
+            {
+                Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickConfirmBuy();
+            }
+            else if (action.Contains("confirm sell") || action == "confirm sell")
+            {
+                Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickConfirmSell();
+            }
+            else if (action == "buy" || action.Contains("buy"))
+            {
+                Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickBuyButton();
+            }
+            else if (action == "sell" || action.Contains("sell"))
+            {
+                Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickSellButton();
+            }
+            else if (action.Contains("cancel") || action == "cancel")
+            {
+                // Try Buy page first, then Sell page
+                try
+                {
+                    Pages?.ManageInvestmentsPage.BuyInstrumentPage.ClickCancel();
+                }
+                catch
+                {
+                    Pages?.ManageInvestmentsPage.SellInstrumentPage.ClickCancel();
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported button action: '{buttonAction}'. Supported actions: 'buy', 'sell', 'confirm buy', 'confirm sell', 'cancel'");
+            }
         }
 
         [When("I validate success message for buy")]
@@ -568,27 +621,67 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
         [Then("I select Fund Type as {string}")]
+        [When("I select Fund Type as {string}")]
         public void ThenISelectFundTypeAs(string fundType)
         {
             Pages?.ManageInvestmentsPage.SearchAndTradePage.SelectFundType(fundType);
         }
 
         [Then("I validate one or more investment products are available")]
+        [When("I validate one or more investment products are available")]
         public void ThenIValidateOneOrMoreInvestmentProductsAreAvailable()
         {
             Pages?.ManageInvestmentsPage.SearchAndTradePage.ValidateOneOrMoreProductsAvailable();
         }
 
         [Then("I deslect Fund Type as {string}")]
+        [When("I deslect Fund Type as {string}")]
         public void ThenIDeslectFundTypeAs(string fundType)
         {
             Pages?.ManageInvestmentsPage.SearchAndTradePage.DeSelectFundType(fundType);
         }
 
         [Then("I validate zero investment products are available")]
+        [When("I validate zero investment products are available")]
         public void ThenIValidateZeroInvestmentProductsAreAvailable()
         {
             Pages?.ManageInvestmentsPage.SearchAndTradePage.ValidateZeroProductsAvailable();
+        }
+
+        [When("I click on ETF fund {string} link")]
+        public void WhenIClickOnEtfFundLink(string fundSymbol)
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ClickEtfFundLink(fundSymbol);
+        }
+
+        [Then("I validate navigating {string} page")]
+        public void ThenIValidateNavigatingPage(string fundSymbol)
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ValidateNavigatingToEtfFundPage(fundSymbol);
+        }
+
+        [Then("I validate {string} displays")]
+        public void ThenIValidateDisplays(string elementName)
+        {
+            if (elementName.Equals("Back button", StringComparison.OrdinalIgnoreCase))
+            {
+                Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ValidateBackButtonDisplays();
+                return;
+            }
+
+            throw new ArgumentException($"Unsupported display validation element: {elementName}");
+        }
+
+        [When("I click browser back button")]
+        public void WhenIClickBrowserBackButton()
+        {
+            driver.Navigate().Back();
+        }
+
+        [Then("I should see Search & Trade page")]
+        public void ThenIShouldSeeSearchAndTradePage()
+        {
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.VerifySearchAndTradeIsVisible();
         }
 
 
@@ -1137,6 +1230,280 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.ManageInvestmentsPage.ActivityTab.CancelAllPendingTransactions();
         }
 
+        [Then(@"validate error warning ""(.*)""")]
+        public void ThenValidateErrorWarning(string expectedErrorMessage)
+        {
+            Thread.Sleep(1000); // Wait for error message to appear
+            string actualErrorText = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetErrorText();
+            Assert.That(actualErrorText, Is.EqualTo(expectedErrorMessage),
+                $"Expected error message '{expectedErrorMessage}' but found '{actualErrorText}'.");
+        }
+
+        [Then(@"validate ""(.*)""")]
+        public void ThenValidateAvailableToSell(string expectedText)
+        {
+            // This step is specifically for validating "Available to sell: $X,XXX.XX" text
+            if (expectedText.StartsWith("Available to sell:", StringComparison.OrdinalIgnoreCase))
+            {
+                string actualText = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellText();
+                Assert.That(actualText, Is.EqualTo(expectedText),
+                    $"Expected 'Available to sell' text '{expectedText}' but found '{actualText}'.");
+            }
+            else
+            {
+                throw new ArgumentException($"This step is for validating 'Available to sell' text. Unsupported text: {expectedText}");
+            }
+        }
+
+        [Then(@"validate Available to sell amount")]
+        public void ThenValidateAvailableToSellAmount()
+        {
+            // Get the actual available to sell amount dynamically
+            string actualText = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellText();
+            Assert.That(actualText, Does.Contain("Available to sell:"),
+                $"Expected 'Available to sell' text but found '{actualText}'.");
+            
+            // Store the amount in ScenarioContext for later use
+            double availableAmount = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellAmount() ?? 0;
+            _scenarioContext["AvailableToSellAmount"] = availableAmount;
+            _scenarioContext["AvailableToSellText"] = actualText;
+            
+            Console.WriteLine($"Available to sell amount: {actualText}");
+        }
+
+        [Then(@"I enter Amount higher then ""(.*)""")]
+        public void ThenIEnterAmountHigherThan(string thresholdText)
+        {
+            // Extract the amount from the threshold text (e.g., "Available to sell: $9,362.26")
+            double thresholdAmount = CommonFunctions.ExtractNumberFromText(thresholdText);
+            
+            // Enter an amount slightly higher than the threshold
+            double amountToEnter = thresholdAmount + 0.01;
+            string formattedAmount = CommonFunctions.FormatDollarAmount(amountToEnter.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(formattedAmount);
+            Thread.Sleep(500); // Wait for validation to trigger
+        }
+
+        [Then(@"I enter Amount higher than Available to sell")]
+        public void ThenIEnterAmountHigherThanAvailableToSell()
+        {
+            // Get the available amount from ScenarioContext (set in previous step)
+            double availableAmount = 0;
+            if (_scenarioContext.ContainsKey("AvailableToSellAmount"))
+            {
+                availableAmount = (double)_scenarioContext["AvailableToSellAmount"];
+            }
+            else
+            {
+                // If not in context, get it directly
+                availableAmount = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellAmount() ?? 0;
+            }
+            
+            // Enter an amount slightly higher than the available amount
+            double amountToEnter = availableAmount + 0.01;
+            string formattedAmount = CommonFunctions.FormatDollarAmount(amountToEnter.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(formattedAmount);
+            Thread.Sleep(500); // Wait for validation to trigger
+        }
+
+        [Then(@"I validate error message ""(.*)""")]
+        public void ThenIValidateErrorMessage(string expectedErrorMessage)
+        {
+            Thread.Sleep(1000); // Wait for error message to appear
+            string actualErrorText = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetErrorText();
+            Assert.That(actualErrorText, Is.EqualTo(expectedErrorMessage),
+                $"Expected error message '{expectedErrorMessage}' but found '{actualErrorText}'.");
+        }
+
+        [Then(@"I validate error message for amount exceeding Available to sell")]
+        public void ThenIValidateErrorMessageForAmountExceedingAvailableToSell()
+        {
+            // Get the available amount from ScenarioContext
+            double availableAmount = 0;
+            if (_scenarioContext.ContainsKey("AvailableToSellAmount"))
+            {
+                availableAmount = (double)_scenarioContext["AvailableToSellAmount"];
+            }
+            else
+            {
+                // If not in context, get it directly
+                availableAmount = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellAmount() ?? 0;
+            }
+            
+            // Build the expected error message dynamically with comma formatting
+            // Format with commas to match the actual error message format (e.g., $13,329.63)
+            string formattedAmount = $"${availableAmount:N2}";
+            string expectedErrorMessage = $"The amount field must be {formattedAmount} or less.";
+            
+            Thread.Sleep(1000); // Wait for error message to appear
+            string actualErrorText = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetErrorText();
+            Assert.That(actualErrorText, Is.EqualTo(expectedErrorMessage),
+                $"Expected error message '{expectedErrorMessage}' but found '{actualErrorText}'.");
+        }
+
+        [Then(@"I validate ""(.*)"" disable")]
+        public void ThenIValidateButtonDisable(string buttonName)
+        {
+            if (buttonName.Contains("confirm sell Button", StringComparison.OrdinalIgnoreCase) ||
+                buttonName.Contains("confirm sell", StringComparison.OrdinalIgnoreCase))
+            {
+                // Wait for button state to update after validation
+                Thread.Sleep(1000);
+                
+                // Try multiple times to check if button is disabled (in case of timing issues)
+                bool isEnabled = true;
+                for (int i = 0; i < 3; i++)
+                {
+                    isEnabled = Pages?.ManageInvestmentsPage.SellInstrumentPage.IsConfirmSellButtonEnabled() ?? true;
+                    if (!isEnabled)
+                        break;
+                    Thread.Sleep(500);
+                }
+                
+                Assert.That(isEnabled, Is.False,
+                    $"Expected 'Confirm sell' button to be disabled, but it was enabled.");
+            }
+            else if (buttonName.Contains("confirm buy Button", StringComparison.OrdinalIgnoreCase) ||
+                     buttonName.Contains("confirm buy", StringComparison.OrdinalIgnoreCase))
+            {
+                // Wait for button state to update after validation
+                Thread.Sleep(1000);
+                
+                // Try multiple times to check if button is disabled (in case of timing issues)
+                bool isEnabled = true;
+                for (int i = 0; i < 3; i++)
+                {
+                    isEnabled = Pages?.ManageInvestmentsPage.BuyInstrumentPage.IsConfirmBuyButtonEnabled() ?? true;
+                    if (!isEnabled)
+                        break;
+                    Thread.Sleep(500);
+                }
+                
+                Assert.That(isEnabled, Is.False,
+                    $"Expected 'Confirm buy' button to be disabled, but it was enabled.");
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported button validation: {buttonName}");
+            }
+        }
+
+        [When(@"I enter the same amount with Available to sell")]
+        public void WhenIEnterTheSameAmountWithAvailableToSell()
+        {
+            // Get the available to sell amount
+            double availableAmount = Pages?.ManageInvestmentsPage.SellInstrumentPage.GetAvailableToSellAmount() ?? 0;
+
+            // Format and enter the same amount
+            string formattedAmount = CommonFunctions.FormatDollarAmount(availableAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            Pages?.ManageInvestmentsPage.SellInstrumentPage.EnterAmount(formattedAmount);
+            Thread.Sleep(500); // Wait for validation to trigger
+        }
+
+        [Then(@"validate Available to buy amount")]
+        public void ThenValidateAvailableToBuyAmount()
+        {
+            // Get the actual available to buy amount dynamically
+            string actualText = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToBuyText();
+            Assert.That(actualText, Does.Contain("Available to invest:"),
+                $"Expected 'Available to invest' text but found '{actualText}'.");
+            
+            // Store the amount in ScenarioContext for later use
+            double availableAmount = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToBuyAmount() ?? 0;
+            _scenarioContext["AvailableToBuyAmount"] = availableAmount;
+            _scenarioContext["AvailableToBuyText"] = actualText;
+            
+            Console.WriteLine($"Available to buy amount: {actualText}");
+        }
+
+        [Then(@"I enter Amount higher than Available to buy")]
+        public void ThenIEnterAmountHigherThanAvailableToBuy()
+        {
+            // Get the available amount from ScenarioContext (set in previous step)
+            double availableAmount = 0;
+            if (_scenarioContext.ContainsKey("AvailableToBuyAmount"))
+            {
+                availableAmount = (double)_scenarioContext["AvailableToBuyAmount"];
+            }
+            else
+            {
+                // If not in context, get it directly
+                availableAmount = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToBuyAmount() ?? 0;
+            }
+            
+            // Enter an amount slightly higher than the available amount
+            double amountToEnter = availableAmount + 0.01;
+            string formattedAmount = CommonFunctions.FormatDollarAmount(amountToEnter.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.EnterAmount(formattedAmount);
+            Thread.Sleep(500); // Wait for validation to trigger
+        }
+
+        [Then(@"I validate error message for amount exceeding Available to buy")]
+        public void ThenIValidateErrorMessageForAmountExceedingAvailableToBuy()
+        {
+            // Get the available amount from ScenarioContext
+            double availableAmount = 0;
+            if (_scenarioContext.ContainsKey("AvailableToBuyAmount"))
+            {
+                availableAmount = (double)_scenarioContext["AvailableToBuyAmount"];
+            }
+            else
+            {
+                // If not in context, get it directly
+                availableAmount = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToBuyAmount() ?? 0;
+            }
+            
+            // Build the expected error message dynamically with comma formatting
+            // Format with commas to match the actual error message format (e.g., $13,329.63)
+            string formattedAmount = $"${availableAmount:N2}";
+            string expectedErrorMessage = $"The amount field must be {formattedAmount} or less.";
+            
+            Thread.Sleep(1000); // Wait for error message to appear
+            string actualErrorText = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetErrorText();
+            Assert.That(actualErrorText, Is.EqualTo(expectedErrorMessage),
+                $"Expected error message '{expectedErrorMessage}' but found '{actualErrorText}'.");
+        }
+
+        [When(@"I enter the same amount with Available to buy")]
+        public void WhenIEnterTheSameAmountWithAvailableToBuy()
+        {
+            // Get the available to buy amount
+            double availableAmount = Pages?.ManageInvestmentsPage.BuyInstrumentPage.GetAvailableToBuyAmount() ?? 0;
+
+            // Format and enter the same amount
+            string formattedAmount = CommonFunctions.FormatDollarAmount(availableAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            Pages?.ManageInvestmentsPage.BuyInstrumentPage.EnterAmount(formattedAmount);
+            Thread.Sleep(500); // Wait for validation to trigger
+        }
+
+        [Then(@"I validate ""(.*)"" enable")]
+        public void ThenIValidateButtonEnable(string buttonName)
+        {
+            if (buttonName.Contains("confirm sell Button", StringComparison.OrdinalIgnoreCase) ||
+                buttonName.Contains("confirm sell", StringComparison.OrdinalIgnoreCase))
+            {
+                bool isEnabled = Pages?.ManageInvestmentsPage.SellInstrumentPage.IsConfirmSellButtonEnabled() ?? false;
+                Assert.That(isEnabled, Is.True,
+                    $"Expected 'Confirm sell' button to be enabled, but it was disabled.");
+            }
+            else if (buttonName.Contains("confirm buy Button", StringComparison.OrdinalIgnoreCase) ||
+                     buttonName.Contains("confirm buy", StringComparison.OrdinalIgnoreCase))
+            {
+                bool isEnabled = Pages?.ManageInvestmentsPage.BuyInstrumentPage.IsConfirmBuyButtonEnabled() ?? false;
+                Assert.That(isEnabled, Is.True,
+                    $"Expected 'Confirm buy' button to be enabled, but it was disabled.");
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported button validation: {buttonName}");
+            }
+        }
+
 
         // New code
         [Then(@"I validate View Performance Data link for all available investments")]
@@ -1203,6 +1570,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
 
             Assert.That(driver.Url, Does.Contain(expectedFragment),
                 $"Expected to be on '{pageName}' page, but URL was: {driver.Url}");
+        }
+
+        [Then(@"I Validate navigated Current Holding page")]
+        public void ThenIValidateNavigatedCurrentHoldingPage()
+        {
+            string currentTab = Pages.ManageInvestmentsPage.GetCurrentlySelectedTab();
+            Assert.That(currentTab, Is.EqualTo("Current Holdings"), 
+                $"Expected to be on 'Current Holdings' page, but current tab is: '{currentTab}'");
         }
 
         [Then(@"I verify the following options are displayed in Auto Funding:")]
@@ -1354,8 +1729,515 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages.ManageInvestmentsPage.HardRefresh();
         }
 
+        [When(@"If Automated Investing status is Active, suspend it first")]
+        public void WhenIfAutomatedInvestingStatusIsActiveSuspendItFirst()
+        {
+            // Null checks
+            if (driver == null)
+            {
+                throw new NullReferenceException("WebDriver is null. Cannot proceed with Automated Investing status check.");
+            }
+            if (Pages == null)
+            {
+                throw new NullReferenceException("Pages object is null. Cannot proceed with Automated Investing status check.");
+            }
+            if (Pages.ManageInvestmentsPage == null)
+            {
+                throw new NullReferenceException("ManageInvestmentsPage is null. Cannot proceed with Automated Investing status check.");
+            }
+            if (Pages.ManageInvestmentsPage.AutoFundingPage == null)
+            {
+                throw new NullReferenceException("AutoFundingPage is null. Cannot proceed with Automated Investing status check.");
+            }
+            
+            // Wait for page to load - wait for spinner to disappear (or not exist)
+            // Increased timeout for Perfecto cloud platform
+            try
+            {
+                var spinnerWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                spinnerWait.Until(d => d != null && d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+                Console.WriteLine("Spinner disappeared. Page is loading...");
+            }
+            catch (WebDriverTimeoutException)
+            {
+                // Spinner might not exist, which is fine - page is already loaded
+                Console.WriteLine("Note: Spinner wait timed out or spinner not found. Continuing...");
+            }
+            
+            // Wait for page ready state (with timeout protection) - increased for Perfecto
+            try
+            {
+                var readyWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                readyWait.Until(d => d != null && ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+                Console.WriteLine("Page ready state is complete.");
+            }
+            catch (WebDriverTimeoutException)
+            {
+                // Page ready state timeout - log but continue
+                Console.WriteLine("Note: Page ready state check timed out. Continuing anyway...");
+            }
+            
+            // Additional wait for Perfecto - wait for jQuery to be ready (if used)
+            try
+            {
+                var jQueryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                jQueryWait.Until(d => 
+                {
+                    try
+                    {
+                        if (d == null) return false;
+                        IJavaScriptExecutor js = (IJavaScriptExecutor)d;
+                        return (bool)js.ExecuteScript("return typeof jQuery === 'undefined' || jQuery.active === 0");
+                    }
+                    catch
+                    {
+                        return true; // If jQuery check fails, assume ready
+                    }
+                });
+                Console.WriteLine("jQuery/ajax requests completed.");
+            }
+            catch (WebDriverTimeoutException)
+            {
+                Console.WriteLine("Note: jQuery wait timed out. Continuing...");
+            }
+            
+            // Wait for status element to be present on the page (either Active or Suspended)
+            // This ensures the page has loaded the status before we try to check it
+            // Increased timeout significantly for Perfecto cloud platform
+            try
+            {
+                var statusElementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+                statusElementWait.Until(d => 
+                {
+                    try
+                    {
+                        if (d == null) return false;
+                        // Check if either Active or Suspended status element is present
+                        var activeElement = d.FindElements(By.XPath("//h4[normalize-space(text())='Automated Investing is Active']"));
+                        var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                        bool found = (activeElement.Count > 0 && activeElement[0].Displayed) || 
+                                    (suspendedElement.Count > 0 && suspendedElement[0].Displayed);
+                        if (found)
+                        {
+                            Console.WriteLine("Status element found on page.");
+                        }
+                        return found;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Exception while checking status element: {ex.Message}");
+                        return false;
+                    }
+                });
+                Console.WriteLine("Status element found on page. Proceeding with status check...");
+            }
+            catch (WebDriverTimeoutException ex)
+            {
+                Console.WriteLine($"Warning: Status element not found after 45 seconds. Error: {ex.Message}. Continuing with status check anyway...");
+            }
+            
+            // Check if status is Active
+            bool isActive = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingActive();
+            
+            if (isActive)
+            {
+                Console.WriteLine("Automated Investing status is Active. Suspending it first...");
+                
+                // Wait for suspend button to be clickable before clicking (Perfecto optimization)
+                try
+                {
+                    var suspendButtonWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    suspendButtonWait.Until(d => 
+                    {
+                        try
+                        {
+                            var suspendBtn = d.FindElement(By.XPath("//button[contains(text(),'SUSPEND') or contains(.,'SUSPEND')]"));
+                            return suspendBtn != null && suspendBtn.Displayed && suspendBtn.Enabled;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                    Console.WriteLine("Suspend button is ready.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    Console.WriteLine("Note: Suspend button wait timed out. Proceeding with click anyway...");
+                }
+                
+                Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend();
+                
+                // Wait for spinner after clicking suspend (Perfecto needs more time)
+                try
+                {
+                    var postClickSpinnerWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    postClickSpinnerWait.Until(d => d != null && d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+                    Console.WriteLine("Spinner disappeared after suspend click.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    Console.WriteLine("Note: Post-click spinner wait timed out. Continuing...");
+                }
+                
+                // Wait for suspension to complete - wait for status to change to Suspended
+                // Increased timeout significantly for Perfecto
+                try
+                {
+                    var suspendStatusWait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+                    suspendStatusWait.Until(d => 
+                    {
+                        try
+                        {
+                            return Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                    Console.WriteLine("Status changed to Suspended after suspend action.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    Console.WriteLine("Warning: Status did not change to Suspended within 60 seconds. Continuing with navigation...");
+                    // If status check times out, wait for spinner to disappear to ensure page is loaded
+                    try
+                    {
+                        var fallbackWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                        fallbackWait.Until(d => d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+                    }
+                    catch (WebDriverTimeoutException)
+                    {
+                        // Spinner might not exist, which is fine - page is already loaded
+                    }
+                }
+                
+                // Navigate back to Automated Investments page after suspension
+                // Use the same navigation pattern as the feature file
+                Pages.SidebarNavPage.ClickManageInvestmentsDropdown();
+                
+                // Wait for dropdown to be visible/expanded - wait for Automated Investments link to be present
+                // Increased timeout for Perfecto
+                try
+                {
+                    var dropdownWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    dropdownWait.Until(d => d.FindElements(By.XPath("//a[normalize-space(text())='Automated Investments']")).Count > 0);
+                    Console.WriteLine("Dropdown expanded and Automated Investments link found.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Dropdown might already be visible - continue anyway
+                    Console.WriteLine("Note: Dropdown wait timed out. Continuing anyway...");
+                }
+                
+                Pages.SidebarNavPage.GoToAutomatedInvestments();
+                
+                // Wait for page to load - wait for spinner to disappear (or not exist) and page ready state
+                // Increased timeouts significantly for Perfecto cloud platform
+                try
+                {
+                    var spinnerWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+                    spinnerWait2.Until(d => d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+                    Console.WriteLine("Spinner disappeared after navigation.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Spinner might not exist, which is fine - page is already loaded
+                    Console.WriteLine("Note: Spinner wait timed out after navigation. Continuing...");
+                }
+                try
+                {
+                    var readyWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+                    readyWait2.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+                    Console.WriteLine("Page ready state is complete after navigation.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Page ready state timeout - log but continue
+                    Console.WriteLine("Note: Page ready state check timed out after navigation. Continuing anyway...");
+                }
+                
+                // Additional wait for jQuery/ajax after navigation (Perfecto optimization)
+                try
+                {
+                    var jQueryWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+                    jQueryWait2.Until(d => 
+                    {
+                        try
+                        {
+                            if (d == null) return false;
+                            IJavaScriptExecutor js = (IJavaScriptExecutor)d;
+                            return (bool)js.ExecuteScript("return typeof jQuery === 'undefined' || jQuery.active === 0");
+                        }
+                        catch
+                        {
+                            return true;
+                        }
+                    });
+                    Console.WriteLine("jQuery/ajax requests completed after navigation.");
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    Console.WriteLine("Note: jQuery wait timed out after navigation. Continuing...");
+                }
+                
+                // Wait for page elements to be fully rendered - wait for body element to be present and stable
+                try
+                {
+                    var elementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                    elementWait.Until(d => 
+                    {
+                        try
+                        {
+                            var body = d.FindElement(By.TagName("body"));
+                            return body != null && body.Displayed;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Body element might already be present, continue
+                }
+                
+                // Wait for status to actually be Suspended on the page after navigation
+                // Use explicit wait with longer timeout and retry logic - optimized for Perfecto
+                bool statusVerified = false;
+                int maxRetries = 15; // Increased retries for Perfecto
+                for (int retry = 0; retry < maxRetries; retry++)
+                {
+                    try
+                    {
+                        // Wait for the AutoFundingPage to be accessible - increased timeout for Perfecto
+                        var pageWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                        pageWait.Until(d => 
+                        {
+                            try
+                            {
+                                return d != null && Pages != null && Pages.ManageInvestmentsPage != null && Pages.ManageInvestmentsPage.AutoFundingPage != null;
+                            }
+                            catch
+                            {
+                                return false;
+                            }
+                        });
+                        
+                        // Wait for status element to be present before checking status
+                        try
+                        {
+                            var statusElementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                            statusElementWait.Until(d => 
+                            {
+                                try
+                                {
+                                    if (d == null) return false;
+                                    var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                                    return suspendedElement.Count > 0 && suspendedElement[0].Displayed;
+                                }
+                                catch
+                                {
+                                    return false;
+                                }
+                            });
+                        }
+                        catch (WebDriverTimeoutException)
+                        {
+                            Console.WriteLine($"Status element not found on attempt {retry + 1}. Continuing with status check...");
+                        }
+                        
+                        // Now check the status with explicit wait - increased timeout for Perfecto
+                        var statusWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                        statusWait.Until(d => 
+                        {
+                            try
+                            {
+                                if (d == null || Pages == null || Pages.ManageInvestmentsPage == null || Pages.ManageInvestmentsPage.AutoFundingPage == null)
+                                {
+                                    return false;
+                                }
+                                return Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Status check exception in wait: {ex.Message}");
+                                return false;
+                            }
+                        });
+                        
+                        statusVerified = true;
+                        Console.WriteLine($"Automated Investing has been suspended and verified on page (attempt {retry + 1}).");
+                        break;
+                    }
+                    catch (WebDriverTimeoutException ex)
+                    {
+                        Console.WriteLine($"Status verification attempt {retry + 1} failed. Retrying... Error: {ex.Message}");
+                        // Wait for page to be stable before retry - check if page is still loading
+                        try
+                        {
+                            var retryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                            retryWait.Until(d => 
+                            {
+                                try
+                                {
+                                    if (d == null) return false;
+                                    string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                                    return readyState == "complete";
+                                }
+                                catch
+                                {
+                                    return false;
+                                }
+                            });
+                        }
+                        catch (WebDriverTimeoutException)
+                        {
+                            // Page might already be ready, continue with retry
+                        }
+                        
+                        // Longer delay between retries for Perfecto to allow page to stabilize
+                        if (retry < maxRetries - 1)
+                        {
+                            System.Threading.Thread.Sleep(2000); // Increased from 500ms to 2 seconds for Perfecto
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Status verification attempt {retry + 1} failed with exception: {ex.Message}. Retrying...");
+                        // Wait for page to be stable before retry
+                        try
+                        {
+                            var retryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                            retryWait.Until(d => 
+                            {
+                                try
+                                {
+                                    if (d == null) return false;
+                                    string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                                    return readyState == "complete";
+                                }
+                                catch
+                                {
+                                    return false;
+                                }
+                            });
+                        }
+                        catch (WebDriverTimeoutException)
+                        {
+                            // Page might already be ready, continue with retry
+                        }
+                        
+                        // Longer delay between retries for Perfecto to allow page to stabilize
+                        if (retry < maxRetries - 1)
+                        {
+                            System.Threading.Thread.Sleep(2000); // Increased from 500ms to 2 seconds for Perfecto
+                        }
+                    }
+                }
+                
+                if (!statusVerified)
+                {
+                    // Last attempt - wait for page to be ready and check one more time - increased timeout for Perfecto
+                    try
+                    {
+                        var finalWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                        finalWait.Until(d => 
+                        {
+                            try
+                            {
+                                if (d == null) return false;
+                                string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                                return readyState == "complete";
+                            }
+                            catch
+                            {
+                                return false;
+                            }
+                        });
+                    }
+                    catch (WebDriverTimeoutException)
+                    {
+                        // Page might already be ready, continue with final check
+                        Console.WriteLine("Note: Final wait timed out. Proceeding with final check...");
+                    }
+                    
+                    bool finalCheck = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                    if (!finalCheck)
+                    {
+                        string pageText = driver.FindElement(By.TagName("body")).Text;
+                        throw new AssertionException($"Failed to verify Automated Investing status is Suspended after {maxRetries} attempts. Page content: {pageText.Substring(0, Math.Min(500, pageText.Length))}");
+                    }
+                    Console.WriteLine("Automated Investing has been suspended and verified on final check.");
+                }
+            }
+            else
+            {
+                // Status is not Active - verify it's Suspended and ensure page is ready
+                Console.WriteLine("Automated Investing status is already Suspended. No action needed.");
+                
+                // Additional wait for Perfecto before checking status
+                try
+                {
+                    var preCheckWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    preCheckWait.Until(d => 
+                    {
+                        try
+                        {
+                            if (d == null) return false;
+                            var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                            return suspendedElement.Count > 0 && suspendedElement[0].Displayed;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    Console.WriteLine("Note: Pre-check wait timed out. Continuing with status check...");
+                }
+                
+                // Verify it's actually Suspended (not just "not Active")
+                try
+                {
+                    bool isSuspended = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                    if (isSuspended)
+                    {
+                        Console.WriteLine("Verified: Automated Investing status is Suspended. Continuing with test...");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Warning: Status is not Active, but Suspended status not confirmed. Continuing anyway...");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // If status check fails, log but don't break - continue with test
+                    Console.WriteLine($"Note: Could not verify Suspended status: {ex.Message}. Continuing with test...");
+                }
+                
+                // Ensure page is ready before continuing - increased timeout for Perfecto
+                try
+                {
+                    var readyWait3 = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    readyWait3.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+                }
+                catch (WebDriverTimeoutException)
+                {
+                    // Page ready state timeout - log but continue
+                    Console.WriteLine("Note: Page ready state check timed out. Continuing with test...");
+                }
+            }
+        }
+
 
 
     }
 }
+
 

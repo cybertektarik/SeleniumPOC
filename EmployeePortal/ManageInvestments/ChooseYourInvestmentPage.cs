@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -19,9 +19,9 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         //private PageControl btnSelect => new PageControl(By.XPath("//h4[contains(text(),'Select')]//ancestor::a"), "Select");
         //private PageControl btnChoice => new PageControl(By.XPath("//h4[contains(text(),'Choice')]//ancestor::a"), "Choice");
 
-        private PageControl btnManaged => new PageControl(By.XPath("//h4[contains(., 'Managed')]"), "Managed");
-        private PageControl btnSelect => new PageControl(By.XPath("//h4[contains(., 'Select')]"), "Select");
-        private PageControl btnChoice => new PageControl(By.XPath("//h4[contains(., 'Choice')]"), "Choice");
+        private PageControl btnManaged => new PageControl(By.XPath("(//a[.//*[contains(normalize-space(.), 'Managed')]] | //button[contains(normalize-space(.), 'Managed')])[1]"), "Managed");
+        private PageControl btnSelect => new PageControl(By.XPath("(//a[.//*[contains(normalize-space(.), 'Select')]] | //button[contains(normalize-space(.), 'Select')])[1]"), "Select");
+        private PageControl btnChoice => new PageControl(By.XPath("(//a[.//*[contains(normalize-space(.), 'Choice')]] | //button[contains(normalize-space(.), 'Choice')])[1]"), "Choice");
 
         private PageControl stcSelectButtonBalance => new PageControl(By.XPath("//h4[text()='Select']//ancestor::a//strong"), "Select button balance");
         private PageControl stcChoiceButtonBalance => new PageControl(By.XPath("//h4[text()='Choice']//ancestor::a//strong"), "Choice button balance");
@@ -58,12 +58,57 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 
         public void ClickOnInvestmentAccountType(string accountType)
         {
-            if (accountType == "Managed")
-                btnManaged.Click();
-            if (accountType == "Select")
-                btnSelect.Click();
-            if (accountType == "Choice")
-                btnChoice.Click();
+            WaitForSpinners();
+
+            if (string.IsNullOrWhiteSpace(accountType))
+                throw new ArgumentException("Account type cannot be null/empty.", nameof(accountType));
+
+            // Debug: log the available account tiles/text to help diagnose env differences
+            try
+            {
+                var headers = driver.FindElements(By.XPath("//h4"));
+                Console.WriteLine($"Account tiles found (h4 count): {headers.Count}");
+                foreach (var h in headers.Take(10))
+                {
+                    var t = (h.Text ?? string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(t))
+                        Console.WriteLine(" - tile: " + t);
+                }
+            }
+            catch { /* best-effort debug only */ }
+
+            // Strategy A: use the existing PageControl (fast path)
+            PageControl? buttonToClick =
+                accountType.Equals("Managed", StringComparison.OrdinalIgnoreCase) ? btnManaged :
+                accountType.Equals("Select", StringComparison.OrdinalIgnoreCase) ? btnSelect :
+                accountType.Equals("Choice", StringComparison.OrdinalIgnoreCase) ? btnChoice :
+                null;
+
+            if (buttonToClick != null)
+            {
+                try
+                {
+                    WaitForElementToBeClickable(buttonToClick, timeoutSeconds: 30);
+                    buttonToClick.Click();
+                    WaitForSpinners();
+                    return;
+                }
+                catch
+                {
+                    // fall through to broader locator below
+                }
+            }
+
+            // Strategy B: broader locator (handles UI text not inside h4 / different markup)
+            string text = accountType.Trim();
+            var clickableXPath =
+                $"(//a[contains(normalize-space(.), '{text}')] | //button[contains(normalize-space(.), '{text}')] | " +
+                $"//*[@role='button' and contains(normalize-space(.), '{text}')])[1]";
+
+            var fallback = new PageControl(By.XPath(clickableXPath), $"{accountType} (fallback)");
+            WaitForElementToBeClickable(fallback, timeoutSeconds: 30);
+            fallback.Click();
+            WaitForSpinners();
         }
 
         public void VerifyAllButtonsEnabled()

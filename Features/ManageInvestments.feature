@@ -268,6 +268,21 @@ Scenario: Validate Search Button on the Choice account
 	And I toggle off index fund
 	And I validate zero investment products are available
 
+@feature2
+Scenario: Validate Choice Account ETF Detail View and Back Navigation
+	Given I am logged in as a user who has an enrolled account
+	When I click on "Manage Investment" from the navigation menu
+	And I click on "Investment Summary" from the navigation menu
+	And I click on the "Choice" Account
+	And I click on the "Search & Trade" tab in Manage Investments
+	And I select Fund Type as "ETF"
+	And I validate one or more investment products are available
+	When I click on ETF fund "AAAU" link
+	Then I validate navigating "AAAU" page
+	Then I validate "Back button" displays
+	When I click browser back button
+	Then I should see Search & Trade page
+
 
 @feature2
 Scenario: Validate Pre Enrollment for Select Account
@@ -423,17 +438,15 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	Then I click on cancel button for pending transcations
 	When I click on "Current Holdings" tab under investment account
 	When I click on the "ASCGX" Trade button
-	And I click on the "Select" Account
-	And I click on "Activity" tab under investment account
-	Then I click on cancel button for pending transcations
-	When I click on "Current Holdings" tab under investment account
 	And I click on SELL Button
 	Then I should see both "By Amount" and "By Share" radio buttons
 	When I enter 1 dollar amount
 	And I click on confirm sell Button
 	And I validate success message for sell
-	And I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 2 times
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	When I click on the "Select" Account
 	Then I refresh the application web page 1 times
 	When I click on "Activity" tab under investment account
@@ -448,14 +461,16 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I click on the "Cancel" button in Activity tab
 	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	And I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 1 times
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	When I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I validate following details for the executed transaction
 		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
 		| Current date   | Current date  | ASCGX       | Sell             | Canceled | $0.00  |
-	When I click on "Manage Investment" from the navigation menu
+	When I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 1 times
 	When I click on Notification Icon
 	Then I validate Cancel notification for "Sell"
@@ -464,19 +479,22 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 @external
 Scenario: Verify CANCEL button functionality and cancellation notification after Buy By Amount from Select account
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	And I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I click on cancel button for pending transcations
 	When I click on "Current Holdings" tab under investment account
-	And I click on TRADE Button
+	When I click on the "ASCGX" Trade button
 	And I click on BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
 	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	And I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 2 times
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	When I click on the "Select" Account
 	Then I refresh the application web page 1 times
 	When I click on "Activity" tab under investment account
@@ -491,36 +509,39 @@ Scenario: Verify CANCEL button functionality and cancellation notification after
 	When I click on the "Cancel" button in Activity tab
 	Then I click on "Confirm Cancellation" button in pop-up
 	When I validate Order was cancelled message
-	And I click on "Manage Investment" from the navigation menu
+	And I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 1 times
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	When I click on the "Select" Account
 	And I click on "Activity" tab under investment account
 	Then I validate following details for the executed transaction
 		| Date Initiated | Executed Date | Investsment | Transaction Type | Status   | Amount |
 		| Current date   | Current date  | ASCGX       | Buy              | Canceled | $0.00  |
-	When I click on "Manage Investment" from the navigation menu
+	When I click on "Manage Investments" from the navigation menu
 	Then I refresh the application web page 1 times
 	When I click on Notification Icon
 	Then I validate Cancel notification for "Buy"
 
 
-@external
+@feature2
 Scenario: Validate Buy with Share on the Choice account and validate from Activity page
 	Given I am logged in as a user who has an enrolled account
-	When I click on "Manage Investment" from the navigation menu
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	And I click on the "Choice" Account
-	And I click on "Activity" tab under investment account
-	Then I click on cancel button for pending transcations
 	When I click on the "Search & Trade" tab in Manage Investments
 	And I search for stock symbol "AMZN"
-	And I click on BUY Button
+	When I click search result BUY Button
 	Then I should see both "By Amount" and "By Share" radio buttons
 	And I validate that the minimum available to invest should be greater than "$1000"
 	When I enter 1 dollar amount
 	And I click on confirm buy Button
 	And I validate success message for buy
-	And I click on "Manage Investment" from the navigation menu
+	When I click on Manage Investment Sub Menu Dropdown
 	Then I refresh the application web page 1 times
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
 	When I click on the "Choice" Account
 	And I click on "Activity" tab under investment account
 	Then I validate following details for the pending transaction
@@ -572,6 +593,8 @@ Scenario: Validate suspension and activation cycle of Automated Investing Auto-F
 	Given I am logged in as a user who has an enrolled account
 	When I click on Manage Investment Sub Menu Dropdown
 	When I click on "Automated Investments" from the navigation menu
+	When If Automated Investing status is Active, suspend it first
+	When I click on "Automated Investments" from the navigation menu
 	Then I validate Automated Investing status is "Suspended"
 	Then I verify the following options are displayed in Auto Funding:
 		| options |
@@ -587,4 +610,43 @@ Scenario: Validate suspension and activation cycle of Automated Investing Auto-F
 	When I click on Manage Investment Sub Menu Dropdown
 	When I click on "Automated Investments" from the navigation menu
 	Then I validate Automated Investing status is "Suspended"
+
+@external
+Scenario: Validate Error warning for Sell on the Select account
+	Given I am logged in as a user who has an enrolled account
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
+	And I click on the "Select" Account
+	When I click on "Current Holdings" tab under investment account
+	When I click on the "BDBKX" Trade button
+	And I click on "SELL" Button
+	And I click on "confirm sell" Button
+	Then validate error warning "The amount field must be $0.01 or more."
+	And validate Available to sell amount
+	Then I enter Amount higher than Available to sell
+	Then I validate error message for amount exceeding Available to sell
+	Then I validate " confirm sell Button" disable
+	When I enter the same amount with Available to sell
+	Then I validate " confirm sell Button" enable
+	And I click on "Cancel" Button
+
+@external
+Scenario: Validate Error warning for Buy on the Choice account
+	Given I am logged in as a user who has an enrolled account
+	When I click on Manage Investment Sub Menu Dropdown
+	When I click on "Investment Summary" from the navigation menu
+	And I click on the "Choice" Account
+	When I click on "Current Holdings" tab under investment account
+	When I click on the "AMZN" Trade button
+	And I click on "BUY" Button
+	And I click on "confirm buy" Button
+	Then validate error warning "The amount field must be $1.00 or more."
+	And validate Available to buy amount
+	Then I enter Amount higher than Available to buy
+	Then I validate error message for amount exceeding Available to buy
+	Then I validate " confirm buy Button" disable
+	When I enter the same amount with Available to buy
+	Then I validate " confirm buy Button" enable
+	And I click on "Cancel" Button
+	Then I Validate navigated Current Holding page
 

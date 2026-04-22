@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using SeleniumProject.Model;
 
 namespace SeleniumProject.Common
@@ -64,15 +64,28 @@ namespace SeleniumProject.Common
             throw new Exception($"User role '{role}' not found.");
         }
 
+        // Default URL when running locally (used when USE_LOCAL=1)
+        private const string LocalBaseUrl = "http://localhost:8080/#/auth/login?returnUrl=%2F";
+
         // METHOD: GetDefaultUrl
-        // PURPOSE: Retrieves default application URL from test data
-        // FLOW: Calls Init → Returns DefaultUrl from TestAccountSet
-        // DRIVER FLOW: No driver involved - URL retrieval only
-        // USAGE: Called by TestHooks to navigate to application
+        // PURPOSE: Retrieves default application URL from test data or environment override
+        // FLOW: Checks BASE_URL env → USE_LOCAL env → else DefaultUrl from JSON
+        // USAGE: Set BASE_URL or USE_LOCAL=1 to run against local; unset to use JSON (remote).
         public static string GetDefaultUrl()
         {
+            // Explicit URL override (e.g. BASE_URL=http://localhost:8080/#/auth/login)
+            var baseUrl = Environment.GetEnvironmentVariable("BASE_URL");
+            if (!string.IsNullOrWhiteSpace(baseUrl))
+                return baseUrl.Trim();
+
+            // Switch to local without editing JSON (e.g. USE_LOCAL=1 or USE_LOCAL=true)
+            var useLocal = Environment.GetEnvironmentVariable("USE_LOCAL");
+            if (string.Equals(useLocal, "1", StringComparison.Ordinal) ||
+                string.Equals(useLocal, "true", StringComparison.OrdinalIgnoreCase))
+                return LocalBaseUrl;
+
             Init(); // Ensure JSON data is loaded
-            return _testAccountSet!.DefaultUrl; // Return the default URL
+            return _testAccountSet!.DefaultUrl; // Use URL from JSON (remote)
         }
     }
 }
