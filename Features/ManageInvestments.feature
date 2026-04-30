@@ -285,6 +285,36 @@ Scenario: Validate Choice Account ETF Detail View and Back Navigation
 
 
 @feature2
+Scenario: Validate Choice Account Mutual Fund Performance Chart for Each Time Period Filter
+	Given I am logged in as "Feature2HSABTester023"
+	When I click on "Manage Investment" from the navigation menu
+	And I click on "Investment Summary" from the navigation menu
+	And I click on the "Choice" Account
+	And I click on the "Search & Trade" tab in Manage Investments
+	And I select Fund Type as "Mutual Funds"
+	And I validate one or more investment products are available
+	When I click on Mutual Fund "ABMVX" link
+	Then I validate navigating to the "ABMVX" detail page
+	And I validate the performance chart is visible
+	And I validate the following time period filters are displayed:
+		| 1W |
+		| 1M |
+		| 1Y |
+		| 2Y |
+		| 3Y |
+		| 5Y |
+	When I click each time period filter and validate the chart:
+		| 1W |
+		| 1M |
+		| 1Y |
+		| 2Y |
+		| 3Y |
+		| 5Y |
+	And I validate the "Back" button is displayed
+	When I click the browser back button
+	Then I should see the Search & Trade page
+
+@feature2
 Scenario: Validate Pre Enrollment for Select Account
 	Given I am logged in as a Pre enrolled user
 	When I click on "Manage Investment" from the navigation menu

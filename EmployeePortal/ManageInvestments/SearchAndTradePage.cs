@@ -8,11 +8,18 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 {
     public class SearchAndTradePage : BasePage
     {
-        private PageControl btnUnavailableToBuy = new PageControl(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='Include Unavailable To Buy']"), "include unavailable to buy");
-        private PageControl btnFundType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()-2]"), "Fund Type)");
-        private PageControl btnCompanyType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()-1]"), "Fund Company");
-        private PageControl btnAssetClassType = new PageControl(By.XPath("(//*[contains(@id,'BV_toggle_')])[last()]"), "Asset Class");
-        private PageControl btnIndexFund = new PageControl(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='Index Fund']"), "Index Fund");
+        private PageControl btnUnavailableToBuy = new PageControl(
+            By.XPath("//*[contains(concat(' ', normalize-space(@class), ' '), ' custom-control-label ')][translate(normalize-space(.), ' ', '')='IncludeUnavailableToBuy']"),
+            "include unavailable to buy");
+
+        // Bootstrap-Vue dropdown toggles: <button id="BV_toggle_..." ...>Fund Type</button>
+        private PageControl btnFundType = new PageControl(By.XPath("//button[contains(@id,'BV_toggle_')][contains(normalize-space(.), 'Fund Type')]"), "Fund Type");
+        private PageControl btnCompanyType = new PageControl(By.XPath("//button[contains(@id,'BV_toggle_')][contains(normalize-space(.), 'Fund Company')]"), "Fund Company");
+        private PageControl btnAssetClassType = new PageControl(By.XPath("//button[contains(@id,'BV_toggle_')][contains(normalize-space(.), 'Asset Class')]"), "Asset Class");
+
+        private PageControl btnIndexFund = new PageControl(
+            By.XPath("//*[contains(concat(' ', normalize-space(@class), ' '), ' custom-control-label ')][translate(normalize-space(.), ' ', '')='IndexFund']"),
+            "Index Fund");
 
         public SearchAndTradePage(IWebDriver driver) : base(driver) { }
 
@@ -79,14 +86,16 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             Assert.IsTrue(btnFundType.IsDisplayed(), "Fund Type is not displayed");
             btnFundType.Click();
-            var fundTypeElement = driver.FindElement(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='" + fundType + "']"));
+            var fundTypeElement = driver.FindElement(By.XPath(
+                "//*[contains(concat(' ', normalize-space(@class), ' '), ' custom-control-label ')][normalize-space(.)='" + fundType + "']"));
             fundTypeElement.Click();
         }
 
         public void DeSelectFundType(string fundType)
         {
             WaitForSpinners();
-            var fundTypeElement = driver.FindElement(By.XPath("//*[@class='custom-control-label'][normalize-space(text())='" + fundType + "']"));
+            var fundTypeElement = driver.FindElement(By.XPath(
+                "//*[contains(concat(' ', normalize-space(@class), ' '), ' custom-control-label ')][normalize-space(.)='" + fundType + "']"));
             fundTypeElement.Click();
             btnFundType.Click();
         }

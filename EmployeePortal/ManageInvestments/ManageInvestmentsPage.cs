@@ -73,6 +73,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public CurrentHoldingsTab CurrentHoldingsTab;
         public AutoFundingPage AutoFundingPage;
         public AvailableInvestmentsTab AvailableInvestmentsTab;
+        public InstrumentPerformancePage InstrumentPerformancePage;
         public ActivityTab ActivityTab;
         public DocumentsTab DocumentsTab;
         public PreferencesTab PreferencesTab;
@@ -91,6 +92,7 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             CurrentHoldingsTab = new CurrentHoldingsTab(driver);
             AutoFundingPage = new AutoFundingPage(driver);
             AvailableInvestmentsTab = new AvailableInvestmentsTab(driver);
+            InstrumentPerformancePage = new InstrumentPerformancePage(driver);
             ActivityTab = new ActivityTab(driver);
             DocumentsTab = new DocumentsTab(driver);
             BuyInstrumentPage = new BuyInstrumentPage(driver);

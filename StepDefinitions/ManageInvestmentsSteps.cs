@@ -8,7 +8,9 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 using SeleniumProject.Common;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 //using TechTalk.SpecFlow;
 
@@ -41,6 +43,12 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         public void GivenILoginToTheEmployeePortalAsAnEnrolledUser()
         {
             var username = TestUserManager.GetUsername("EnrolledUser");
+            Pages?.LoginPage.Login(username);
+        }
+
+        [Given(@"I am logged in as ""(.*)""")]
+        public void GivenIAmLoggedInAs(string username)
+        {
             Pages?.LoginPage.Login(username);
         }
 
@@ -654,10 +662,99 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ClickEtfFundLink(fundSymbol);
         }
 
+        [When("I click on Mutual Fund {string} link")]
+        public void WhenIClickOnMutualFundLink(string fundSymbol)
+        {
+            // Same UI pattern as ETF: fund symbol is a clickable link in the results grid.
+            Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ClickEtfFundLink(fundSymbol);
+        }
+
         [Then("I validate navigating {string} page")]
         public void ThenIValidateNavigatingPage(string fundSymbol)
         {
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.ValidateNavigatingToEtfFundPage(fundSymbol);
+        }
+
+        [Then("I validate navigating to the {string} detail page")]
+        public void ThenIValidateNavigatingToTheDetailPage(string fundSymbol)
+        {
+            Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidateNavigatedToInstrument(fundSymbol);
+        }
+
+        [Then("I validate the performance chart is visible")]
+        public void ThenIValidateThePerformanceChartIsVisible()
+        {
+            Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidatePerformanceChartVisible();
+        }
+
+        [Then("I validate the performance chart is still displayed")]
+        public void ThenIValidateThePerformanceChartIsStillDisplayed()
+        {
+            Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidatePerformanceChartVisible();
+        }
+
+        [Then("I validate the following time period filters are displayed:")]
+        public void ThenIValidateTheFollowingTimePeriodFiltersAreDisplayed(Reqnroll.Table table)
+        {
+            foreach (var v in GetTimePeriodColumnValuesInOrder(table).Distinct(StringComparer.OrdinalIgnoreCase))
+                Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidateTimePeriodFilterDisplayed(v);
+        }
+
+        /// <summary>
+        /// For each period in order: click filter, assert chart still visible, assert chart reflects that period.
+        /// Same single-column table shape as "filters are displayed" (first cell may be header).
+        /// </summary>
+        [When("I click each time period filter and validate the chart:")]
+        public void WhenIClickEachTimePeriodFilterAndValidateTheChart(Reqnroll.Table table)
+        {
+            foreach (var period in GetTimePeriodColumnValuesInOrder(table))
+            {
+                Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ClickTimePeriodFilter(period);
+                Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidatePerformanceChartVisible();
+                Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidateChartDataDisplayedFor(period);
+            }
+        }
+
+        private static List<string> GetTimePeriodColumnValuesInOrder(Reqnroll.Table table)
+        {
+            var values = new List<string>();
+            if (table.Header?.Count == 1)
+                values.Add(table.Header.First());
+
+            foreach (var row in table.Rows)
+            {
+                var timePeriod = row.Values.FirstOrDefault()?.Trim();
+                if (!string.IsNullOrWhiteSpace(timePeriod))
+                    values.Add(timePeriod);
+            }
+
+            return values;
+        }
+
+        [When("I click on the {string} time period filter")]
+        public void WhenIClickOnTheTimePeriodFilter(string timePeriod)
+        {
+            Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ClickTimePeriodFilter(timePeriod);
+        }
+
+        [Then("I validate the chart data is displayed for {string}")]
+        public void ThenIValidateTheChartDataIsDisplayedFor(string timePeriod)
+        {
+            Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidateChartDataDisplayedFor(timePeriod);
+        }
+
+        // Gherkin "And" inherits the previous keyword; after a When-step, And... is a When.
+        [Then("I validate the {string} button is displayed")]
+        [When("I validate the {string} button is displayed")]
+        public void ThenIValidateTheButtonIsDisplayed(string buttonName)
+        {
+            if (buttonName.Equals("Back", StringComparison.OrdinalIgnoreCase))
+            {
+                Pages?.ManageInvestmentsPage.InstrumentPerformancePage.ValidateBackButtonDisplayed();
+                return;
+            }
+
+            throw new ArgumentException($"Unsupported button validation: '{buttonName}'.");
         }
 
         [Then("I validate {string} displays")]
@@ -673,12 +770,14 @@ namespace SeleniumPOC.EmployeePortal.Tests.ManageInvestments
         }
 
         [When("I click browser back button")]
+        [When("I click the browser back button")]
         public void WhenIClickBrowserBackButton()
         {
             driver.Navigate().Back();
         }
 
         [Then("I should see Search & Trade page")]
+        [Then("I should see the Search & Trade page")]
         public void ThenIShouldSeeSearchAndTradePage()
         {
             Pages?.ManageInvestmentsPage.AvailableInvestmentsTab.VerifySearchAndTradeIsVisible();
