@@ -16,8 +16,13 @@ namespace SeleniumPOC.Common
     internal class SeleniumDriverHelper
     {
         private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-        private const string PERFECTO_TOKEN = "";
         private static ReportiumClient? _reportiumClient;
+
+        private static string GetPerfectoSecurityToken()
+        {
+            var token = Environment.GetEnvironmentVariable("PERFECTO_TOKEN");
+            return string.IsNullOrWhiteSpace(token) ? string.Empty : token.Trim();
+        }
 
         static SeleniumDriverHelper()
         {
@@ -120,7 +125,8 @@ namespace SeleniumPOC.Common
 
         public static WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
         {
-            if (string.IsNullOrEmpty(PERFECTO_TOKEN))
+            var token = GetPerfectoSecurityToken();
+            if (string.IsNullOrEmpty(token))
                 throw new InvalidOperationException("Perfecto token is not set. Please configure 'PERFECTO_TOKEN' as an environment variable.");
 
             try
@@ -128,7 +134,7 @@ namespace SeleniumPOC.Common
                 string scriptName = $"{testName}-{platformName}-{browserType}";
                 Dictionary<string, object> perfectoOptions = new Dictionary<string, object>
                 {
-                    {"securityToken", PERFECTO_TOKEN},
+                    {"securityToken", token},
                     {"resolution", desktopSize},
                     {"scriptName", scriptName},
                     {"location", "US East"}
@@ -156,6 +162,58 @@ namespace SeleniumPOC.Common
             catch (Exception e)
             {
                 Console.Error.WriteLine($"Error initializing Perfecto remote driver: {e.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Perfecto **mobile web** on a real iPhone (Safari on iOS). Enable with env:
+        /// <c>RUN_REMOTE=1</c>, <c>PERFECTO_TOKEN</c>, and <c>PERFECTO_MOBILE_IOS=1</c> (or <c>PERFECTO_MOBILE_WEB=1</c>).
+        /// Optional: <c>PERFECTO_DEVICE_MODEL</c> (default <c>iPhone.*</c>), <c>PERFECTO_LOCATION</c> (default <c>US East</c>).
+        /// </summary>
+        public static WebDriver GetPerfectoIosMobileSafariDriver(string testName)
+        {
+            var token = GetPerfectoSecurityToken();
+            if (string.IsNullOrEmpty(token))
+                throw new InvalidOperationException("Perfecto token is not set. Please configure 'PERFECTO_TOKEN' as an environment variable.");
+
+            var deviceModel = Environment.GetEnvironmentVariable("PERFECTO_DEVICE_MODEL");
+            if (string.IsNullOrWhiteSpace(deviceModel))
+                deviceModel = "iPhone.*";
+
+            var location = Environment.GetEnvironmentVariable("PERFECTO_LOCATION");
+            if (string.IsNullOrWhiteSpace(location))
+                location = "US East";
+
+            try
+            {
+                var scriptName = $"{testName}-iOS-Safari-Mobile";
+                var perfectoOptions = new Dictionary<string, object>
+                {
+                    { "securityToken", token },
+                    { "model", deviceModel.Trim() },
+                    { "scriptName", scriptName },
+                    { "location", location.Trim() },
+                };
+
+                var safariOptions = new SafariOptions
+                {
+                    PlatformName = "iOS",
+                    BrowserVersion = "latest",
+                };
+                safariOptions.AddAdditionalOption("perfecto:options", perfectoOptions);
+
+                var driver = new RemoteWebDriver(new Uri(PERFECTO_URL), safariOptions);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(60);
+                driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(60);
+
+                StartPerfectoReporting(driver, "Safari", "iOS", scriptName);
+                return driver;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error initializing Perfecto iOS Safari mobile driver: {e.Message}");
                 throw;
             }
         }

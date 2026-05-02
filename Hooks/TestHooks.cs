@@ -105,13 +105,21 @@ namespace SeleniumPOC.Hooks
             // STEP 4: Determine run mode (env: RUN_REMOTE, USE_LOCAL, BASE_URL) and log it
             bool runRemote = GetEnvBool("RUN_REMOTE", false);
             bool useLocal = GetEnvBool("USE_LOCAL", false) || !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("BASE_URL"));
-            string runMode = runRemote ? "Perfecto (remote browser)" : (useLocal ? "Local (localhost)" : "Browser (remote URL)");
+            bool perfectoMobileIos = GetEnvBool("PERFECTO_MOBILE_IOS", false) || GetEnvBool("PERFECTO_MOBILE_WEB", false);
+            string runMode = runRemote
+                ? (perfectoMobileIos ? "Perfecto (iPhone Safari mobile web)" : "Perfecto (remote browser)")
+                : (useLocal ? "Local (localhost)" : "Browser (remote URL)");
             Console.WriteLine("Run mode: " + runMode);
 
             // STEP 5: Create WebDriver based on configuration (env: RUN_REMOTE, RUN_HEADLESS)
             bool runHeadless = GetEnvBool("RUN_HEADLESS", false);
             if (runRemote)
-                driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
+            {
+                if (perfectoMobileIos)
+                    driver = SeleniumDriverHelper.GetPerfectoIosMobileSafariDriver(TEST_NAME);
+                else
+                    driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
+            }
             else
                 driver = SeleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, runHeadless, RUN_DESKTOP_SIZE);
 
