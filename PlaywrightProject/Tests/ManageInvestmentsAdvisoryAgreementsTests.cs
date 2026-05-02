@@ -2,6 +2,7 @@ using System.Web;
 using FluentAssertions;
 using Microsoft.Playwright;
 using NUnit.Framework;
+using PlaywrightProject;
 using SeleniumProject.Common;
 
 namespace PlaywrightProject.Tests;
@@ -29,10 +30,8 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
             Headless = headless
         });
 
-        _context = await _browser.NewContextAsync(new BrowserNewContextOptions
-        {
-            ViewportSize = new ViewportSize { Width = 1280, Height = 800 }
-        });
+        // Desktop: default viewport. iPhone emulation: PLAYWRIGHT_MOBILE_IOS=1 (or PLAYWRIGHT_IPHONE=1) and optional PLAYWRIGHT_DEVICE (e.g. "iPhone 15").
+        _context = await _browser.NewContextAsync(PlaywrightMobileContext.CreateContextOptions(_playwright));
 
         _page = await _context.NewPageAsync();
 
