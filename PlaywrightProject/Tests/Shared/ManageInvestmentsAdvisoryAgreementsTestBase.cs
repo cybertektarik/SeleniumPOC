@@ -4,22 +4,23 @@ using Microsoft.Playwright;
 using NUnit.Framework;
 using SeleniumProject.Common;
 
-namespace PlaywrightProject.Tests;
+namespace PlaywrightProject.Tests.Shared;
 
-[TestFixture]
-public sealed class ManageInvestmentsAdvisoryAgreementsTests
+/// <summary>Shared advisory-agreements flow; web vs mobile differs only in <see cref="GetContextOptions"/>.</summary>
+public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
 {
     private IPlaywright? _playwright;
     private IBrowser? _browser;
     private IBrowserContext? _context;
     private IPage? _page;
 
+    protected abstract BrowserNewContextOptions GetContextOptions(IPlaywright playwright);
+
     [SetUp]
     public async Task SetUp()
     {
         bool headless = GetEnvBool("RUN_HEADLESS", false);
 
-        // Match the Selenium hook behavior: pick the default data file for feature2 scenarios.
         var dataPath = Path.Combine(AppContext.BaseDirectory, "Data", "UserRoles_Set1.json");
         TestUserManager.SetDataFile(dataPath);
 
@@ -29,10 +30,7 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
             Headless = headless
         });
 
-        _context = await _browser.NewContextAsync(new BrowserNewContextOptions
-        {
-            ViewportSize = new ViewportSize { Width = 1280, Height = 800 }
-        });
+        _context = await _browser.NewContextAsync(GetContextOptions(_playwright));
 
         _page = await _context.NewPageAsync();
 
@@ -55,24 +53,18 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
     [Test]
     public async Task ValidateHsaAdvisoryAgreementsLinkForAllInvestmentTypes()
     {
-        // Equivalent to:
-        // Given I am logged in as a user who has an enrolled account
         var username = TestUserManager.GetUsername("EnrolledUser");
         await Login(username, "$BetterHsa777");
 
-        // When I click on "Manage Investment" from the navigation menu
         await ClickNavManageInvestments();
 
-        // And I click on "Resources" from the navigation menu
+        await EnsureTopNavDrawerOpenIfNeededAsync();
         await _page!.GetByRole(AriaRole.Link, new() { Name = "Resources" }).ClickAsync();
         await WaitForGenericLoadingToDisappearIfPresent();
 
-        // And I click on the "HSA Invest" info link
-        // This link may live inside a collapsible/hidden menu. Navigating to the route is more robust.
         await NavigateToHashRoute("/resources/hsa-invest");
         await WaitForGenericLoadingToDisappearIfPresent();
 
-        // Then I validate the HSA Advisory Agreements links for following investment types
         await AssertAdvisoryAgreement("HSA Advisory Agreement Select", "HSA_Curated_Advisory_Agreement_LH");
         await AssertAdvisoryAgreement("HSA Advisory Agreement Choice", "HSA_Choice_Advisory_Agreement_LH");
         await AssertAdvisoryAgreement("HSA Advisory Agreement Managed", "abg_advisory_managed");
@@ -80,15 +72,56 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
 
     private async Task ClickNavManageInvestments()
     {
-        // Mirrors Selenium selector: //span[@role='button' and normalize-space()='Manage Investments']
-        await _page!.Locator("span[role='button']", new() { HasTextString = "Manage Investments" })
-            .First.ClickAsync();
+        await EnsureTopNavDrawerOpenIfNeededAsync();
+
+        var manage = _page!.Locator("[data-perm-id='nav-submenu-manage-investments']").First;
+        if (await manage.IsVisibleAsync())
+            await manage.ClickAsync();
+        else
+            await manage.ClickAsync(new LocatorClickOptions { Force = true });
+
         await WaitForGenericLoadingToDisappearIfPresent();
+    }
+
+    /// <summary>
+    /// Narrow viewports tuck the sidebar behind a navbar toggler; open it so perm-id / link targets work.
+    /// </summary>
+    private async Task EnsureTopNavDrawerOpenIfNeededAsync()
+    {
+        var manage = _page!.Locator("[data-perm-id='nav-submenu-manage-investments']").First;
+        await manage.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Attached, Timeout = 60_000 });
+        if (await manage.IsVisibleAsync())
+            return;
+
+        var togglerCandidates = new[]
+        {
+            _page.Locator("button.navbar-toggler").First,
+            _page.Locator("[class*='navbar-toggler']").First,
+            _page.GetByRole(AriaRole.Button, new() { NameRegex = new System.Text.RegularExpressions.Regex("menu", System.Text.RegularExpressions.RegexOptions.IgnoreCase) }).First,
+        };
+
+        foreach (var btn in togglerCandidates)
+        {
+            try
+            {
+                if (await btn.IsVisibleAsync())
+                {
+                    await btn.ClickAsync();
+                    await _page.WaitForTimeoutAsync(400);
+                    await WaitForGenericLoadingToDisappearIfPresent();
+                    if (await manage.IsVisibleAsync())
+                        return;
+                }
+            }
+            catch (PlaywrightException)
+            {
+                // try next candidate
+            }
+        }
     }
 
     private async Task NavigateToHashRoute(string route)
     {
-        // Keep origin, replace hash route. Works whether current URL already contains a hash.
         var current = _page!.Url;
         var baseUrl = current.Split('#')[0];
         var target = $"{baseUrl}#{route}";
@@ -97,6 +130,8 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
 
     private async Task Login(string userName, string password)
     {
+        var appHost = new Uri(TestUserManager.GetDefaultUrl()).Host;
+
         await _page!.Locator("#idp-discovery-username").FillAsync(userName);
         await _page.Locator("#idp-discovery-submit").ClickAsync();
 
@@ -109,9 +144,17 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
         await _page.Locator("#okta-signin-password").FillAsync(password);
         await _page.Locator("#okta-signin-submit").ClickAsync();
 
-        // NetworkIdle can hang on SPAs (long-poll/websocket). Wait for an app-specific signal instead.
-        await _page.Locator("span[role='button']", new() { HasTextString = "Manage Investments" })
-            .First.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible, Timeout = 60_000 });
+        // Match Selenium Okta flow: wait for redirect into the app shell before requiring nav chrome.
+        await _page.WaitForURLAsync(
+            u => u.Contains(appHost, StringComparison.OrdinalIgnoreCase)
+                 && !u.Contains("#/auth/login", StringComparison.OrdinalIgnoreCase),
+            new PageWaitForURLOptions { Timeout = 120_000 });
+
+        await WaitForGenericLoadingToDisappearIfPresent();
+
+        // Mobile / narrow layouts: nav lives in a drawer; submenu row can be attached but not "visible".
+        await _page.Locator("[data-perm-id='nav-submenu-manage-investments']").First.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Attached, Timeout = 120_000 });
 
         await WaitForGenericLoadingToDisappearIfPresent();
     }
@@ -133,7 +176,6 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
     {
         try
         {
-            // There can be multiple '#generic-loading' elements on the page; avoid strict mode.
             await _page!.WaitForFunctionAsync(
                 "() => document.querySelectorAll('#generic-loading').length === 0",
                 null,
@@ -141,14 +183,13 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
         }
         catch (TimeoutException)
         {
-            // Spinner is sometimes optional/flaky; don't fail on timeout.
         }
     }
 
     private static string ExtractDocumentKeyFromFragment(string url)
     {
         var uri = new Uri(url);
-        string fragment = uri.Fragment; // e.g. "#/document-view?documentKey=..."
+        string fragment = uri.Fragment;
 
         if (!fragment.Contains("documentKey=", StringComparison.OrdinalIgnoreCase))
             throw new AssertionException($"Document key not found in the URL fragment: {fragment}");
@@ -175,4 +216,3 @@ public sealed class ManageInvestmentsAdvisoryAgreementsTests
                string.Equals(v, "true", StringComparison.OrdinalIgnoreCase);
     }
 }
-

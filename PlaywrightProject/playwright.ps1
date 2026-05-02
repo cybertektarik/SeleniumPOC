@@ -1,14 +1,13 @@
-$ErrorActionPreference = "Stop"
+# Install Playwright browsers for this project.
+# Run from: C:\Users\thoma\SeleniumPOC\PlaywrightProject
 
-# Installs Playwright browsers for this repo (Chromium only is enough for now).
-# Run from repo root: powershell -ExecutionPolicy Bypass -File .\PlaywrightProject\playwright.ps1
+Write-Host "Building PlaywrightProject.csproj..."
+dotnet build .\PlaywrightProject.csproj
 
-dotnet build .\PlaywrightProject\PlaywrightProject.csproj
+$binPath = Resolve-Path ".\bin\Debug\net8.0"
+$pwScript = Join-Path $binPath "playwright.ps1"
 
-$playwrightScript = Join-Path (Resolve-Path .\PlaywrightProject\bin\Debug\net8.0) "playwright.ps1"
-if (!(Test-Path $playwrightScript)) {
-  throw "Could not find playwright.ps1 at $playwrightScript. Build may have failed."
-}
+Write-Host "Running Playwright installer..."
+powershell -ExecutionPolicy Bypass -File $pwScript install
 
-powershell -ExecutionPolicy Bypass -File $playwrightScript install chromium
 
