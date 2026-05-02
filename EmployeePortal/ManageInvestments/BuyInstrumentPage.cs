@@ -7,18 +7,19 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
 {
     public class BuyInstrumentPage : BasePage
     {
-        private PageControl txtEnterAmount = new PageControl(By.XPath("//*[@data-vv-name='amount']//input"), "Enter Amount");
-        private PageControl btnCancel = new PageControl(By.XPath("//span[text()='Cancel']/.."), "Cancel");
-        private PageControl btnConfirmBuy = new PageControl(By.XPath("//span[text()='Confirm Buy']"), "Confirm Buy");
+        private PageControl txtEnterAmount = new PageControl(With.PermId("buy-enter-amount-input"), "Enter Amount");
+        private PageControl btnCancel = new PageControl(With.PermId("cancel-buy-btn"), "Cancel");
+        private PageControl btnConfirmBuy = new PageControl(With.PermId("confirm-buy-btn"), "Confirm Buy");
         private PageControl stcErrorText = new PageControl(By.XPath("//div[contains(@class, 'invalid-feedback')]"));
-        private PageControl stcAvailableToInvest = new PageControl(By.XPath("//div[@role='main']//div/div/div[contains(., 'Available to invest:')]"));
-        private PageControl btnBuy = new PageControl(By.XPath("(//*[contains(text(),'Buy')])[last()]"), "BUY");
+        private PageControl stcAvailableToInvest = new PageControl(With.PermId("available-to-invest-label"));
+        private PageControl btnBuy = new PageControl(With.PermId("buy-option"), "Buy");
+        private PageControl btnSearchBuy => new PageControl(By.XPath("//a[.//span[normalize-space()='Buy']]"), "Search BUY from Choice");
 
-        private PageControl btnByAmount = new PageControl(By.XPath("//*[contains(text(),'By Amount')]"));
-        private PageControl btnByShare = new PageControl(By.XPath("//*[contains(text(),'By Share')]"));
-        private PageControl txtAvailableToInvest = new PageControl(By.XPath("//*[contains(text(),'Available to invest')]"));
+        private PageControl btnByAmount = new PageControl(With.PermId("by-amount-radio"));
+        private PageControl btnByShare = new PageControl(With.PermId("by-share-radio"));
+        private PageControl txtAvailableToInvest = new PageControl(With.PermId("available-to-invest-label"));
         private PageControl txtAvailableToSell = new PageControl(By.XPath("//*[contains(text(),'Available to sell')]"));
-        private PageControl txtEnterShares = new PageControl(By.XPath("//*[@data-vv-name='shares']"));
+        private PageControl txtEnterShares = new PageControl(With.PermId("buy-enter-shares-input"));
 
 
         public BuyInstrumentPage(IWebDriver driver) : base(driver)
@@ -35,6 +36,12 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             Assert.IsTrue(btnBuy.IsDisplayed(), "Button Buy is not displayed");
             btnBuy.Click();
+        }
+        public void ClickSearchBuyButton()
+        {
+            WaitForSpinners();
+            Assert.That(btnSearchBuy.IsDisplayed(), Is.True, "Search BUY button is not displayed");
+            btnSearchBuy.Click();
         }
 
         public void ClickConfirmBuy()
@@ -100,6 +107,41 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
             WaitForSpinners();
             txtEnterShares.Clear();
             txtEnterShares.SendKeys(shareCount);
+        }
+
+        public string GetAvailableToBuyText()
+        {
+            WaitForSpinners();
+            return stcAvailableToInvest.GetText().Trim();
+        }
+
+        public double GetAvailableToBuyAmount()
+        {
+            WaitForSpinners();
+            return CommonFunctions.ExtractNumberFromText(stcAvailableToInvest.GetText());
+        }
+
+        public bool IsConfirmBuyButtonEnabled()
+        {
+            WaitForSpinners();
+            // Find the button that contains the "Confirm Buy" span
+            // Check if button is disabled via disabled attribute or disabled class
+            try
+            {
+                var button = driver.FindElement(With.PermId("confirm-buy-btn"));
+                bool hasDisabledAttribute = button.GetAttribute("disabled") != null;
+                string classAttribute = button.GetAttribute("class") ?? "";
+                bool hasDisabledClass = classAttribute.Contains("disabled", StringComparison.OrdinalIgnoreCase);
+                
+                // Button is disabled if it has disabled attribute OR disabled class
+                bool isDisabled = hasDisabledAttribute || hasDisabledClass;
+                return !isDisabled; // Return enabled state (opposite of disabled)
+            }
+            catch (NoSuchElementException)
+            {
+                // If button not found, try the original method
+                return btnConfirmBuy.IsEnabled;
+            }
         }
     }
 }

@@ -30,16 +30,17 @@ namespace SeleniumPOC.EmployeePortal.Pages.Common
 
         protected void WaitForSpinners()
         {
-            int count = 0;
-
-            for (int i = 0; i < 5000; i++)
+            try
             {
-                if (spinners.Count(1) > 0)
-                    count++;
-                else
-                    break;
+                // Wait for spinner to disappear using explicit wait (not static wait)
+                var spinnerWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                spinnerWait.Until(d => d != null && d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
             }
-
+            catch (WebDriverTimeoutException)
+            {
+                // Spinner might not exist, which is fine - page is already loaded
+                // Continue without throwing exception
+            }
         }
 
         public void Refresh()

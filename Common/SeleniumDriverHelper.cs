@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -9,72 +9,124 @@ using Reportium.Model;
 using Reportium.Test;
 using Reportium.Test.Result;
 using System.Drawing;
+using System.IO;
 
 namespace SeleniumPOC.Common
 {
     internal class SeleniumDriverHelper
     {
         private const string PERFECTO_URL = "https://webster.perfectomobile.com/nexperience/perfectomobile/wd/hub";
-        private const string PERFECTO_TOKEN = "";
         private static ReportiumClient? _reportiumClient;
+
+        private static string GetPerfectoSecurityToken()
+        {
+            var token = Environment.GetEnvironmentVariable("PERFECTO_TOKEN");
+            return string.IsNullOrWhiteSpace(token) ? string.Empty : token.Trim();
+        }
+
+        static SeleniumDriverHelper()
+        {
+            // Default: allow Selenium Manager to resolve matching browser drivers automatically.
+            // Set DISABLE_SELENIUM_MANAGER=1 only if you explicitly want to use a pinned/bundled driver.
+            var disableManager = Environment.GetEnvironmentVariable("DISABLE_SELENIUM_MANAGER");
+            if (string.Equals(disableManager, "1", StringComparison.Ordinal) ||
+                string.Equals(disableManager, "true", StringComparison.OrdinalIgnoreCase))
+            {
+                Environment.SetEnvironmentVariable("SE_MANAGER_DISABLE", "true", EnvironmentVariableTarget.Process);
+            }
+
+            Environment.SetEnvironmentVariable("SE_SESSION_REQUEST_TIMEOUT", "0", EnvironmentVariableTarget.Process);
+        }
 
         public static WebDriver GetLocalDriver(string browserType, bool headless, bool desktopSize)
         {
+            // Only Chrome is supported for local execution
+            if (!browserType.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException($"Only Chrome is supported for local execution. Requested: {browserType}");
+            }
+
             try
             {
-                WebDriver? driver = null;
-
-                if (browserType.Equals("chrome", StringComparison.OrdinalIgnoreCase))
+                // Configure Chrome options (set all at once for efficiency)
+                ChromeOptions chromeOptions = new();
+                chromeOptions.AddArguments("--no-sandbox", "--disable-dev-shm-usage");
+                
+                if (headless)
                 {
-                    ChromeOptions chromeOptions = new();
-
-                    if (headless)
-                        chromeOptions.AddArguments("--headless");
-                    // Always launch in incognito mode
-                    //chromeOptions.AddArguments("--incognito");
-
-                    // Automatically manage the ChromeDriver version
-                    driver = new ChromeDriver(chromeOptions);
-                }
-                else if (browserType.Equals("edge", StringComparison.OrdinalIgnoreCase))
-                {
-                    EdgeOptions edgeOptions = new();
-
-                    if (headless)
-                        edgeOptions.AddArguments("--headless");
-                    // Always launch in InPrivate mode
-                    //edgeOptions.AddArguments("-inprivate");
-
-                    // Automatically manage the EdgeDriver version
-                    driver = new EdgeDriver(edgeOptions);
+                    chromeOptions.AddArguments("--headless", "--disable-gpu");
                 }
                 else
                 {
-                    throw new ArgumentException($"Unsupported browser type: {browserType}");
+                    chromeOptions.AddExcludedArgument("enable-automation");
+                    chromeOptions.AddAdditionalOption("useAutomationExtension", false);
                 }
 
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+                // Default: Selenium Manager resolves the matching driver for the installed Chrome.
+                // If you need to force using the bundled chromedriver.exe, set USE_BUNDLED_CHROMEDRIVER=1.
+                var useBundled = Environment.GetEnvironmentVariable("USE_BUNDLED_CHROMEDRIVER");
+                if (string.Equals(useBundled, "1", StringComparison.Ordinal) ||
+                    string.Equals(useBundled, "true", StringComparison.OrdinalIgnoreCase))
+                {
+                    string driverDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                    string chromeDriverPath = Path.Combine(driverDirectory, "chromedriver.exe");
+                    if (!File.Exists(chromeDriverPath))
+                        throw new FileNotFoundException($"ChromeDriver not found at: {chromeDriverPath}");
 
-                if (desktopSize)
-                    driver.Manage().Window.Size = new Size(1200, 800); // Desktop 1920, 1080
-                else
-                    driver.Manage().Window.Size = new Size(390, 844); // Mobile
+                    ChromeDriverService chromeService = ChromeDriverService.CreateDefaultService(
+                        Path.GetDirectoryName(chromeDriverPath)!,
+                        Path.GetFileName(chromeDriverPath));
+                    chromeService.SuppressInitialDiagnosticInformation = true;
+                    chromeService.HideCommandPromptWindow = true;
 
-                driver.Manage().Window.Maximize();
+                    return ConfigureLocalDriver(new ChromeDriver(chromeService, chromeOptions), desktopSize);
+                }
 
-                return driver;
+                return ConfigureLocalDriver(new ChromeDriver(chromeOptions), desktopSize);
             }
-            catch (Exception e)
+            catch (DriverServiceNotFoundException ex)
             {
-                Console.Error.WriteLine($"Error initializing local driver: {e.Message}");
-                throw;
+                throw new InvalidOperationException(
+                    "Failed to create ChromeDriver service. Ensure ChromeDriver is installed and compatible.", ex);
             }
+            catch (WebDriverException ex)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to initialize ChromeDriver. Check Chrome browser version compatibility.\n" +
+                    "If you are using a bundled chromedriver.exe, it may not match your Chrome version.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"Unexpected error initializing ChromeDriver: {ex.Message}\n" +
+                    "Check Selenium Manager / ChromeDriver setup.", ex);
+            }
+        }
+
+        private static WebDriver ConfigureLocalDriver(WebDriver driver, bool desktopSize)
+        {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+            driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(30);
+
+            if (desktopSize)
+            {
+                driver.Manage().Window.Size = new Size(1200, 800);
+                driver.Manage().Window.Maximize();
+            }
+            else
+            {
+                driver.Manage().Window.Size = new Size(390, 844);
+            }
+
+            return driver;
         }
 
 
         public static WebDriver GetPerfectoRemoteDriver(string browserType, string platformName, string desktopSize, string testName)
         {
-            if (string.IsNullOrEmpty(PERFECTO_TOKEN))
+            var token = GetPerfectoSecurityToken();
+            if (string.IsNullOrEmpty(token))
                 throw new InvalidOperationException("Perfecto token is not set. Please configure 'PERFECTO_TOKEN' as an environment variable.");
 
             try
@@ -82,7 +134,7 @@ namespace SeleniumPOC.Common
                 string scriptName = $"{testName}-{platformName}-{browserType}";
                 Dictionary<string, object> perfectoOptions = new Dictionary<string, object>
                 {
-                    {"securityToken", PERFECTO_TOKEN},
+                    {"securityToken", token},
                     {"resolution", desktopSize},
                     {"scriptName", scriptName},
                     {"location", "US East"}
@@ -110,6 +162,58 @@ namespace SeleniumPOC.Common
             catch (Exception e)
             {
                 Console.Error.WriteLine($"Error initializing Perfecto remote driver: {e.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Perfecto **mobile web** on a real iPhone (Safari on iOS). Enable with env:
+        /// <c>RUN_REMOTE=1</c>, <c>PERFECTO_TOKEN</c>, and <c>PERFECTO_MOBILE_IOS=1</c> (or <c>PERFECTO_MOBILE_WEB=1</c>).
+        /// Optional: <c>PERFECTO_DEVICE_MODEL</c> (default <c>iPhone.*</c>), <c>PERFECTO_LOCATION</c> (default <c>US East</c>).
+        /// </summary>
+        public static WebDriver GetPerfectoIosMobileSafariDriver(string testName)
+        {
+            var token = GetPerfectoSecurityToken();
+            if (string.IsNullOrEmpty(token))
+                throw new InvalidOperationException("Perfecto token is not set. Please configure 'PERFECTO_TOKEN' as an environment variable.");
+
+            var deviceModel = Environment.GetEnvironmentVariable("PERFECTO_DEVICE_MODEL");
+            if (string.IsNullOrWhiteSpace(deviceModel))
+                deviceModel = "iPhone.*";
+
+            var location = Environment.GetEnvironmentVariable("PERFECTO_LOCATION");
+            if (string.IsNullOrWhiteSpace(location))
+                location = "US East";
+
+            try
+            {
+                var scriptName = $"{testName}-iOS-Safari-Mobile";
+                var perfectoOptions = new Dictionary<string, object>
+                {
+                    { "securityToken", token },
+                    { "model", deviceModel.Trim() },
+                    { "scriptName", scriptName },
+                    { "location", location.Trim() },
+                };
+
+                var safariOptions = new SafariOptions
+                {
+                    PlatformName = "iOS",
+                    BrowserVersion = "latest",
+                };
+                safariOptions.AddAdditionalOption("perfecto:options", perfectoOptions);
+
+                var driver = new RemoteWebDriver(new Uri(PERFECTO_URL), safariOptions);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(60);
+                driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(60);
+
+                StartPerfectoReporting(driver, "Safari", "iOS", scriptName);
+                return driver;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Error initializing Perfecto iOS Safari mobile driver: {e.Message}");
                 throw;
             }
         }

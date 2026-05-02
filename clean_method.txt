@@ -1,0 +1,407 @@
+[When(@"If Automated Investing status is Active, suspend it first")]
+public void WhenIfAutomatedInvestingStatusIsActiveSuspendItFirst()
+{
+    if (driver == null)
+    {
+        throw new NullReferenceException("WebDriver is null. Cannot proceed with Automated Investing status check.");
+    }
+    if (Pages == null)
+    {
+        throw new NullReferenceException("Pages object is null. Cannot proceed with Automated Investing status check.");
+    }
+    if (Pages.ManageInvestmentsPage == null)
+    {
+        throw new NullReferenceException("ManageInvestmentsPage is null. Cannot proceed with Automated Investing status check.");
+    }
+    if (Pages.ManageInvestmentsPage.AutoFundingPage == null)
+    {
+        throw new NullReferenceException("AutoFundingPage is null. Cannot proceed with Automated Investing status check.");
+    }
+    
+    try
+    {
+        var spinnerWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+        spinnerWait.Until(d => d != null && d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+    }
+    catch (WebDriverTimeoutException)
+    {
+    }
+    
+    try
+    {
+        var readyWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+        readyWait.Until(d => d != null && ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+    }
+    catch (WebDriverTimeoutException)
+    {
+    }
+    
+    try
+    {
+        var jQueryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        jQueryWait.Until(d => 
+        {
+            try
+            {
+                if (d == null) return false;
+                IJavaScriptExecutor js = (IJavaScriptExecutor)d;
+                return (bool)js.ExecuteScript("return typeof jQuery === 'undefined' || jQuery.active === 0");
+            }
+            catch
+            {
+                return true;
+            }
+        });
+    }
+    catch (WebDriverTimeoutException)
+    {
+    }
+    
+    try
+    {
+        var statusElementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+        statusElementWait.Until(d => 
+        {
+            try
+            {
+                if (d == null) return false;
+                var activeElement = d.FindElements(By.XPath("//h4[normalize-space(text())='Automated Investing is Active']"));
+                var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                bool found = (activeElement.Count > 0 && activeElement[0].Displayed) || 
+                            (suspendedElement.Count > 0 && suspendedElement[0].Displayed);
+                return found;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+    catch (WebDriverTimeoutException)
+    {
+    }
+    
+    bool isActive = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingActive();
+    
+    if (isActive)
+    {
+        try
+        {
+            var suspendButtonWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            suspendButtonWait.Until(d => 
+            {
+                try
+                {
+                    var suspendBtn = d.FindElement(By.XPath("//button[contains(text(),'SUSPEND') or contains(.,'SUSPEND')]"));
+                    return suspendBtn != null && suspendBtn.Displayed && suspendBtn.Enabled;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        Pages.ManageInvestmentsPage.AutoFundingPage.ClickOnSuspend();
+        
+        try
+        {
+            var postClickSpinnerWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            postClickSpinnerWait.Until(d => d != null && d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        try
+        {
+            var suspendStatusWait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+            suspendStatusWait.Until(d => 
+            {
+                try
+                {
+                    return Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+            try
+            {
+                var fallbackWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                fallbackWait.Until(d => d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+            }
+            catch (WebDriverTimeoutException)
+            {
+            }
+        }
+        
+        Pages.SidebarNavPage.ClickManageInvestmentsDropdown();
+        
+        try
+        {
+            var dropdownWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            dropdownWait.Until(d => d.FindElements(By.XPath("//a[normalize-space(text())='Automated Investments']")).Count > 0);
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        Pages.SidebarNavPage.GoToAutomatedInvestments();
+        
+        try
+        {
+            var spinnerWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+            spinnerWait2.Until(d => d.FindElements(By.XPath("//*[@id='generic-loading']")).Count == 0);
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        try
+        {
+            var readyWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(45));
+            readyWait2.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        try
+        {
+            var jQueryWait2 = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            jQueryWait2.Until(d => 
+            {
+                try
+                {
+                    if (d == null) return false;
+                    IJavaScriptExecutor js = (IJavaScriptExecutor)d;
+                    return (bool)js.ExecuteScript("return typeof jQuery === 'undefined' || jQuery.active === 0");
+                }
+                catch
+                {
+                    return true;
+                }
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        try
+        {
+            var elementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            elementWait.Until(d => 
+            {
+                try
+                {
+                    var body = d.FindElement(By.TagName("body"));
+                    return body != null && body.Displayed;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        bool statusVerified = false;
+        int maxRetries = 15;
+        for (int retry = 0; retry < maxRetries; retry++)
+        {
+            try
+            {
+                var pageWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                pageWait.Until(d => 
+                {
+                    try
+                    {
+                        return d != null && Pages != null && Pages.ManageInvestmentsPage != null && Pages.ManageInvestmentsPage.AutoFundingPage != null;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                });
+                
+                try
+                {
+                    var statusElementWait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+                    statusElementWait.Until(d => 
+                    {
+                        try
+                        {
+                            if (d == null) return false;
+                            var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                            return suspendedElement.Count > 0 && suspendedElement[0].Displayed;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                }
+                catch (WebDriverTimeoutException)
+                {
+                }
+                
+                var statusWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                statusWait.Until(d => 
+                {
+                    try
+                    {
+                        if (d == null || Pages == null || Pages.ManageInvestmentsPage == null || Pages.ManageInvestmentsPage.AutoFundingPage == null)
+                        {
+                            return false;
+                        }
+                        return Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                });
+                
+                statusVerified = true;
+                break;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                try
+                {
+                    var retryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    retryWait.Until(d => 
+                    {
+                        try
+                        {
+                            if (d == null) return false;
+                            string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                            return readyState == "complete";
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                }
+                catch (WebDriverTimeoutException)
+                {
+                }
+                
+                if (retry < maxRetries - 1)
+                {
+                    System.Threading.Thread.Sleep(2000);
+                }
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    var retryWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                    retryWait.Until(d => 
+                    {
+                        try
+                        {
+                            if (d == null) return false;
+                            string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                            return readyState == "complete";
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    });
+                }
+                catch (WebDriverTimeoutException)
+                {
+                }
+                
+                if (retry < maxRetries - 1)
+                {
+                    System.Threading.Thread.Sleep(2000);
+                }
+            }
+        }
+        
+        if (!statusVerified)
+        {
+            try
+            {
+                var finalWait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                finalWait.Until(d => 
+                {
+                    try
+                    {
+                        if (d == null) return false;
+                        string readyState = ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").ToString();
+                        return readyState == "complete";
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                });
+            }
+            catch (WebDriverTimeoutException)
+            {
+            }
+            
+            bool finalCheck = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+            if (!finalCheck)
+            {
+                string pageText = driver.FindElement(By.TagName("body")).Text;
+                throw new AssertionException($"Failed to verify Automated Investing status is Suspended after {maxRetries} attempts. Page content: {pageText.Substring(0, Math.Min(500, pageText.Length))}");
+            }
+        }
+    }
+    else
+    {
+        try
+        {
+            var preCheckWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            preCheckWait.Until(d => 
+            {
+                try
+                {
+                    if (d == null) return false;
+                    var suspendedElement = d.FindElements(By.XPath("//h4[contains(text(),'Automated Investing is Suspended')]"));
+                    return suspendedElement.Count > 0 && suspendedElement[0].Displayed;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+        
+        try
+        {
+            bool isSuspended = Pages.ManageInvestmentsPage.AutoFundingPage.IsAutomatedInvestingSuspended();
+        }
+        catch (Exception)
+        {
+        }
+        
+        try
+        {
+            var readyWait3 = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            readyWait3.Until(d => ((IJavaScriptExecutor)d).ExecuteScript("return document.readyState").Equals("complete"));
+        }
+        catch (WebDriverTimeoutException)
+        {
+        }
+    }
+}
+

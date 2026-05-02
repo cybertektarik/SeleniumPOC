@@ -1,8 +1,9 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using SeleniumPOC.Common;
 using SeleniumPOC.EmployeePortal.Pages.Common;
 using NUnit.Framework;
 using SeleniumProject.Common;
+using System.Linq;
 
 
 
@@ -15,6 +16,12 @@ namespace SeleniumPOC.Hooks
     [Binding]
     public class TestHooks
     {
+        static TestHooks()
+        {
+            Environment.SetEnvironmentVariable("SE_MANAGER_DISABLE", "true", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("SE_SESSION_REQUEST_TIMEOUT", "0", EnvironmentVariableTarget.Process);
+        }
+
         // FIELD: _scenarioContext - SpecFlow scenario context for test information
         // PURPOSE: Provides access to scenario details, tags, and execution status
         // FLOW: Used throughout test lifecycle for context and status tracking
@@ -32,11 +39,9 @@ namespace SeleniumPOC.Hooks
 
         // FIELDS: Test execution configuration constants
         // PURPOSE: Control browser type, execution mode, and test environment
-        // FLOW: Used in BeforeScenario to determine driver creation strategy
-        private readonly bool RUN_REMOTE = false;                        // Remote execution flag
+        // FLOW: RUN_REMOTE/RUN_HEADLESS can be overridden via env vars (see RUN_GUIDE.md)
         private readonly string PLATFORM = Constants.PLATFORM_WINDOWS;  // Target platform
         private readonly string BROWSER_TYPE = Constants.BROWSER_CHROME; // Browser type
-        private readonly bool RUN_HEADLESS = false;                    // Headless mode flag
         private readonly bool RUN_DESKTOP_SIZE = true;                  // Desktop size flag
         private readonly string TEST_NAME;                             // Current test name
 
@@ -97,17 +102,34 @@ namespace SeleniumPOC.Hooks
             // STEP 3: Load test data based on scenario tags
             SetTestDataFileBasedOnTags(_scenarioContext.ScenarioInfo.Tags);
 
-            // STEP 4: Create WebDriver based on configuration
-            if (RUN_REMOTE)
-                driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
-            else
-                driver = SeleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, RUN_HEADLESS, RUN_DESKTOP_SIZE);
+            // STEP 4: Determine run mode (env: RUN_REMOTE, USE_LOCAL, BASE_URL) and log it
+            bool runRemote = GetEnvBool("RUN_REMOTE", false);
+            bool useLocal = GetEnvBool("USE_LOCAL", false) || !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("BASE_URL"));
+            bool perfectoMobileIos = GetEnvBool("PERFECTO_MOBILE_IOS", false) || GetEnvBool("PERFECTO_MOBILE_WEB", false);
+            string runMode = runRemote
+                ? (perfectoMobileIos ? "Perfecto (iPhone Safari mobile web)" : "Perfecto (remote browser)")
+                : (useLocal ? "Local (localhost)" : "Browser (remote URL)");
+            Console.WriteLine("Run mode: " + runMode);
 
-            // STEP 5: Navigate to application URL
-            NavigateToDefaultUrl(TestUserManager.GetDefaultUrl()); // Use TestUserManager after Init
+            // STEP 5: Create WebDriver based on configuration (env: RUN_REMOTE, RUN_HEADLESS)
+            bool runHeadless = GetEnvBool("RUN_HEADLESS", false);
+            if (runRemote)
+            {
+                if (perfectoMobileIos)
+                    driver = SeleniumDriverHelper.GetPerfectoIosMobileSafariDriver(TEST_NAME);
+                else
+                    driver = SeleniumDriverHelper.GetPerfectoRemoteDriver(BROWSER_TYPE, PLATFORM, "1920x1080", TEST_NAME);
+            }
+            else
+                driver = SeleniumDriverHelper.GetLocalDriver(BROWSER_TYPE, runHeadless, RUN_DESKTOP_SIZE);
+
+            // STEP 6: Navigate to application URL (localhost when USE_LOCAL=1 or BASE_URL set; else from JSON)
+            string url = TestUserManager.GetDefaultUrl();
+            Console.WriteLine("Navigating to: " + url);
+            NavigateToDefaultUrl(url); // Use TestUserManager after Init
             Thread.Sleep(2000); // Wait for page to load
 
-            // STEP 6: Create AllPages object and store in context
+            // STEP 7: Create AllPages object and store in context
             Pages = new AllPages(driver);                    // Create all page objects with driver
             _scenarioContext["driver"] = driver;              // Store driver in scenario context
             _scenarioContext["Pages"] = Pages;               // Store Pages in scenario context
@@ -132,7 +154,7 @@ namespace SeleniumPOC.Hooks
 
             // STEP 3: Handle remote reporting cleanup
             var seleniumDriverHelper = new SeleniumDriverHelper();
-            if (RUN_REMOTE)
+            if (GetEnvBool("RUN_REMOTE", false))
             {
                 seleniumDriverHelper.StopPerfectoReporting(isScenarioPassed); // Stop remote reporting
             }
@@ -236,6 +258,17 @@ namespace SeleniumPOC.Hooks
             Thread.Sleep(seconds * 1000); // Convert seconds to milliseconds
         }
 
+        // METHOD: GetEnvBool
+        // PURPOSE: Read boolean from environment variable (e.g. RUN_REMOTE, RUN_HEADLESS, USE_LOCAL)
+        // FLOW: Returns true if env value is "1" or "true" (case-insensitive), else defaultVal
+        private static bool GetEnvBool(string envName, bool defaultVal)
+        {
+            var v = Environment.GetEnvironmentVariable(envName);
+            if (string.IsNullOrWhiteSpace(v)) return defaultVal;
+            return string.Equals(v, "1", StringComparison.Ordinal) ||
+                   string.Equals(v, "true", StringComparison.OrdinalIgnoreCase);
+        }
+
         // METHOD: SetTestDataFileBasedOnTags
         // PURPOSE: Selects appropriate test data file based on scenario tags
         // FLOW: Checks tags → Selects data file → Sets TestUserManager data file
@@ -245,12 +278,12 @@ namespace SeleniumPOC.Hooks
             // STEP 1: Set default test data file
             string testDataPath = "Data/UserRoles_Set1.json"; // Default
 
-            // STEP 2: Select data file based on scenario tags
-            if (tags.Contains("feature2"))
+            // STEP 2: Select data file based on scenario tags (case-insensitive)
+            if (tags.Any(t => t.Equals("Feature2", StringComparison.OrdinalIgnoreCase)))
             {
                 testDataPath = "Data/UserRoles_Set1.json"; // Feature2 environment data
             }
-            else if (tags.Contains("external"))
+            else if (tags.Any(t => t.Equals("External", StringComparison.OrdinalIgnoreCase)))
             {
                 testDataPath = "Data/UserRoles_Set2.json"; // External environment data
             }

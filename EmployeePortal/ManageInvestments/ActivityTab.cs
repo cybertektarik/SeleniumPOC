@@ -139,7 +139,16 @@ namespace SeleniumPOC.EmployeePortal.Pages.ManageInvestments
         public bool IsCancelButtonDisplayed()
         {
             WaitForSpinners();
-            return cancelButton.IsDisplayed();
+            try
+            {
+                // Wait up to 10 seconds for the Cancel button to appear
+                wait.Until(d => cancelButton.IsDisplayed());
+                return true;
+            }
+            catch (WebDriverTimeoutException)
+            {
+                return false;
+            }
         }
 
         public void ClickCancelButton()
