@@ -86,6 +86,8 @@ public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
 
     private async Task Login(string userName, string password)
     {
+        var appHost = new Uri(TestUserManager.GetDefaultUrl()).Host;
+
         await _page!.Locator("#idp-discovery-username").FillAsync(userName);
         await _page.Locator("#idp-discovery-submit").ClickAsync();
 
@@ -98,8 +100,16 @@ public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
         await _page.Locator("#okta-signin-password").FillAsync(password);
         await _page.Locator("#okta-signin-submit").ClickAsync();
 
+        // Match Selenium Okta flow: wait for redirect into the app shell before requiring nav chrome.
+        await _page.WaitForURLAsync(
+            u => u.Contains(appHost, StringComparison.OrdinalIgnoreCase)
+                 && !u.Contains("#/auth/login", StringComparison.OrdinalIgnoreCase),
+            new PageWaitForURLOptions { Timeout = 120_000 });
+
+        await WaitForGenericLoadingToDisappearIfPresent();
+
         await _page.Locator("span[role='button']", new() { HasTextString = "Manage Investments" })
-            .First.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible, Timeout = 60_000 });
+            .First.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible, Timeout = 120_000 });
 
         await WaitForGenericLoadingToDisappearIfPresent();
     }
