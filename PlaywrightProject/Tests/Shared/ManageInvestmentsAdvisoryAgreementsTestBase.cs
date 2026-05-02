@@ -58,6 +58,7 @@ public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
 
         await ClickNavManageInvestments();
 
+        await EnsureTopNavDrawerOpenIfNeededAsync();
         await _page!.GetByRole(AriaRole.Link, new() { Name = "Resources" }).ClickAsync();
         await WaitForGenericLoadingToDisappearIfPresent();
 
@@ -71,9 +72,52 @@ public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
 
     private async Task ClickNavManageInvestments()
     {
-        await _page!.Locator("span[role='button']", new() { HasTextString = "Manage Investments" })
-            .First.ClickAsync();
+        await EnsureTopNavDrawerOpenIfNeededAsync();
+
+        var manage = _page!.Locator("[data-perm-id='nav-submenu-manage-investments']").First;
+        if (await manage.IsVisibleAsync())
+            await manage.ClickAsync();
+        else
+            await manage.ClickAsync(new LocatorClickOptions { Force = true });
+
         await WaitForGenericLoadingToDisappearIfPresent();
+    }
+
+    /// <summary>
+    /// Narrow viewports tuck the sidebar behind a navbar toggler; open it so perm-id / link targets work.
+    /// </summary>
+    private async Task EnsureTopNavDrawerOpenIfNeededAsync()
+    {
+        var manage = _page!.Locator("[data-perm-id='nav-submenu-manage-investments']").First;
+        await manage.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Attached, Timeout = 60_000 });
+        if (await manage.IsVisibleAsync())
+            return;
+
+        var togglerCandidates = new[]
+        {
+            _page.Locator("button.navbar-toggler").First,
+            _page.Locator("[class*='navbar-toggler']").First,
+            _page.GetByRole(AriaRole.Button, new() { NameRegex = new System.Text.RegularExpressions.Regex("menu", System.Text.RegularExpressions.RegexOptions.IgnoreCase) }).First,
+        };
+
+        foreach (var btn in togglerCandidates)
+        {
+            try
+            {
+                if (await btn.IsVisibleAsync())
+                {
+                    await btn.ClickAsync();
+                    await _page.WaitForTimeoutAsync(400);
+                    await WaitForGenericLoadingToDisappearIfPresent();
+                    if (await manage.IsVisibleAsync())
+                        return;
+                }
+            }
+            catch (PlaywrightException)
+            {
+                // try next candidate
+            }
+        }
     }
 
     private async Task NavigateToHashRoute(string route)
@@ -108,8 +152,9 @@ public abstract class ManageInvestmentsAdvisoryAgreementsTestBase
 
         await WaitForGenericLoadingToDisappearIfPresent();
 
-        await _page.Locator("span[role='button']", new() { HasTextString = "Manage Investments" })
-            .First.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible, Timeout = 120_000 });
+        // Mobile / narrow layouts: nav lives in a drawer; submenu row can be attached but not "visible".
+        await _page.Locator("[data-perm-id='nav-submenu-manage-investments']").First.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Attached, Timeout = 120_000 });
 
         await WaitForGenericLoadingToDisappearIfPresent();
     }
